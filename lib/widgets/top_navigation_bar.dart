@@ -1,60 +1,80 @@
 import 'package:flutter/material.dart';
 
 enum ScrollSection {
-  Introduction,
-  Education,
-  Experience,
-  Publications,
-  Contact
+  introduction,
+  education,
+  experience,
+  publications,
+  contact
 }
 
-class TopNavigationBar extends SliverPersistentHeaderDelegate {
+class TopNavigationBar extends StatelessWidget {
   final Function(ScrollSection) onItemSelected;
-
-  TopNavigationBar({required this.onItemSelected});
+  const TopNavigationBar({super.key, required this.onItemSelected});
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      height: maxExtent, // Ensure height matches the maxExtent
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10.0,
+          ),
+        ],
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextButton(
-            onPressed: () => onItemSelected(ScrollSection.Introduction),
-            child: const Text("Introduction"),
-          ),
-          TextButton(
-            onPressed: () => onItemSelected(ScrollSection.Education),
-            child: const Text("Education"),
-          ),
-          TextButton(
-            onPressed: () => onItemSelected(ScrollSection.Experience),
-            child: const Text("Experience"),
-          ),
-          TextButton(
-            onPressed: () => onItemSelected(ScrollSection.Publications),
-            child: const Text("Publications"),
-          ),
-          TextButton(
-            onPressed: () => onItemSelected(ScrollSection.Contact),
-            child: const Text("Contact"),
-          ),
+          _buildLogo(context),
+          _buildNavItems(context),
         ],
       ),
     );
   }
 
-  @override
-  double get maxExtent => 60.0; // Set maxExtent consistent with the content
+  Widget _buildLogo(BuildContext context) {
+    return Text(
+      'My Portfolio',
+      style: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).primaryColor,
+      ),
+    );
+  }
 
-  @override
-  double get minExtent => 60.0; // Set minExtent consistent with the content
+  Widget _buildNavItems(BuildContext context) {
+    return Row(
+      children: [
+        _buildNavItem(context, "Introduction", ScrollSection.introduction),
+        _buildNavItem(context, "Education", ScrollSection.education),
+        _buildNavItem(context, "Experience", ScrollSection.experience),
+        _buildNavItem(context, "Publications", ScrollSection.publications),
+        _buildNavItem(context, "Contact", ScrollSection.contact),
+      ],
+    );
+  }
 
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
+  Widget _buildNavItem(
+      BuildContext context, String title, ScrollSection section) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: InkWell(
+        onTap: () => onItemSelected(section),
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

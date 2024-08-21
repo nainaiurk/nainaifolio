@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import '../utils/responsive.dart';
 
 class PublicationsSection extends StatelessWidget {
+  @override
+  final Key? key;
+
+  PublicationsSection({this.key}) : super(key: key);
+
   final List<Map<String, String>> publicationsList = [
     {
       'title': 'Flutter for Beginners',
@@ -17,61 +21,83 @@ class PublicationsSection extends StatelessWidget {
     },
   ];
 
-  PublicationsSection({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 32.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Publications",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.bodyLarge!.color),
           ),
-          const SizedBox(height: 20),
-          Responsive(
-            mobile: Column(
-              children: publicationsList
-                  .map((pub) => _buildPublicationCard(pub))
-                  .toList(),
-            ),
-            tablet: GridView.count(
-              crossAxisCount: 2,
-              childAspectRatio: 3,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: publicationsList
-                  .map((pub) => _buildPublicationCard(pub))
-                  .toList(),
-            ),
-            desktop: GridView.count(
-              crossAxisCount: 3,
-              childAspectRatio: 4,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: publicationsList
-                  .map((pub) => _buildPublicationCard(pub))
-                  .toList(),
-            ),
-          ),
+          const SizedBox(height: 30),
+          ...publicationsList.map((pub) => _buildPublicationCard(pub, context)),
         ],
       ),
     );
   }
 
-  Widget _buildPublicationCard(Map<String, String> publication) {
-    return Card(
-      child: ListTile(
-        title: Text(publication['title']!),
-        subtitle: Text('${publication['year']!}\n${publication['abstract']!}'),
-        trailing: IconButton(
-          icon: const Icon(Icons.link),
-          onPressed: () {
-            // Open the link
-          },
-        ),
+  Widget _buildPublicationCard(
+      Map<String, String> publication, BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            publication['title']!,
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.bodyMedium!.color),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            publication['year']!,
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).textTheme.bodySmall!.color,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            publication['abstract']!,
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).textTheme.bodySmall!.color,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () {
+                // Open the link
+              },
+              child: Text(
+                'Read More',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

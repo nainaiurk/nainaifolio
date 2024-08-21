@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import '../models/education.dart';
-import '../utils/responsive.dart';
 
 class EducationSection extends StatelessWidget {
+  @override
+  final Key? key;
+
+  EducationSection({this.key}) : super(key: key);
+
   final List<Education> educationList = [
     Education(
       degree: 'Master of Science in Computer Science',
@@ -18,53 +22,80 @@ class EducationSection extends StatelessWidget {
     ),
   ];
 
-  EducationSection({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 32.0),
+      // color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Educational Qualifications",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          Responsive(
-            mobile: Column(
-              children:
-                  educationList.map((edu) => _buildEducationCard(edu)).toList(),
-            ),
-            tablet: GridView.count(
-              crossAxisCount: 2,
-              childAspectRatio: 3,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children:
-                  educationList.map((edu) => _buildEducationCard(edu)).toList(),
-            ),
-            desktop: GridView.count(
-              crossAxisCount: 2,
-              childAspectRatio: 4,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children:
-                  educationList.map((edu) => _buildEducationCard(edu)).toList(),
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
           ),
+          const SizedBox(height: 30),
+          ...educationList.map((edu) => _buildEducationCard(edu, context)),
         ],
       ),
     );
   }
 
-  Widget _buildEducationCard(Education education) {
-    return Card(
-      child: ListTile(
-        title: Text(education.degree),
-        subtitle: Text(
-            '${education.institution}\n${education.duration}\n${education.description}'),
+  Widget _buildEducationCard(Education education, BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            education.degree,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            education.institution,
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).textTheme.bodyMedium!.color,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            education.duration,
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).textTheme.bodySmall!.color,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            education.description,
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).textTheme.bodySmall!.color,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/animated_header.dart';
-import '../widgets/portfolio_drawer.dart';
 import '../widgets/top_navigation_bar.dart';
 import '../widgets/introduction_section.dart';
 import '../widgets/education_section.dart';
@@ -8,54 +7,47 @@ import '../widgets/experience_section.dart';
 import '../widgets/publications_section.dart';
 import '../widgets/contact_section.dart';
 import '../widgets/footer.dart';
-import '../utils/scroll_to_section.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey introKey = GlobalKey();
   final GlobalKey educationKey = GlobalKey();
   final GlobalKey experienceKey = GlobalKey();
   final GlobalKey publicationsKey = GlobalKey();
   final GlobalKey contactKey = GlobalKey();
 
-  HomeScreen({super.key});
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  void scrollToSection(GlobalKey key) {
+    Scrollable.ensureVisible(
+      key.currentContext!,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const PortfolioDrawer(),
-      body: CustomScrollView(
-        slivers: [
-          SliverPersistentHeader(
-            delegate: AnimatedHeader(),
-            pinned: true,
-          ),
-          SliverPersistentHeader(
-            delegate: TopNavigationBar(
-              onItemSelected: (section) {
-                switch (section) {
-                  case ScrollSection.Introduction:
-                    ScrollToSection.scrollTo(introKey);
-                    break;
-                  case ScrollSection.Education:
-                    ScrollToSection.scrollTo(educationKey);
-                    break;
-                  case ScrollSection.Experience:
-                    ScrollToSection.scrollTo(experienceKey);
-                    break;
-                  case ScrollSection.Publications:
-                    ScrollToSection.scrollTo(publicationsKey);
-                    break;
-                  case ScrollSection.Contact:
-                    ScrollToSection.scrollTo(contactKey);
-                    break;
-                }
-              },
-            ),
-            pinned: true,
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              children: [
+                const AnimatedHeader(),
                 IntroductionSection(key: introKey),
                 EducationSection(key: educationKey),
                 ExperienceSection(key: experienceKey),
@@ -63,6 +55,32 @@ class HomeScreen extends StatelessWidget {
                 ContactSection(key: contactKey),
                 const Footer(),
               ],
+            ),
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: TopNavigationBar(
+              onItemSelected: (section) {
+                switch (section) {
+                  case ScrollSection.introduction:
+                    scrollToSection(introKey);
+                    break;
+                  case ScrollSection.education:
+                    scrollToSection(educationKey);
+                    break;
+                  case ScrollSection.experience:
+                    scrollToSection(experienceKey);
+                    break;
+                  case ScrollSection.publications:
+                    scrollToSection(publicationsKey);
+                    break;
+                  case ScrollSection.contact:
+                    scrollToSection(contactKey);
+                    break;
+                }
+              },
             ),
           ),
         ],
