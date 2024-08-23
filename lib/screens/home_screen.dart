@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nainaifolio/utils/constant.dart';
+import 'package:nainaifolio/widgets/what_i_can_offer_section.dart';
 import '../widgets/animated_header.dart';
 import '../widgets/top_navigation_bar.dart';
 import '../widgets/introduction_section.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey introKey = GlobalKey();
+  final GlobalKey whatICanOfferKey = GlobalKey();
   final GlobalKey educationKey = GlobalKey();
   final GlobalKey experienceKey = GlobalKey();
   final GlobalKey publicationsKey = GlobalKey();
@@ -53,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const AnimatedHeader(),
                   IntroductionSection(key: introKey),
+                  WhatICanOfferSection(key: whatICanOfferKey),
                   EducationSection(key: educationKey),
                   ExperienceSection(key: experienceKey),
                   PublicationsSection(key: publicationsKey),
@@ -83,6 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     break;
                   case ScrollSection.contact:
                     scrollToSection(contactKey);
+                    break;
+                  case ScrollSection.whatICanOffer:
+                    scrollToSection(whatICanOfferKey);
                     break;
                 }
               },

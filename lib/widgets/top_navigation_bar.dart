@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 enum ScrollSection {
   introduction,
+  whatICanOffer,
   education,
   experience,
   publications,
@@ -50,6 +51,8 @@ class TopNavigationBar extends StatelessWidget {
     return Row(
       children: [
         _buildNavItem(context, "Introduction", ScrollSection.introduction),
+        _buildNavItem(
+            context, "What I Can Offer?", ScrollSection.whatICanOffer),
         _buildNavItem(context, "Education", ScrollSection.education),
         _buildNavItem(context, "Experience", ScrollSection.experience),
         _buildNavItem(context, "Publications", ScrollSection.publications),
