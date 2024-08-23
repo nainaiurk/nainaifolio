@@ -18,12 +18,12 @@ class TopNavigationBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10.0,
-          ),
-        ],
+        // boxShadow: const [
+        //   BoxShadow(
+        //     color: Colors.white10,
+        //     blurRadius: 10.0,
+        //   ),
+        // ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,7 +37,7 @@ class TopNavigationBar extends StatelessWidget {
 
   Widget _buildLogo(BuildContext context) {
     return Text(
-      'My Portfolio',
+      '(Nai)^2_U',
       style: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.bold,
@@ -70,7 +70,7 @@ class TopNavigationBar extends StatelessWidget {
             title,
             style: TextStyle(
               color: Theme.of(context).primaryColor,
-              fontSize: 16,
+              fontSize: 20,
             ),
           ),
         ),

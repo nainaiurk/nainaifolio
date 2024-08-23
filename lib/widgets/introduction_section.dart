@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nainaifolio/utils/constant.dart';
 
 class IntroductionSection extends StatelessWidget {
   @override
@@ -8,13 +9,17 @@ class IntroductionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double maxHeight = getMaxHeight(context);
+    double maxWidth = getMaxWidth(context);
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 32.0),
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 50, horizontal: maxWidth * 0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
             Theme.of(context).scaffoldBackgroundColor,
-            Theme.of(context).canvasColor
+            Theme.of(context).cardColor,
+            // Theme.of(context).canvasColor,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -23,12 +28,12 @@ class IntroductionSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Hi, I'm Nainaiu Rakhaine",
             style: TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Theme.of(context).textTheme.bodyMedium!.color,
             ),
           ),
           const SizedBox(height: 20),

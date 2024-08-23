@@ -10,11 +10,12 @@ class AnimatedHeader extends StatelessWidget {
     return Container(
       color: Colors.transparent,
       height: getMaxHeight(context), // Set a fixed height for the header
+      width: double.infinity,
       child: Stack(
         children: [
           Positioned(
               top: getMaxHeight(context) * 0.15,
-              left: 0,
+              left: -getMaxWidth(context) * 0.06,
               child: Image(
                 image: const AssetImage('images/me.png'),
                 fit: BoxFit.contain,

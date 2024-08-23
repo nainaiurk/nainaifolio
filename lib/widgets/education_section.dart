@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/education.dart';
 
 class EducationSection extends StatelessWidget {
@@ -8,35 +9,47 @@ class EducationSection extends StatelessWidget {
   EducationSection({this.key}) : super(key: key);
 
   final List<Education> educationList = [
+    // Education(
+    //   degree: 'Master of Science in Computer Science',
+    //   institution: 'XYZ University',
+    //   duration: '2018 - 2020',
+    //   description: 'Specialized in Software Engineering.',
+    // ),
     Education(
-      degree: 'Master of Science in Computer Science',
-      institution: 'XYZ University',
-      duration: '2018 - 2020',
-      description: 'Specialized in Software Engineering.',
-    ),
-    Education(
-      degree: 'Bachelor of Technology in Information Technology',
-      institution: 'ABC College',
-      duration: '2014 - 2018',
-      description: 'Focused on full-stack development.',
+      degree: 'BSC Engineering in Electrical and Electronic Engineering',
+      institution: 'Shahjalal Univeristy of Science and Technology, Sylhet',
+      duration: '2020 - 2024',
+      description: 'Focused on Power Electronics, Embedded Systems, Robotics',
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 32.0),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 0.0),
       // color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Educational Qualifications",
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            ),
+          Row(
+            children: [
+              const Icon(
+                FontAwesomeIcons.book,
+                size: 40,
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Text(
+                "Educational Qualifications",
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 30),
           ...educationList.map((edu) => _buildEducationCard(edu, context)),
@@ -52,6 +65,7 @@ class EducationSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Theme.of(context).primaryColor),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
@@ -68,7 +82,7 @@ class EducationSection extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.bodyLarge!.color,
+              color: Theme.of(context).textTheme.bodyMedium!.color,
             ),
           ),
           const SizedBox(height: 8),
@@ -76,7 +90,7 @@ class EducationSection extends StatelessWidget {
             education.institution,
             style: TextStyle(
               fontSize: 16,
-              color: Theme.of(context).textTheme.bodyMedium!.color,
+              color: Theme.of(context).textTheme.bodySmall!.color,
             ),
           ),
           const SizedBox(height: 8),

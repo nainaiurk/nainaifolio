@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nainaifolio/utils/constant.dart';
 import '../widgets/animated_header.dart';
 import '../widgets/top_navigation_bar.dart';
 import '../widgets/introduction_section.dart';
@@ -43,18 +44,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              children: [
-                const AnimatedHeader(),
-                IntroductionSection(key: introKey),
-                EducationSection(key: educationKey),
-                ExperienceSection(key: experienceKey),
-                PublicationsSection(key: publicationsKey),
-                ContactSection(key: contactKey),
-                const Footer(),
-              ],
+          Container(
+            padding:
+                EdgeInsets.symmetric(horizontal: getMaxWidth(context) * 0.05),
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  const AnimatedHeader(),
+                  IntroductionSection(key: introKey),
+                  EducationSection(key: educationKey),
+                  ExperienceSection(key: experienceKey),
+                  PublicationsSection(key: publicationsKey),
+                  ContactSection(key: contactKey),
+                  const Footer(),
+                ],
+              ),
             ),
           ),
           Positioned(
