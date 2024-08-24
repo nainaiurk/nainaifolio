@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nainaifolio/utils/constant.dart';
 
 class IntroductionSection extends StatelessWidget {
   @override
@@ -9,11 +8,9 @@ class IntroductionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double maxHeight = getMaxHeight(context);
-    double maxWidth = getMaxWidth(context);
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 50, horizontal: maxWidth * 0),
+      padding: const EdgeInsets.symmetric(vertical: 50),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -38,7 +35,7 @@ class IntroductionSection extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           const Text(
-            "I am a Software Developer with expertise in Flutter, Dart, and Web Development. I have a passion for creating elegant and efficient software solutions.",
+            "As a passionate and driven Electrical and Electronic Engineering student, I specialize in embedded systems and IoT. With hands-on experience in microcontroller programming, PCB design, and TinyML, I have developed a strong foundation in both hardware and software integration. My journey includes leading projects that harness the power of IoT to solve real-world problems, as well as achieving recognition in national and international competitions. My work reflects a blend of technical expertise and innovation, always pushing the boundaries of what\’s possible in the world of electronics and embedded systems.",
             style: TextStyle(
               fontSize: 18,
               color: Colors.white70,

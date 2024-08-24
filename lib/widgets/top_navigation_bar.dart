@@ -6,6 +6,7 @@ enum ScrollSection {
   education,
   experience,
   publications,
+  skills,
   contact
 }
 
@@ -15,24 +16,42 @@ class TopNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
-        // boxShadow: const [
-        //   BoxShadow(
-        //     color: Colors.white10,
-        //     blurRadius: 10.0,
-        //   ),
-        // ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildLogo(context),
-          _buildNavItems(context),
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth > 800) {
+          // Wide screen: Display the full navigation bar
+          return Container(
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildLogo(context),
+                _buildNavItems(context),
+              ],
+            ),
+          );
+        } else {
+          // Narrow screen: Display a hamburger menu
+          return Container(
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildLogo(context),
+                _buildPopupMenu(context),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -56,6 +75,7 @@ class TopNavigationBar extends StatelessWidget {
         _buildNavItem(context, "Education", ScrollSection.education),
         _buildNavItem(context, "Experience", ScrollSection.experience),
         _buildNavItem(context, "Publications", ScrollSection.publications),
+        _buildNavItem(context, "Skills", ScrollSection.skills),
         _buildNavItem(context, "Contact", ScrollSection.contact),
       ],
     );
@@ -73,11 +93,35 @@ class TopNavigationBar extends StatelessWidget {
             title,
             style: TextStyle(
               color: Theme.of(context).primaryColor,
-              fontSize: 20,
+              fontSize: MediaQuery.of(context).size.width > 1000 ? 18 : 15,
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildPopupMenu(BuildContext context) {
+    return PopupMenuButton<ScrollSection>(
+      icon: Icon(Icons.menu, color: Theme.of(context).primaryColor),
+      onSelected: (section) => onItemSelected(section),
+      itemBuilder: (context) => <PopupMenuEntry<ScrollSection>>[
+        _buildPopupMenuItem("Introduction", ScrollSection.introduction),
+        _buildPopupMenuItem("What I Can Offer?", ScrollSection.whatICanOffer),
+        _buildPopupMenuItem("Education", ScrollSection.education),
+        _buildPopupMenuItem("Experience", ScrollSection.experience),
+        _buildPopupMenuItem("Publications", ScrollSection.publications),
+        _buildPopupMenuItem("Skills", ScrollSection.skills),
+        _buildPopupMenuItem("Contact", ScrollSection.contact),
+      ],
+    );
+  }
+
+  PopupMenuItem<ScrollSection> _buildPopupMenuItem(
+      String title, ScrollSection section) {
+    return PopupMenuItem<ScrollSection>(
+      value: section,
+      child: Text(title),
     );
   }
 }

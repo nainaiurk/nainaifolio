@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ContactSection extends StatelessWidget {
   @override
@@ -9,16 +10,22 @@ class ContactSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 32.0),
+      padding: const EdgeInsets.symmetric(vertical: 50.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Contact Me",
-            style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).textTheme.bodyLarge!.color),
+          Row(
+            children: [
+              const Icon(FontAwesomeIcons.phone, size: 40),
+              const SizedBox(width: 20),
+              Text(
+                "Contact Me",
+                style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyLarge!.color),
+              ),
+            ],
           ),
           const SizedBox(height: 30),
           const TextField(

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'dart:js' as js;
 import '../models/publication_item.dart';
 
 class PublicationsSection extends StatelessWidget {
@@ -43,7 +43,7 @@ class PublicationsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(vertical: 50.0),
       color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,12 +223,15 @@ class _PublicationCardContentState extends State<PublicationCardContent> {
     );
   }
 
-  Future<void> _launchURL(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Could not launch $url';
-    }
+  void _launchURL(String url) {
+    js.context.callMethod('open', [url]);
   }
+  // Future<void> _launchURL(String url) async {
+  //   final uri = Uri.parse(url);
+  //   if (await canLaunchUrl(uri)) {
+  //     await launchUrl(uri);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 }
