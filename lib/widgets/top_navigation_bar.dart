@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../utils/responsive.dart';
 
 enum ScrollSection {
@@ -39,9 +40,10 @@ class TopNavigationBar extends StatelessWidget {
   Widget _buildLogo(BuildContext context) {
     return Text(
       '(Nai)^2_U',
-      style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
+      style: GoogleFonts.caveat(
+        fontSize: Responsive.isMobile(context) ? 20 : 30,
+        // fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.italic,
         color: Theme.of(context).primaryColor,
       ),
     );
