@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../utils/responsive.dart';
 
 class ContactSection extends StatelessWidget {
   @override
@@ -16,12 +19,13 @@ class ContactSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(FontAwesomeIcons.phone, size: 40),
+              Icon(FontAwesomeIcons.phone,
+                  size: TitleIconSize().titleIconSize(context)),
               const SizedBox(width: 20),
               Text(
                 "Contact Me",
                 style: TextStyle(
-                    fontSize: 32,
+                    fontSize: TitleFontSize().titleFontSize(context),
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).textTheme.bodyLarge!.color),
               ),

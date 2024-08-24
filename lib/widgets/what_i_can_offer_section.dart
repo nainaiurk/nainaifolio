@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nainaifolio/utils/responsive.dart';
 
 import '../models/offer_item.dart';
 
@@ -42,7 +43,7 @@ class WhatICanOfferSection extends StatelessWidget {
           Text(
             "What I Can Offer?",
             style: TextStyle(
-              fontSize: 36,
+              fontSize: TitleFontSize().titleFontSize(context),
               fontWeight: FontWeight.bold,
               color: Theme.of(context).primaryColor,
             ),

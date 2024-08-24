@@ -33,3 +33,19 @@ class Responsive extends StatelessWidget {
     }
   }
 }
+
+class TitleFontSize {
+  double titleFontSize(BuildContext context) {
+    if (Responsive.isMobile(context)) return 20.0;
+    if (Responsive.isTablet(context)) return 32.0;
+    return 32.0; // Desktop
+  }
+}
+
+class TitleIconSize {
+  double titleIconSize(BuildContext context) {
+    if (Responsive.isMobile(context)) return 30.0;
+    if (Responsive.isTablet(context)) return 40.0;
+    return 40.0; // Desktop
+  }
+}

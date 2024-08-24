@@ -1,9 +1,11 @@
 // widgets/publications_section.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:js' as js;
 import '../models/publication_item.dart';
+import '../utils/responsive.dart';
 
 class PublicationsSection extends StatelessWidget {
   final Key? key;
@@ -51,12 +53,13 @@ class PublicationsSection extends StatelessWidget {
           // Section Header
           Row(
             children: [
-              const Icon(FontAwesomeIcons.bookJournalWhills, size: 40),
+              Icon(FontAwesomeIcons.bookJournalWhills,
+                  size: TitleIconSize().titleIconSize(context)),
               const SizedBox(width: 20),
               Text(
                 "Publications",
                 style: TextStyle(
-                  fontSize: 36,
+                  fontSize: TitleFontSize().titleFontSize(context),
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColor,
                 ),

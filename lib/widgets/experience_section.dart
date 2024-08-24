@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/experience_item.dart';
+import '../utils/responsive.dart';
 
 class ExperienceSection extends StatelessWidget {
   final Key? key;
@@ -78,12 +80,13 @@ class ExperienceSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(FontAwesomeIcons.award, size: 40),
+              Icon(FontAwesomeIcons.award,
+                  size: TitleIconSize().titleIconSize(context)),
               const SizedBox(width: 20),
               Text(
                 "Experience & Achievements",
                 style: TextStyle(
-                  fontSize: 36,
+                  fontSize: TitleFontSize().titleFontSize(context),
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColor,
                 ),

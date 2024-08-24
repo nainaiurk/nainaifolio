@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import '../models/skill_item.dart';
+import '../utils/responsive.dart';
 
 class SkillsSection extends StatelessWidget {
   final Key? key;
@@ -29,12 +30,13 @@ class SkillsSection extends StatelessWidget {
           // Section Header
           Row(
             children: [
-              const Icon(FontAwesomeIcons.screwdriverWrench, size: 40),
+              Icon(FontAwesomeIcons.screwdriverWrench,
+                  size: TitleIconSize().titleIconSize(context)),
               const SizedBox(width: 20),
               Text(
                 "Skills",
                 style: TextStyle(
-                  fontSize: 36,
+                  fontSize: TitleFontSize().titleFontSize(context),
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColor,
                 ),

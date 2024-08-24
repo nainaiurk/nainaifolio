@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/education.dart';
+import '../utils/responsive.dart';
 
 class EducationSection extends StatelessWidget {
   @override
@@ -34,9 +35,9 @@ class EducationSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 FontAwesomeIcons.book,
-                size: 40,
+                size: TitleIconSize().titleIconSize(context),
               ),
               const SizedBox(
                 width: 20,
@@ -44,7 +45,7 @@ class EducationSection extends StatelessWidget {
               Text(
                 "Educational Qualifications",
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: TitleFontSize().titleFontSize(context),
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).textTheme.bodyLarge!.color,
                 ),
