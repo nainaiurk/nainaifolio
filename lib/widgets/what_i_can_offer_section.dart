@@ -7,7 +7,7 @@ class WhatICanOfferSection extends StatelessWidget {
   final Key? key;
   final List<OfferItem> offers = [
     OfferItem(
-      icon: FontAwesomeIcons.mobileAlt,
+      icon: FontAwesomeIcons.mobileScreenButton,
       label: "App Development",
       color: Colors.blueAccent,
     ),
@@ -22,7 +22,7 @@ class WhatICanOfferSection extends StatelessWidget {
       color: Colors.orangeAccent,
     ),
     OfferItem(
-      icon: FontAwesomeIcons.tools,
+      icon: FontAwesomeIcons.screwdriverWrench,
       label: "Electronics",
       color: Colors.redAccent,
     ),
@@ -93,7 +93,7 @@ class WhatICanOfferSection extends StatelessWidget {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: Theme.of(context).textTheme.bodyText1!.color,
+            color: Theme.of(context).textTheme.bodyMedium!.color,
           ),
         ),
       ],
