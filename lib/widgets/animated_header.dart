@@ -21,7 +21,7 @@ class AnimatedHeader extends StatelessWidget {
               top: getMaxHeight(context) * 0.15,
               left: -getMaxWidth(context) * 0.06,
               child: Image(
-                image: const AssetImage('images/me.png'),
+                image: const AssetImage('assets/images/me.png'),
                 fit: BoxFit.contain,
                 height: getMaxHeight(context) * 0.85,
                 width: getMaxWidth(context) * 0.5,
