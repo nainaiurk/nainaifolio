@@ -37,8 +37,7 @@ class AnimatedHeader extends StatelessWidget {
                     Text(
                       "Hello:)",
                       style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
                         color: Theme.of(context).textTheme.bodyMedium!.color,
                       ),
                     ),
@@ -47,8 +46,7 @@ class AnimatedHeader extends StatelessWidget {
                         TypewriterAnimatedText(
                           "Welcome to Nainai's Portfolio",
                           textStyle: const TextStyle(
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
                           ),
                           speed: const Duration(milliseconds: 100),
                         ),

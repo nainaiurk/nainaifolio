@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/responsive.dart';
 
 enum ScrollSection {
   introduction,
@@ -12,46 +13,26 @@ enum ScrollSection {
 
 class TopNavigationBar extends StatelessWidget {
   final Function(ScrollSection) onItemSelected;
+
   const TopNavigationBar({super.key, required this.onItemSelected});
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth > 800) {
-          // Wide screen: Display the full navigation bar
-          return Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildLogo(context),
-                _buildNavItems(context),
-              ],
-            ),
-          );
-        } else {
-          // Narrow screen: Display a hamburger menu
-          return Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildLogo(context),
-                _buildPopupMenu(context),
-              ],
-            ),
-          );
-        }
-      },
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.5),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildLogo(context),
+          if (Responsive.isDesktop(context))
+            _buildDesktopNavItems(context)
+          else
+            _buildHamburgerMenu(context),
+        ],
+      ),
     );
   }
 
@@ -66,7 +47,7 @@ class TopNavigationBar extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItems(BuildContext context) {
+  Widget _buildDesktopNavItems(BuildContext context) {
     return Row(
       children: [
         _buildNavItem(context, "Introduction", ScrollSection.introduction),
@@ -93,7 +74,7 @@ class TopNavigationBar extends StatelessWidget {
             title,
             style: TextStyle(
               color: Theme.of(context).primaryColor,
-              fontSize: MediaQuery.of(context).size.width > 1000 ? 18 : 15,
+              fontSize: 20,
             ),
           ),
         ),
@@ -101,7 +82,7 @@ class TopNavigationBar extends StatelessWidget {
     );
   }
 
-  Widget _buildPopupMenu(BuildContext context) {
+  Widget _buildHamburgerMenu(BuildContext context) {
     return PopupMenuButton<ScrollSection>(
       icon: Icon(Icons.menu, color: Theme.of(context).primaryColor),
       onSelected: (section) => onItemSelected(section),
