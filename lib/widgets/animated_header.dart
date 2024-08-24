@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,6 +30,7 @@ class AnimatedHeader extends StatelessWidget {
               top: getMaxHeight(context) * 0.4,
               right: getMaxWidth(context) * 0.1,
               child: Container(
+                color: Colors.transparent,
                 height: getMaxHeight(context) * 0.5,
                 width: getMaxWidth(context) * 0.3,
                 child: Column(
