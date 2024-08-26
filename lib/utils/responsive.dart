@@ -36,8 +36,8 @@ class Responsive extends StatelessWidget {
 
 class TitleFontSize {
   double titleFontSize(BuildContext context) {
-    if (Responsive.isMobile(context)) return 20.0;
-    if (Responsive.isTablet(context)) return 32.0;
+    if (Responsive.isMobile(context)) return 22.0;
+    if (Responsive.isTablet(context)) return 28.0;
     return 32.0; // Desktop
   }
 }
@@ -45,7 +45,7 @@ class TitleFontSize {
 class TitleIconSize {
   double titleIconSize(BuildContext context) {
     if (Responsive.isMobile(context)) return 30.0;
-    if (Responsive.isTablet(context)) return 40.0;
+    if (Responsive.isTablet(context)) return 36.0;
     return 40.0; // Desktop
   }
 }

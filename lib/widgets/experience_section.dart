@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/experience_item.dart';
 import '../utils/responsive.dart';
@@ -61,22 +60,13 @@ class ExperienceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    const minCardWidth = 250.0; // Constant minimum width for each card
-    const maxCardWidth = 300.0; // Maximum width for each card
-
-    // Calculate the number of cards per row
-    int cardsPerRow = (screenWidth / (minCardWidth + 16)).floor();
-    cardsPerRow =
-        cardsPerRow < 2 ? 2 : cardsPerRow; // Ensure at least 2 cards per row
-
-    final cardWidth = (screenWidth - (cardsPerRow - 1) * 16) / cardsPerRow;
+    final double cardWidth = _getCardWidth(context);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 50.0),
       color: Colors.transparent,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             children: [
@@ -100,8 +90,8 @@ class ExperienceSection extends StatelessWidget {
             children: experienceList.map((item) {
               return ConstrainedBox(
                 constraints: BoxConstraints(
-                  minWidth: minCardWidth,
-                  maxWidth: cardWidth.clamp(minCardWidth, maxCardWidth),
+                  minWidth: cardWidth,
+                  maxWidth: cardWidth,
                 ),
                 child: _buildExperienceCard(item, context),
               );
@@ -135,7 +125,7 @@ class ExperienceSection extends StatelessWidget {
                       item.imageUrl,
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      height: isExpanded ? 250 : 200,
+                      height: _getImageHeight(context, isExpanded),
                     ),
                   ),
                   if (!isExpanded)
@@ -159,7 +149,7 @@ class ExperienceSection extends StatelessWidget {
                             Text(
                               item.title,
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: _getCardTitleFontSize(context),
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context)
                                     .textTheme
@@ -171,7 +161,7 @@ class ExperienceSection extends StatelessWidget {
                             Text(
                               item.description,
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: _getCardDescriptionFontSize(context),
                                 color: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
@@ -192,6 +182,7 @@ class ExperienceSection extends StatelessWidget {
                                   child: Text(
                                     'Read More',
                                     style: TextStyle(
+                                      fontSize: _getButtonFontSize(context),
                                       color: Theme.of(context).primaryColor,
                                     ),
                                   ),
@@ -214,7 +205,7 @@ class ExperienceSection extends StatelessWidget {
                       Text(
                         item.title,
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: _getCardTitleFontSize(context),
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).textTheme.bodyMedium!.color,
                         ),
@@ -223,7 +214,7 @@ class ExperienceSection extends StatelessWidget {
                       Text(
                         item.description,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: _getCardDescriptionFontSize(context),
                           color: Theme.of(context).textTheme.bodySmall!.color,
                         ),
                       ),
@@ -239,7 +230,9 @@ class ExperienceSection extends StatelessWidget {
                               child: Text(
                                 'Read Less',
                                 style: TextStyle(
-                                    color: Theme.of(context).primaryColor),
+                                  fontSize: _getButtonFontSize(context),
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               )),
                         ],
                       ),
@@ -251,5 +244,44 @@ class ExperienceSection extends StatelessWidget {
         );
       },
     );
+  }
+
+  // Card width based on screen size
+  double _getCardWidth(BuildContext context) {
+    if (Responsive.isMobile(context)) {
+      return MediaQuery.of(context).size.width / 3 + 20;
+    }
+    if (Responsive.isTablet(context)) {
+      return MediaQuery.of(context).size.width / 4 + 20;
+    }
+    return MediaQuery.of(context).size.width / 4; // Desktop
+  }
+
+  // Constants for card title font size
+  double _getCardTitleFontSize(BuildContext context) {
+    if (Responsive.isMobile(context)) return 14.0;
+    if (Responsive.isTablet(context)) return 18.0;
+    return 22.0; // Desktop
+  }
+
+  // Constants for card description font size
+  double _getCardDescriptionFontSize(BuildContext context) {
+    if (Responsive.isMobile(context)) return 14.0;
+    if (Responsive.isTablet(context)) return 16.0;
+    return 18.0; // Desktop
+  }
+
+  // Constants for button font size
+  double _getButtonFontSize(BuildContext context) {
+    if (Responsive.isMobile(context)) return 14.0;
+    if (Responsive.isTablet(context)) return 16.0;
+    return 18.0; // Desktop
+  }
+
+  // Constants for image height
+  double _getImageHeight(BuildContext context, bool isExpanded) {
+    if (Responsive.isMobile(context)) return isExpanded ? 200.0 : 150.0;
+    if (Responsive.isTablet(context)) return isExpanded ? 250.0 : 200.0;
+    return isExpanded ? 300.0 : 250.0; // Desktop
   }
 }
