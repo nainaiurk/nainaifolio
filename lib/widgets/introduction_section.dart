@@ -33,11 +33,14 @@ class IntroductionSection extends StatelessWidget {
 
   Widget _buildContent(
       BuildContext context, double titleFontSize, double bodyFontSize) {
+    const String aboutMeTtile = "Hi, I'm Nainaiu Rakhaine,";
+    String aboutMeText =
+        '''An Electrical and Electronic Engineering student passionate about embedded systems and IoT. With hands-on experience in microcontroller programming, PCB design, and TinyML, I love turning ideas into practical solutions.\n\nI've led projects ranging from autonomous underwater vehicles to smart communication devices, and I've earned recognition in national and international competitions for my innovative work. My journey is fueled by a curiosity for technology and a drive to tackle complex challenges. \n\nBeyond academics, I enjoy exploring new tech trends, learning programming languages, and collaborating on exciting projects. I'm always eager to take on new challenges and grow as an engineer.\n\nThanks for stopping by my portfolio—I look forward to connecting with you!''';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Hi, I'm Nainaiu Rakhaine",
+          aboutMeTtile,
           style: TextStyle(
             fontSize: titleFontSize,
             fontWeight: FontWeight.bold,
@@ -47,15 +50,14 @@ class IntroductionSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        Text(
-          "As a passionate and driven Electrical and Electronic Engineering student, I specialize in embedded systems and IoT. With hands-on experience in microcontroller programming, PCB design, and TinyML, I have developed a strong foundation in both hardware and software integration. My journey includes leading projects that harness the power of IoT to solve real-world problems, as well as achieving recognition in national and international competitions. My work reflects a blend of technical expertise and innovation, always pushing the boundaries of what’s possible in the world of electronics and embedded systems.",
-          style: TextStyle(
-            fontSize: bodyFontSize,
-            color: Colors.white70,
-            fontFamily:
-                'FontAwesome', // Example: Use FontAwesome for custom fonts
-          ),
-        ),
+        Text(aboutMeText,
+            style: TextStyle(
+              fontSize: bodyFontSize,
+              color: Colors.white70,
+              fontFamily:
+                  'FontAwesome', // Example: Use FontAwesome for custom fonts
+            ),
+            textAlign: TextAlign.justify),
         const SizedBox(height: 40),
         ElevatedButton(
           onPressed: () {
@@ -66,7 +68,7 @@ class IntroductionSection extends StatelessWidget {
             side: BorderSide(color: Theme.of(context).primaryColor),
           ),
           child: Text(
-            "Learn More",
+            "Learn More Below",
             style: TextStyle(
               fontSize: bodyFontSize - 3,
               color: Theme.of(context).textTheme.bodyMedium!.color,

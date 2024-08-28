@@ -1,8 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:js' as js;
-import '../utils/responsive.dart'; // Import your responsive helper file
+import '../utils/responsive.dart';
 
 class AnimatedHeader extends StatelessWidget {
   const AnimatedHeader({super.key});
@@ -27,25 +28,30 @@ class AnimatedHeader extends StatelessWidget {
           ),
           Positioned(
             top: _getTextTopPosition(context),
-            // right: _getTextRightPosition(context),
             right: 0,
             child: Container(
               color: Colors.transparent,
-              // height: _getHeaderHeight(context),
               width: _getTextContainerWidth(context),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Hello:)",
-                    style: TextStyle(
-                      fontSize: _getTitleFontSize(context),
-                      color: Theme.of(context).textTheme.bodyMedium!.color,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "Hello:)",
+                        style: TextStyle(
+                          fontSize: _getTitleFontSize(context),
+                          color: Theme.of(context).textTheme.bodyMedium!.color,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Image.asset(
+                        'gif/hand_wave.gif', // Replace with your GIF path
+                        height: _getGifSize(context),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: _getTitleSpace(context),
-                  ),
+                  SizedBox(height: _getTitleSpace(context)),
                   AnimatedTextKit(
                     animatedTexts: [
                       TypewriterAnimatedText(
@@ -61,19 +67,24 @@ class AnimatedHeader extends StatelessWidget {
                     displayFullTextOnTap: true,
                     stopPauseOnTap: true,
                   ),
-                  SizedBox(
-                    height: _getSubtitleSpace(context),
-                  ),
+                  SizedBox(height: _getSubtitleSpace(context)),
                   Text(
-                    "NAINAIU\nRAKHAINE",
-                    style: TextStyle(
+                    "NAINAIU",
+                    style: GoogleFonts.montserrat(
                       fontSize: _getNameFontSize(context),
                       color: Theme.of(context).textTheme.bodyLarge!.color,
+                      fontWeight: FontWeight.w300,
                     ),
                   ),
-                  SizedBox(
-                    height: _getIconSpace(context),
+                  Text(
+                    "RAKHAINE",
+                    style: GoogleFonts.montserrat(
+                      fontSize: _getNameFontSize(context),
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
+                  SizedBox(height: _getIconSpace(context)),
                   if (!Responsive.isMobile(context))
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,51 +127,57 @@ class AnimatedHeader extends StatelessWidget {
                       ],
                     ),
                   if (Responsive.isMobile(context))
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    Column(
                       children: [
-                        IconButton(
-                          onPressed: () {
-                            _launchURL(
-                                'https://www.facebook.com/nainaiu.rk1234/');
-                          },
-                          icon: const Icon(FontAwesomeIcons.facebook),
-                          color: Theme.of(context).primaryColor,
-                          iconSize: _getIconSize(context),
+                        Row(
+                          children: [
+                            const SizedBox(width: 10),
+                            IconButton(
+                              onPressed: () {
+                                _launchURL(
+                                    'https://www.facebook.com/nainaiu.rk1234/');
+                              },
+                              icon: const Icon(FontAwesomeIcons.facebook),
+                              color: Theme.of(context).primaryColor,
+                              iconSize: _getIconSize(context),
+                            ),
+                            const SizedBox(width: 20),
+                            IconButton(
+                              onPressed: () {
+                                _launchURL(
+                                    'https://www.linkedin.com/in/nainaiu-rakhaine');
+                              },
+                              icon: const Icon(FontAwesomeIcons.linkedin),
+                              color: Theme.of(context).primaryColor,
+                              iconSize: _getIconSize(context),
+                            ),
+                          ],
                         ),
-                        IconButton(
-                          onPressed: () {
-                            _launchURL(
-                                'https://www.linkedin.com/in/nainaiu-rakhaine');
-                          },
-                          icon: const Icon(FontAwesomeIcons.linkedin),
-                          color: Theme.of(context).primaryColor,
-                          iconSize: _getIconSize(context),
+                        Row(
+                          children: [
+                            const SizedBox(width: 10),
+                            IconButton(
+                              onPressed: () {
+                                _launchURL(
+                                    'https://www.linkedin.com/in/nainaiu-rakhaine');
+                              },
+                              icon: const Icon(FontAwesomeIcons.twitter),
+                              color: Theme.of(context).primaryColor,
+                              iconSize: _getIconSize(context),
+                            ),
+                            const SizedBox(width: 20),
+                            IconButton(
+                              onPressed: () {
+                                _launchURL('https://github.com/nainaiurk');
+                              },
+                              icon: const Icon(FontAwesomeIcons.github),
+                              color: Theme.of(context).primaryColor,
+                              iconSize: _getIconSize(context),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  if (Responsive.isMobile(context))
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            _launchURL(
-                                'https://www.linkedin.com/in/nainaiu-rakhaine');
-                          },
-                          icon: const Icon(FontAwesomeIcons.twitter),
-                          color: Theme.of(context).primaryColor,
-                          iconSize: _getIconSize(context),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _launchURL('https://github.com/nainaiurk');
-                          },
-                          icon: const Icon(FontAwesomeIcons.github),
-                          color: Theme.of(context).primaryColor,
-                          iconSize: _getIconSize(context),
-                        ),
-                      ],
-                    )
                 ],
               ),
             ),
@@ -188,12 +205,6 @@ class AnimatedHeader extends StatelessWidget {
     return 100.0; // Desktop
   }
 
-  // double _getImageHeight(BuildContext context) {
-  //   if (Responsive.isMobile(context)) return 300.0;
-  //   if (Responsive.isTablet(context)) return 350.0;
-  //   return 680.0; // Desktop
-  // }
-
   double _getImageWidth(BuildContext context) {
     if (Responsive.isMobile(context)) return getMaxWidth(context) * 0.45;
     if (Responsive.isTablet(context)) return getMaxWidth(context) * 0.45;
@@ -206,12 +217,6 @@ class AnimatedHeader extends StatelessWidget {
     if (Responsive.isTablet(context)) return 140.0;
     return 300.0; // Desktop
   }
-
-  // double _getTextRightPosition(BuildContext context) {
-  //   if (Responsive.isMobile(context)) return 0.0;
-  //   if (Responsive.isTablet(context)) return 30.0;
-  //   return 100.0; // Desktop
-  // }
 
   double _getTitleSpace(BuildContext context) {
     if (Responsive.isMobile(context)) return 5.0;
@@ -232,7 +237,7 @@ class AnimatedHeader extends StatelessWidget {
   }
 
   double _getTextContainerWidth(BuildContext context) {
-    if (Responsive.isMobile(context)) return getMaxWidth(context) * 0.42;
+    if (Responsive.isMobile(context)) return getMaxWidth(context) * 0.37;
     if (Responsive.isTablet(context)) return getMaxWidth(context) * 0.42;
     return 500.0; // Desktop
   }
@@ -250,7 +255,7 @@ class AnimatedHeader extends StatelessWidget {
   }
 
   double _getNameFontSize(BuildContext context) {
-    if (Responsive.isMobile(context)) return 25;
+    if (Responsive.isMobile(context)) return getMaxWidth(context) * 0.06;
     if (Responsive.isTablet(context)) return 45;
     return 50; // Desktop
   }
@@ -259,6 +264,12 @@ class AnimatedHeader extends StatelessWidget {
     if (Responsive.isMobile(context)) return 20;
     if (Responsive.isTablet(context)) return 40;
     return 50; // Desktop
+  }
+
+  double _getGifSize(BuildContext context) {
+    if (Responsive.isMobile(context)) return 20;
+    if (Responsive.isTablet(context)) return 30;
+    return 40; // Desktop
   }
 
   // Utility Methods

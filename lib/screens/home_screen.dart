@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nainaifolio/utils/constant.dart';
 import 'package:nainaifolio/widgets/portfolio_drawer.dart';
+import 'package:nainaifolio/widgets/projects_section.dart';
 import 'package:nainaifolio/widgets/what_i_can_offer_section.dart';
 import '../widgets/animated_header.dart';
 import '../widgets/skills_section.dart';
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey experienceKey = GlobalKey();
   final GlobalKey publicationsKey = GlobalKey();
   final GlobalKey skillsKey = GlobalKey();
+  final GlobalKey projectsKey = GlobalKey();
   final GlobalKey contactKey = GlobalKey();
 
   late ScrollController _scrollController;
@@ -64,8 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ExperienceSection(key: experienceKey),
                   PublicationsSection(key: publicationsKey),
                   SkillsSection(key: skillsKey),
+                  ProjectsSection(key: projectsKey),
                   ContactSection(key: contactKey),
-                  Footer(),
+                  const Footer(),
                 ],
               ),
             ),
@@ -98,6 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   case ScrollSection.skills:
                     scrollToSection(skillsKey);
                     break;
+                  case ScrollSection.projects:
+                    scrollToSection(projectsKey);
                 }
               },
             ),

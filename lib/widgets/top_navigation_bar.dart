@@ -9,6 +9,7 @@ enum ScrollSection {
   experience,
   publications,
   skills,
+  projects,
   contact
 }
 
@@ -59,6 +60,7 @@ class TopNavigationBar extends StatelessWidget {
         _buildNavItem(context, "Experience", ScrollSection.experience),
         _buildNavItem(context, "Publications", ScrollSection.publications),
         _buildNavItem(context, "Skills", ScrollSection.skills),
+        _buildNavItem(context, "Projects", ScrollSection.projects),
         _buildNavItem(context, "Contact", ScrollSection.contact),
       ],
     );
@@ -95,6 +97,7 @@ class TopNavigationBar extends StatelessWidget {
         _buildPopupMenuItem("Experience", ScrollSection.experience),
         _buildPopupMenuItem("Publications", ScrollSection.publications),
         _buildPopupMenuItem("Skills", ScrollSection.skills),
+        _buildPopupMenuItem("Projects", ScrollSection.projects),
         _buildPopupMenuItem("Contact", ScrollSection.contact),
       ],
     );
