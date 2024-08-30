@@ -31,11 +31,21 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey contactKey = GlobalKey();
 
   late ScrollController _scrollController;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _simulateLoading(); // Simulate loading time
+  }
+
+  void _simulateLoading() async {
+    // Simulate a delay for loading
+    await Future.delayed(const Duration(seconds: 3)); // 3 seconds loading time
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void scrollToSection(GlobalKey key) {
@@ -52,27 +62,32 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: const PortfolioDrawer(),
       body: Stack(
         children: [
-          Container(
-            padding:
-                EdgeInsets.symmetric(horizontal: getMaxWidth(context) * 0.05),
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                children: [
-                  const AnimatedHeader(),
-                  IntroductionSection(key: introKey),
-                  WhatICanOfferSection(key: whatICanOfferKey),
-                  EducationSection(key: educationKey),
-                  ExperienceSection(key: experienceKey),
-                  PublicationsSection(key: publicationsKey),
-                  SkillsSection(key: skillsKey),
-                  ProjectsSection(key: projectsKey),
-                  ContactSection(key: contactKey),
-                  const Footer(),
-                ],
+          if (_isLoading)
+            const Center(
+              child: CircularProgressIndicator(), // Show loading animation
+            )
+          else
+            Container(
+              padding:
+                  EdgeInsets.symmetric(horizontal: getMaxWidth(context) * 0.05),
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Column(
+                  children: [
+                    const AnimatedHeader(),
+                    IntroductionSection(key: introKey),
+                    WhatICanOfferSection(key: whatICanOfferKey),
+                    EducationSection(key: educationKey),
+                    ExperienceSection(key: experienceKey),
+                    PublicationsSection(key: publicationsKey),
+                    SkillsSection(key: skillsKey),
+                    ProjectsSection(key: projectsKey),
+                    ContactSection(key: contactKey),
+                    const Footer(),
+                  ],
+                ),
               ),
             ),
-          ),
           Positioned(
             top: 0,
             left: 0,

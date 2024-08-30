@@ -13,43 +13,50 @@ class ProjectsSection extends StatelessWidget {
     ProjectItem(
       title: 'Microcontroller Board Design',
       subtitle: 'Custom PCB for Embedded Systems',
-      imageUrl: 'https://via.placeholder.com/400', // Replace with actual image
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZLJ4FenmNw7xBQ2KcebhDvJ7IKtYkqLz', // Replace with actual image
       documentationUrl: 'https://example.com/docs/microcontroller-board',
     ),
     ProjectItem(
       title: 'PCB Drones',
       subtitle: 'Design and Development of Drones',
-      imageUrl: 'https://via.placeholder.com/400', // Replace with actual image
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZGET_Cgg8Q7w8fFHS2KSjtu5pL10Ac0n', // Replace with actual image
       documentationUrl: 'https://example.com/docs/pcb-drones',
     ),
     ProjectItem(
       title: 'AUV (Autonomous Underwater Vehicle)',
       subtitle: 'Design of Autonomous Underwater Vehicles',
-      imageUrl: 'https://via.placeholder.com/400', // Replace with actual image
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZO5brHNF0UImesYNftWbbe93ArYloDRd', // Replace with actual image
       documentationUrl: 'https://example.com/docs/auv',
     ),
     ProjectItem(
       title: 'Electric Vehicle',
       subtitle: 'Electric Car Development',
-      imageUrl: 'https://via.placeholder.com/400', // Replace with actual image
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZRRegB9bHrYeZ_4QCu-v5Z_VncM6FFRD', // Replace with actual image
       documentationUrl: 'https://example.com/docs/electric-vehicle',
     ),
     ProjectItem(
       title: 'Line Follower Robot',
       subtitle: 'Robotics and Automation',
-      imageUrl: 'https://via.placeholder.com/400', // Replace with actual image
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZT-vIBzM1FTTGnj39H1K6vuZ2wINaXLs', // Replace with actual image
       documentationUrl: 'https://example.com/docs/line-follower-robot',
     ),
     ProjectItem(
       title: 'LoRa Messenger',
       subtitle: 'Long Range Communication Project',
-      imageUrl: 'https://via.placeholder.com/400', // Replace with actual image
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZNiOikXJjXsQHgfMWLwObXjfePd-1bqE', // Replace with actual image
       documentationUrl: 'https://example.com/docs/lora-messenger',
     ),
     ProjectItem(
       title: 'Chat App',
       subtitle: 'Flutter-based Chat Application',
-      imageUrl: 'https://via.placeholder.com/400', // Replace with actual image
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1VGx1PaYbVE2SbtOX2xAmT1_lNcz-zUGX', // Replace with actual image
       documentationUrl: 'https://example.com/docs/chat-app',
     ),
   ];
