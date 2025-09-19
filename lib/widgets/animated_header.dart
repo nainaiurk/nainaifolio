@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
 import '../utils/responsive.dart';
 import 'cv_viewer_page.dart';

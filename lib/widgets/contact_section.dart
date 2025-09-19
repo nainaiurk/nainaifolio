@@ -1,4 +1,5 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,10 +46,12 @@ class _ContactSectionState extends State<ContactSection> {
     setState(() => _isSending = true);
 
     try {
-      print('DEBUG: Attempting to send email...');
-      print('DEBUG: Name: $name');
-      print('DEBUG: Email: $email');
-      print('DEBUG: Subject: $subject');
+      if (kDebugMode) {
+        print('DEBUG: Attempting to send email...');
+        print('DEBUG: Name: $name');
+        print('DEBUG: Email: $email');
+        print('DEBUG: Subject: $subject');
+      }
 
       final Email emailToSend = Email(
         body: '''
@@ -71,12 +74,16 @@ $name
         isHTML: false,
       );
 
-      print('DEBUG: Email object created successfully');
-      print('DEBUG: Recipients: ${emailToSend.recipients}');
-      print('DEBUG: Subject: ${emailToSend.subject}');
+      if (kDebugMode) {
+        print('DEBUG: Email object created successfully');
+        print('DEBUG: Recipients: ${emailToSend.recipients}');
+        print('DEBUG: Subject: ${emailToSend.subject}');
+      }
 
       await FlutterEmailSender.send(emailToSend);
-      print('DEBUG: Email sent successfully');
+      if (kDebugMode) {
+        print('DEBUG: Email sent successfully');
+      }
 
       // Clear form on success
       _nameController.clear();
@@ -94,8 +101,10 @@ $name
         );
       }
     } catch (e) {
-      print('DEBUG: Error sending email: $e');
-      print('DEBUG: Error type: ${e.runtimeType}');
+      if (kDebugMode) {
+        print('DEBUG: Error sending email: $e');
+        print('DEBUG: Error type: ${e.runtimeType}');
+      }
 
       // Try fallback method using url_launcher
       await _sendEmailFallback(name, email, subject, message);
@@ -109,7 +118,9 @@ $name
   Future<void> _sendEmailFallback(
       String name, String email, String subject, String message) async {
     try {
-      print('DEBUG: Trying fallback email method...');
+      if (kDebugMode) {
+        print('DEBUG: Trying fallback email method...');
+      }
 
       final String emailUrl = 'mailto:nainaiu.rk1234@gmail.com?'
           'subject=${Uri.encodeComponent(subject)}&'

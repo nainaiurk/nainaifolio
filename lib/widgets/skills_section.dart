@@ -215,16 +215,4 @@ class SkillsSection extends StatelessWidget {
       return Colors.blueGrey; // Beginner level
     }
   }
-
-  String _getProficiencyText(double level) {
-    if (level >= 0.8) {
-      return 'Expert';
-    } else if (level >= 0.7) {
-      return 'Advanced';
-    } else if (level >= 0.6) {
-      return 'Intermediate';
-    } else {
-      return 'Beginner';
-    }
-  }
 }

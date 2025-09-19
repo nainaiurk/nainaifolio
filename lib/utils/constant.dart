@@ -15,8 +15,7 @@ double getMaxWidth(BuildContext context) {
 // Academic / Professional palette with proper roles
 const Color _background =
     Color(0xFFF4F6F8); // Primary background (off-white paper)
-const Color _secondaryBackground =
-    Color(0xFFB7882E); // Secondary background for accents
+// Secondary background for accents
 const Color _primary = Color(0xFF0B2D5B); // Primary for headings and main CTAs
 const Color _secondary =
     Color(0xFFB7882E); // Secondary for accents and secondary CTAs
@@ -57,7 +56,7 @@ ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: _background,
   cardColor: Colors.white,
   textTheme: _lightTextTheme,
-  colorScheme: ColorScheme(
+  colorScheme: const ColorScheme(
     brightness: Brightness.light,
     primary: _primary,
     onPrimary: Colors.white,
@@ -89,7 +88,7 @@ ThemeData lightTheme = ThemeData(
       ),
     ),
   ),
-  iconTheme: IconThemeData(
+  iconTheme: const IconThemeData(
     color: _primary,
   ),
 );
@@ -99,7 +98,7 @@ ThemeData darkTheme = ThemeData(
   scaffoldBackgroundColor: _darkBackground,
   cardColor: _darkSurface,
   textTheme: _darkTextTheme,
-  colorScheme: ColorScheme(
+  colorScheme: const ColorScheme(
     brightness: Brightness.dark,
     primary: _darkPrimary,
     onPrimary: _darkBackground,
@@ -131,7 +130,7 @@ ThemeData darkTheme = ThemeData(
       ),
     ),
   ),
-  iconTheme: IconThemeData(
+  iconTheme: const IconThemeData(
     color: _darkPrimary,
   ),
 );

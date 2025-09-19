@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -86,9 +88,6 @@ class _CVViewerPageState extends State<CVViewerPage> {
       final url = html.Url.createObjectUrlFromBlob(blob);
 
       // Create a download link
-      final anchor = html.AnchorElement(href: url)
-        ..setAttribute('download', 'Nainai_Rakhaine_CV.pdf')
-        ..click();
 
       // Clean up
       html.Url.revokeObjectUrl(url);
