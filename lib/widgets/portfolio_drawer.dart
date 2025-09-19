@@ -26,6 +26,13 @@ class PortfolioDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            title: const Text('Expertise Areas'),
+            onTap: () {
+              // Scroll to Expertise Areas section
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
             title: const Text('Experience'),
             onTap: () {
               // Scroll to Experience section

@@ -1,13 +1,19 @@
 class ExperienceItem {
-  final String title;
-  final String description;
-  final String type; // e.g., 'Achievement', 'Job', 'Contest'
-  final String imageUrl; // URL for the image
+  final String role;
+  final String organization;
+  final String period;
+  final String location;
+  final String summary;
+  final List<String> highlights;
+  final String? professorLink;
 
-  ExperienceItem({
-    required this.title,
-    required this.description,
-    required this.type,
-    required this.imageUrl,
+  const ExperienceItem({
+    required this.role,
+    required this.organization,
+    required this.period,
+    required this.location,
+    required this.summary,
+    required this.highlights,
+    this.professorLink,
   });
 }

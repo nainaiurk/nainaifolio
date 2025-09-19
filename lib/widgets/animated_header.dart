@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:js' as js;
 import '../utils/responsive.dart';
+import 'cv_viewer_page.dart';
 
 class AnimatedHeader extends StatelessWidget {
   const AnimatedHeader({super.key});
@@ -33,8 +34,43 @@ class AnimatedHeader extends StatelessWidget {
               color: Colors.transparent,
               width: _getTextContainerWidth(context),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // CV Button positioned prominently above Hello
+                  Container(
+                    margin: const EdgeInsets.only(
+                        bottom: 5), // Reduced from 10 to 5
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CVViewerPage()),
+                        );
+                      },
+                      icon: const Icon(Icons.description, size: 20),
+                      label: const Text(
+                        'View My CV',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2,
+                        ),
+                        foregroundColor: Theme.of(context).colorScheme.primary,
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.05),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                    ),
+                  ),
                   Row(
                     children: [
                       Text(
@@ -46,7 +82,7 @@ class AnimatedHeader extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Image.asset(
-                        'gif/hand_wave.gif', // Replace with your GIF path
+                        'assets/gif/hand_wave.gif', // Replace with your GIF path
                         height: _getGifSize(context),
                       ),
                     ],
@@ -58,6 +94,7 @@ class AnimatedHeader extends StatelessWidget {
                         "Welcome to Nainai's Portfolio",
                         textStyle: TextStyle(
                           fontSize: _getSubtitleFontSize(context),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         speed: const Duration(milliseconds: 100),
                       ),
@@ -72,7 +109,7 @@ class AnimatedHeader extends StatelessWidget {
                     "NAINAIU",
                     style: GoogleFonts.montserrat(
                       fontSize: _getNameFontSize(context),
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
@@ -80,7 +117,7 @@ class AnimatedHeader extends StatelessWidget {
                     "RAKHAINE",
                     style: GoogleFonts.montserrat(
                       fontSize: _getNameFontSize(context),
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -95,7 +132,7 @@ class AnimatedHeader extends StatelessWidget {
                                 'https://www.facebook.com/nainaiu.rk1234/');
                           },
                           icon: const Icon(FontAwesomeIcons.facebook),
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).colorScheme.primary,
                           iconSize: _getIconSize(context),
                         ),
                         IconButton(
@@ -213,9 +250,9 @@ class AnimatedHeader extends StatelessWidget {
 
   // Text Positioning and Sizing
   double _getTextTopPosition(BuildContext context) {
-    if (Responsive.isMobile(context)) return 80.0;
-    if (Responsive.isTablet(context)) return 140.0;
-    return 300.0; // Desktop
+    if (Responsive.isMobile(context)) return 40.0; // Moved up from 80.0
+    if (Responsive.isTablet(context)) return 80.0; // Moved up from 140.0
+    return 250.0; // Moved up from 300.0 for Desktop
   }
 
   double _getTitleSpace(BuildContext context) {

@@ -1,287 +1,330 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/gestures.dart';
+
 import '../models/experience_item.dart';
 import '../utils/responsive.dart';
 
 class ExperienceSection extends StatelessWidget {
-  final Key? key;
+  const ExperienceSection({super.key});
 
-  ExperienceSection({this.key}) : super(key: key);
-
-  final List<ExperienceItem> experienceList = [
-    ExperienceItem(
-      title: 'Robonix Mechnovation 2022',
-      description: 'Secured 2nd place in Line Follower Robot Contest.',
-      type: 'Achievement',
-      imageUrl:
-          'https://lh3.googleusercontent.com/d/1VGx1PaYbVE2SbtOX2xAmT1_lNcz-zUGX',
+  static final List<ExperienceItem> _experiences = [
+    const ExperienceItem(
+      role: 'Research Assistant',
+      organization: 'Autonomous Vehicle Research Group, SUST',
+      period: 'Jul 2024 - 2025',
+      location: 'Sylhet, Bangladesh',
+      summary:
+          'Collaborating with Prof. Dr. Mohammad Shahidur Rahman on AutoMAMA, Bangladesh\'s first Level 2 autonomous vehicle initiative.',
+      highlights: [
+        'Delivered sensor-integration and control modules that enabled reliable two-passenger autonomous operation.',
+        'Coordinated embedded software validation across perception, actuation, and safety subsystems to meet research milestones.',
+      ],
+      professorLink:
+          'https://www.sust.edu/departments/cse/faculty/rahmanms@sust.edu',
     ),
-    ExperienceItem(
-      title: 'JRC Board Hackathon 2023',
-      description:
-          'Led a team to victory in the JRC Board Hackathon on The Topic "IoT for Industries".',
-      type: 'Achievement',
-      imageUrl:
-          'https://lh3.googleusercontent.com/d/1VQQ0TsFdYC3RF_0D8B1G0jAn9il1F5Vq',
+    const ExperienceItem(
+      role: 'Research Assistant',
+      organization: 'Embedded Systems Lab, SUST',
+      period: 'Jul 2023 - Present',
+      location: 'Sylhet, Bangladesh',
+      summary:
+          'Working with Assoc. Prof. Dr. Md Rashedujjaman on resilient IoT platforms and lab instrumentation for academic deployments.',
+      highlights: [
+        'Engineered a custom ESP32-S3 data logger adopted across ongoing research projects and student training cohorts.',
+        'Integrated low-power MQTT communication into an IoT-enabled P10 notice board to streamline campus messaging.',
+      ],
+      professorLink:
+          'https://www.sust.edu/departments/eee/faculty/mrased-eee@sust.edu',
     ),
-    ExperienceItem(
-      title: 'University Innovation Hub Program 2024',
-      description:
-          'Secured Top 5 position in the University Innovation Hub Program for The Startup Idea on \'Autonomous Underwater Vehicle\'.',
-      type: 'Achievement',
-      imageUrl:
-          'https://lh3.googleusercontent.com/d/1VDerRfKn2Lv_-EjJHWTQApeAVrFQueO4',
+    const ExperienceItem(
+      role: 'Research Assistant',
+      organization: 'Sustainable Energy & IoT Group, SUST',
+      period: 'Jun 2022 - Present',
+      location: 'Sylhet, Bangladesh',
+      summary:
+          'Supporting Asst. Prof. Arif Ahammad on intelligent sensing systems for campus-scale deployments.',
+      highlights: [
+        'Built a multimodal biometric attendance platform (face + fingerprint) deployed at university events for secure access control.',
+        'Developed a hybrid solar-wind IoT monitoring node with efficient telemetry for off-grid environmental sensing.',
+      ],
+      professorLink: 'https://github.com/nainaiurk/LoRa-Messenger',
     ),
-    ExperienceItem(
-      title: 'NASA Space Apps Challenge 2022',
-      description:
-          'Participated in the NASA Space Apps Challenge National Round.',
-      type: 'Contest Participation',
-      imageUrl:
-          'https://lh3.googleusercontent.com/d/1VQkBgnl5lI9GAtoTQ2O8t_xxSDyP6E6-',
-    ),
-    ExperienceItem(
-      title: 'President In RoboSUST',
-      description:
-          'Volunteered in a Robotics Club of SUST as a President.(2024-2025)',
-      type: 'Volunteer',
-      imageUrl:
-          'https://lh3.googleusercontent.com/d/1VTBrEfHNxy1IN8fc-WzZlPGkowg-fZmp',
-    ),
-    ExperienceItem(
-      title: 'Junior App Developer',
-      description:
-          'Worked as a Junior App Developer in a Software Company.(2021-2022)',
-      type: 'Job',
-      imageUrl:
-          'https://lh3.googleusercontent.com/d/1VTBrEfHNxy1IN8fc-WzZlPGkowg-fZmp',
+    const ExperienceItem(
+      role: 'Electronic Content Engineer',
+      organization: 'JLCPCB',
+      period: '2024 - Present',
+      location: 'Remote',
+      summary:
+          'Produce industry-grade PCB design and embedded tutorials consumed by a global maker and academic community.',
+      highlights: [
+        'Author detailed design guides spanning advanced PCB layout, embedded firmware, and TinyML workflows.',
+        'Collaborate with product teams to validate reference designs prior to publication for engineering audiences.',
+      ],
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    final double cardWidth = _getCardWidth(context);
+    final theme = Theme.of(context);
+    final headingStyle = theme.textTheme.headlineSmall?.copyWith(
+      fontSize: TitleFontSize().titleFontSize(context),
+      fontWeight: FontWeight.w700,
+      letterSpacing: 0.6,
+      color: theme.colorScheme.primary,
+    );
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 50.0),
-      color: Colors.transparent,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 24.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Icon(FontAwesomeIcons.award,
-                  size: TitleIconSize().titleIconSize(context)),
+              Icon(
+                FontAwesomeIcons.briefcase,
+                size: 24,
+                color: theme.colorScheme.primary,
+              ),
               const SizedBox(width: 20),
-              Text(
-                "Experience & Achievements",
-                style: TextStyle(
-                  fontSize: TitleFontSize().titleFontSize(context),
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+              Expanded(
+                child: Text(
+                  'Research and Professional Experience',
+                  style: headingStyle,
+                  softWrap: true,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 30),
-          Wrap(
-            spacing: 16.0, // Spacing between cards horizontally
-            runSpacing: 16.0, // Spacing between cards vertically
-            children: experienceList.map((item) {
-              return ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: cardWidth,
-                  maxWidth: cardWidth,
+          const SizedBox(height: 16),
+          Text(
+            'Hands-on roles spanning autonomous systems, IoT instrumentation, and technical communication for next-generation embedded platforms.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              height: 1.6,
+              color: theme.textTheme.bodyMedium?.color?.withOpacity(0.85),
+            ),
+          ),
+          const SizedBox(height: 32),
+          ..._experiences.map((item) => _ExperienceCard(item: item)),
+        ],
+      ),
+    );
+  }
+}
+
+class _ExperienceCard extends StatelessWidget {
+  const _ExperienceCard({required this.item});
+
+  final ExperienceItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final background =
+        isDark ? theme.cardColor : theme.colorScheme.surface.withOpacity(0.98);
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: theme.colorScheme.primary.withOpacity(0.4),
+        ),
+        boxShadow: isDark
+            ? const []
+            : [
+                BoxShadow(
+                  color: theme.colorScheme.primary.withOpacity(0.08),
+                  blurRadius: 18,
+                  offset: const Offset(0, 12),
                 ),
-                child: _buildExperienceCard(item, context),
-              );
-            }).toList(),
+              ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            item.role,
+            style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.4,
+                  color: theme.colorScheme.primary,
+                ) ??
+                TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.primary,
+                ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${item.organization} | ${item.location}',
+            style: theme.textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.3,
+              color: theme.textTheme.bodySmall?.color?.withOpacity(0.85),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            item.period,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildSummaryWithLinks(item.summary, item.professorLink, context),
+          const SizedBox(height: 16),
+          ...item.highlights.map(
+            (highlight) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 6,
+                    height: 6,
+                    margin: const EdgeInsets.only(top: 8),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      highlight,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                            height: 1.6,
+                            color: theme.textTheme.bodyMedium?.color,
+                          ) ??
+                          TextStyle(
+                            fontSize: 15,
+                            height: 1.6,
+                            color: theme.textTheme.bodyMedium?.color,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildExperienceCard(ExperienceItem item, BuildContext context) {
-    bool isExpanded = false;
+  Widget _buildSummaryWithLinks(
+      String summary, String? professorLink, BuildContext context) {
+    final theme = Theme.of(context);
 
-    return StatefulBuilder(
-      builder: (BuildContext context, StateSetter setState) {
-        return Card(
-          elevation: 8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+    if (professorLink == null || professorLink.isEmpty) {
+      // If no professor link, just return regular text
+      return Text(
+        summary,
+        style: theme.textTheme.bodyMedium?.copyWith(
+              height: 1.6,
+              color: theme.textTheme.bodyMedium?.color,
+            ) ??
+            TextStyle(
+              fontSize: 15,
+              height: 1.6,
+              color: theme.textTheme.bodyMedium?.color,
+            ),
+      );
+    }
+
+    // Extract professor name from summary (assuming it follows "with" or "Working with")
+    final professorPatterns = [
+      RegExp(r'with\s+([^,]+)', caseSensitive: false),
+      RegExp(r'Working with\s+([^,]+)', caseSensitive: false),
+      RegExp(r'Supporting\s+([^,]+)', caseSensitive: false),
+      RegExp(r'Collaborating with\s+([^,]+)', caseSensitive: false),
+    ];
+
+    String? professorName;
+    for (final pattern in professorPatterns) {
+      final match = pattern.firstMatch(summary);
+      if (match != null && match.groupCount >= 1) {
+        professorName = match.group(1)?.trim();
+        break;
+      }
+    }
+
+    if (professorName == null) {
+      // If we can't extract professor name, return regular text
+      return Text(
+        summary,
+        style: theme.textTheme.bodyMedium?.copyWith(
+              height: 1.6,
+              color: theme.textTheme.bodyMedium?.color,
+            ) ??
+            TextStyle(
+              fontSize: 15,
+              height: 1.6,
+              color: theme.textTheme.bodyMedium?.color,
+            ),
+      );
+    }
+
+    // Split the text around the professor name
+    final parts = summary.split(professorName);
+    if (parts.length != 2) {
+      // If we can't split properly, return regular text
+      return Text(
+        summary,
+        style: theme.textTheme.bodyMedium?.copyWith(
+              height: 1.6,
+              color: theme.textTheme.bodyMedium?.color,
+            ) ??
+            TextStyle(
+              fontSize: 15,
+              height: 1.6,
+              color: theme.textTheme.bodyMedium?.color,
+            ),
+      );
+    }
+
+    return RichText(
+      text: TextSpan(
+        style: theme.textTheme.bodyMedium?.copyWith(
+              height: 1.6,
+              color: theme.textTheme.bodyMedium?.color,
+            ) ??
+            TextStyle(
+              fontSize: 15,
+              height: 1.6,
+              color: theme.textTheme.bodyMedium?.color,
+            ),
+        children: [
+          TextSpan(text: parts[0]),
+          TextSpan(
+            text: professorName,
+            style: TextStyle(
+              color: theme.colorScheme.primary,
+              fontWeight: FontWeight.w600,
+              decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () async {
+                final Uri uri = Uri.parse(professorLink);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                }
+              },
           ),
-          shadowColor: Colors.black45,
-          color: Theme.of(context).cardColor,
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(15)),
-                    child: Image.network(
-                      item.imageUrl,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: _getImageHeight(context, isExpanded),
-                    ),
-                  ),
-                  if (!isExpanded)
-                    Positioned.fill(
-                      child: Container(
-                        padding: const EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withOpacity(0.8),
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              item.title,
-                              style: TextStyle(
-                                fontSize: _getCardTitleFontSize(context),
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .color,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              item.description,
-                              style: TextStyle(
-                                fontSize: _getCardDescriptionFontSize(context),
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .color,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      isExpanded = !isExpanded;
-                                    });
-                                  },
-                                  child: Text(
-                                    'Read More',
-                                    style: TextStyle(
-                                      fontSize: _getButtonFontSize(context),
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              if (isExpanded)
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  color: Theme.of(context).cardColor,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.title,
-                        style: TextStyle(
-                          fontSize: _getCardTitleFontSize(context),
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).textTheme.bodyMedium!.color,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        item.description,
-                        style: TextStyle(
-                          fontSize: _getCardDescriptionFontSize(context),
-                          color: Theme.of(context).textTheme.bodySmall!.color,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  isExpanded = !isExpanded;
-                                });
-                              },
-                              child: Text(
-                                'Read Less',
-                                style: TextStyle(
-                                  fontSize: _getButtonFontSize(context),
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              )),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        );
-      },
+          TextSpan(text: parts[1]),
+        ],
+      ),
     );
-  }
-
-  // Card width based on screen size
-  double _getCardWidth(BuildContext context) {
-    if (Responsive.isMobile(context)) {
-      return MediaQuery.of(context).size.width / 3 + 20;
-    }
-    if (Responsive.isTablet(context)) {
-      return MediaQuery.of(context).size.width / 4 + 20;
-    }
-    return MediaQuery.of(context).size.width / 4; // Desktop
-  }
-
-  // Constants for card title font size
-  double _getCardTitleFontSize(BuildContext context) {
-    if (Responsive.isMobile(context)) return 14.0;
-    if (Responsive.isTablet(context)) return 18.0;
-    return 22.0; // Desktop
-  }
-
-  // Constants for card description font size
-  double _getCardDescriptionFontSize(BuildContext context) {
-    if (Responsive.isMobile(context)) return 14.0;
-    if (Responsive.isTablet(context)) return 16.0;
-    return 18.0; // Desktop
-  }
-
-  // Constants for button font size
-  double _getButtonFontSize(BuildContext context) {
-    if (Responsive.isMobile(context)) return 14.0;
-    if (Responsive.isTablet(context)) return 16.0;
-    return 18.0; // Desktop
-  }
-
-  // Constants for image height
-  double _getImageHeight(BuildContext context, bool isExpanded) {
-    if (Responsive.isMobile(context)) return isExpanded ? 200.0 : 150.0;
-    if (Responsive.isTablet(context)) return isExpanded ? 250.0 : 200.0;
-    return isExpanded ? 300.0 : 250.0; // Desktop
   }
 }

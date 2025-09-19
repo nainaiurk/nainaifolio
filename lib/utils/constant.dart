@@ -12,46 +12,126 @@ double getMaxWidth(BuildContext context) {
   return MediaQuery.of(context).size.width;
 }
 
+// Academic / Professional palette with proper roles
+const Color _background =
+    Color(0xFFF4F6F8); // Primary background (off-white paper)
+const Color _secondaryBackground =
+    Color(0xFFB7882E); // Secondary background for accents
+const Color _primary = Color(0xFF0B2D5B); // Primary for headings and main CTAs
+const Color _secondary =
+    Color(0xFFB7882E); // Secondary for accents and secondary CTAs
+const Color _bodyText = Color(0xFF1E293B); // Body text color
+const Color _darkBackground = Color(0xFF071427); // Dark mode background
+const Color _darkSurface = Color(0xFF0F2233); // Dark mode surface
+const Color _darkPrimary = Color(0xFF9FBFF0); // Dark mode primary
+const Color _darkSecondary = Color(0xFFD6C29A); // Dark mode secondary
+const Color _darkBodyText = Color(0xFFE6EAF4); // Dark mode body text
+
+// Public aliases for use across the app
+const Color kPrimaryColor = _primary;
+const Color kSecondaryColor = _secondary;
+const Color kBackgroundColor = _background;
+const Color kSurfaceColor = Colors.white;
+const Color kDarkPrimaryColor = _darkPrimary;
+const Color kDarkSecondaryColor = _darkSecondary;
+const Color kDarkBackgroundColor = _darkBackground;
+const Color kDarkSurfaceColor = _darkSurface;
+const Color kDarkBodyText = _darkBodyText;
+
+final TextTheme _lightTextTheme = GoogleFonts.loraTextTheme(
+  ThemeData.light().textTheme,
+).apply(
+  bodyColor: _bodyText, // Body text color
+  displayColor: _primary,
+);
+
+final TextTheme _darkTextTheme = GoogleFonts.loraTextTheme(
+  ThemeData.dark().textTheme,
+).apply(
+  bodyColor: _darkBodyText,
+  displayColor: _darkPrimary,
+);
+
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  primaryColor: const Color(0xFF66FCF1),
-  colorScheme: ColorScheme.fromSwatch().copyWith(
-    secondary: const Color(0XFF4E31AA), // Replaces accentColor
-  ),
-  scaffoldBackgroundColor: const Color(0XFFF7F7F8),
-  textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Color.fromARGB(255, 105, 99, 99)),
-    bodyMedium: TextStyle(color: Color(0xFF757575)),
+  scaffoldBackgroundColor: _background,
+  cardColor: Colors.white,
+  textTheme: _lightTextTheme,
+  colorScheme: ColorScheme(
+    brightness: Brightness.light,
+    primary: _primary,
+    onPrimary: Colors.white,
+    secondary: _secondary,
+    onSecondary: Colors.white,
+    error: Color(0xFFB3261E),
+    onError: Colors.white,
+    background: _background,
+    onBackground: _bodyText,
+    surface: Colors.white,
+    onSurface: _bodyText,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0XFF3795BD), // Replaces primary
-      foregroundColor: Colors.white, // Replaces onPrimary
+      backgroundColor: _primary,
+      foregroundColor: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      textStyle: GoogleFonts.lora(
+        fontWeight: FontWeight.w600,
+        fontSize: 16,
+      ),
     ),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: _primary,
+      textStyle: GoogleFonts.lora(
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ),
+  iconTheme: IconThemeData(
+    color: _primary,
   ),
 );
+
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: const Color(0XFF6fffe9),
-  canvasColor: const Color(0XFF5bc0be),
-  colorScheme: const ColorScheme.dark().copyWith(
-    secondary: const Color(0xFFC5C6C7),
-  ),
-  scaffoldBackgroundColor: const Color(0XFF0b132b),
-  cardColor: const Color(0XFF3a506b),
-  textTheme: TextTheme(
-    bodyLarge: GoogleFonts.poppins(color: const Color(0XFF6fffe9)),
-    bodyMedium:
-        GoogleFonts.poppins(color: const Color.fromARGB(255, 255, 255, 255)),
-    bodySmall: GoogleFonts.poppins(color: const Color(0xFFC5C6C7)),
+  scaffoldBackgroundColor: _darkBackground,
+  cardColor: _darkSurface,
+  textTheme: _darkTextTheme,
+  colorScheme: ColorScheme(
+    brightness: Brightness.dark,
+    primary: _darkPrimary,
+    onPrimary: _darkBackground,
+    secondary: _darkSecondary,
+    onSecondary: _darkBackground,
+    error: Color(0xFFF2B8B5),
+    onError: Color(0xFF601410),
+    background: _darkBackground,
+    onBackground: _darkBodyText,
+    surface: _darkSurface,
+    onSurface: _darkBodyText,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0XFF0B0C10),
-      foregroundColor: Colors.black,
+      backgroundColor: _darkPrimary,
+      foregroundColor: _darkBackground,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      textStyle: GoogleFonts.lora(
+        fontWeight: FontWeight.w600,
+        fontSize: 16,
+      ),
     ),
   ),
-  iconTheme: const IconThemeData(
-    color: Color(0XFF6fffe9),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: _darkPrimary,
+      textStyle: GoogleFonts.lora(
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ),
+  iconTheme: IconThemeData(
+    color: _darkPrimary,
   ),
 );

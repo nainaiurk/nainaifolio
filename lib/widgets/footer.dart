@@ -8,7 +8,7 @@ class Footer extends StatelessWidget {
   final String email1 = 'nainaiu.rakhaine@gmail.com';
   final String email2 = 'nainaiu52@student.sust.edu';
   final String whatsappNumber = '+8801605544977';
-  final String skypeUsername = 'live:.cid.7b3b3b3b3b3b3b3b';
+  final String linkedinUrl = 'https://www.linkedin.com/in/nainaiu-rakhaine';
 
   const Footer({super.key});
 
@@ -40,7 +40,7 @@ class Footer extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          // WhatsApp and Skype
+          // WhatsApp and LinkedIn
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -53,9 +53,9 @@ class Footer extends StatelessWidget {
               const SizedBox(width: 20),
               _buildContactItem(
                 context,
-                FontAwesomeIcons.skype,
-                skypeUsername,
-                () => _launchSkype(skypeUsername),
+                FontAwesomeIcons.linkedinIn,
+                'LinkedIn',
+                () => _launchLinkedIn(linkedinUrl),
               ),
             ],
           ),
@@ -66,20 +66,21 @@ class Footer extends StatelessWidget {
 
   Widget _buildContactItem(
       BuildContext context, IconData icon, String label, VoidCallback onTap) {
+    final theme = Theme.of(context);
     return InkWell(
       onTap: onTap,
       child: Row(
         children: [
           FaIcon(
             icon,
-            color: Colors.white,
+            color: theme.colorScheme.primary,
             size: (Responsive.isMobile(context)) ? 20.0 : 40.0,
           ),
           const SizedBox(width: 10),
           Text(
             label,
             style: TextStyle(
-              color: Colors.white,
+              color: theme.colorScheme.primary,
               fontSize: (Responsive.isMobile(context)) ? 10.0 : 15.0,
               decoration: TextDecoration.underline,
             ),
@@ -99,8 +100,7 @@ class Footer extends StatelessWidget {
     js.context.callMethod('open', [whatsappUrl]);
   }
 
-  void _launchSkype(String username) {
-    final skypeUrl = 'skype:$username?chat';
-    js.context.callMethod('open', [skypeUrl]);
+  void _launchLinkedIn(String url) {
+    js.context.callMethod('open', [url]);
   }
 }

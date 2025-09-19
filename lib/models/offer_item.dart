@@ -1,13 +1,15 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 class OfferItem {
   final IconData icon;
   final String label;
+  final String description;
   final Color color;
 
-  OfferItem({
+  const OfferItem({
     required this.icon,
     required this.label,
+    required this.description,
     required this.color,
   });
 }

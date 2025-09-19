@@ -15,8 +15,7 @@ class PortfolioApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode:
-          ThemeMode.dark, // Automatically switch between light and dark mode
+      themeMode: ThemeMode.light,
       home: const HomeScreen(),
     );
   }

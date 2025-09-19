@@ -1,0 +1,9 @@
+# Placeholder images for projects
+assets/images/projects/
+  microcontroller_board.png
+  pcb_drones.png
+  auv.png
+  electric_vehicle.png
+  line_follower_robot.png
+  lora_messenger.png
+  chat_app.png

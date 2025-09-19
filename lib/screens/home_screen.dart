@@ -1,8 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:nainaifolio/utils/constant.dart';
 import 'package:nainaifolio/widgets/portfolio_drawer.dart';
 import 'package:nainaifolio/widgets/projects_section.dart';
-import 'package:nainaifolio/widgets/what_i_can_offer_section.dart';
+import 'package:nainaifolio/widgets/expertise_areas_section.dart';
 import '../widgets/animated_header.dart';
 import '../widgets/skills_section.dart';
 import '../widgets/top_navigation_bar.dart';
@@ -49,10 +51,32 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void scrollToSection(GlobalKey key) {
+    double alignment = 0.22; // Default higher alignment for most sections
+
+    // Fine-tune alignment for specific sections
+    if (key == whatICanOfferKey) {
+      alignment = 0.20; // Expertise section - working correctly
+    } else if (key == educationKey) {
+      alignment = 0.12; // Education section - working correctly
+    } else if (key == introKey) {
+      alignment = 0.18; // Introduction section
+    } else if (key == experienceKey) {
+      alignment = -0.1; // Experience section - needs more space
+    } else if (key == publicationsKey) {
+      alignment = -0.1; // Publications section
+    } else if (key == skillsKey) {
+      alignment = -0.5; // Skills section
+    } else if (key == projectsKey) {
+      alignment = -0.2; // Projects section - needs most space
+    } else if (key == contactKey) {
+      alignment = 0.21; // Contact section
+    }
+
     Scrollable.ensureVisible(
       key.currentContext!,
       duration: const Duration(seconds: 1),
       curve: Curves.easeInOut,
+      alignment: alignment,
     );
   }
 
@@ -76,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     const AnimatedHeader(),
                     IntroductionSection(key: introKey),
-                    WhatICanOfferSection(key: whatICanOfferKey),
+                    ExpertiseAreasSection(key: whatICanOfferKey),
                     EducationSection(key: educationKey),
                     ExperienceSection(key: experienceKey),
                     PublicationsSection(key: publicationsKey),
