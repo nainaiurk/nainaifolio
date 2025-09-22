@@ -6,14 +6,14 @@ import '../models/offer_item.dart';
 /// Expertise section:
 /// - Mobile (<600px): 2 cards per row
 /// - Tablet/Desktop (>=600px): 4 cards per row
-/// - Cards are **as tight as possible**: cell height == exact content height (no white gap top/bottom)
+/// - Cards are tight: grid cell height ~= content height (with safety to prevent overflow)
 class ExpertiseAreasSection extends StatelessWidget {
   const ExpertiseAreasSection({super.key});
 
   static const List<OfferItem> _offers = [
     OfferItem(
       icon: FontAwesomeIcons.microchip,
-      label: 'Embedded Systems & IoT Research',
+      label: 'Embedded Systems & IoT',
       description:
           'Can design System on Chip(SoC) devices using compact PCB design. Integrate to low-power ESP32/STM32 platforms, IoT pipelines, and resilient data acquisition for ready autonomous systems.',
       color: Color(0xFF1A2B4C),
@@ -50,6 +50,9 @@ class ExpertiseAreasSection extends StatelessWidget {
       color: theme.colorScheme.primary,
     );
 
+    double clamp(double v, double min, double max) =>
+        v < min ? min : (v > max ? max : v);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final w = constraints.maxWidth;
@@ -62,78 +65,56 @@ class ExpertiseAreasSection extends StatelessWidget {
         final totalSpacing = spacing * (cols - 1);
         final cardW = (w - totalSpacing) / cols;
 
-        double clamp(double v, double min, double max) =>
-            v < min ? min : (v > max ? max : v);
-
-        // Compact section title sizes
-        final sectionTitleFont = clamp(cardW * 0.12, 16, 22);
+        // Title sizes
+        final sectionTitleFont = isMobile ? 20.0 : (isTablet ? 24.0 : 28.0);
         final iconLeadingSize = clamp(sectionTitleFont * 0.6, 16, 20);
 
-        // ===== Ultra-compact card metrics (smaller → less white gap) =====
-        final double iconBox = isMobile
-            ? 18.0
-            : isTablet
-                ? 26.0
-                : 30.0;
-        final double iconSize = isMobile
-            ? 16.0
-            : isTablet
-                ? 18.0
-                : 20.0;
-        final double titleFont = isMobile
-            ? 10.5
-            : isTablet
-                ? 11.5
-                : 12.5;
-        final double hintFont = isMobile
-            ? 8.5
-            : isTablet
-                ? 9.0
-                : 10.0;
-        final double arrowSz = isMobile
-            ? 8.0
-            : isTablet
-                ? 9.0
-                : 10.0;
+        // ===== Compact card metrics =====
+        final double iconBox = isMobile ? 18.0 : (isTablet ? 26.0 : 30.0);
+        final double iconSize = isMobile ? 18.0 : (isTablet ? 18.0 : 20.0);
+        final double titleFont = isMobile ? 12.0 : (isTablet ? 13.5 : 14.5);
+        final double hintFont = isMobile ? 8.5 : (isTablet ? 9.0 : 10.0);
+        final double arrowSz = isMobile ? 8.0 : (isTablet ? 9.0 : 10.0);
 
-        // Tighter internal paddings
-        const double cardPadV = 5.0; // ↓↓ trimmed vertical padding
+        // Internal paddings & gaps
+        const double cardPadV = 5.0;
         const double cardPadH = 6.0;
-
-        // Tighter gaps
         const double gapAfterIcon = 4.0;
-        const double gapAfterTitle = 5.0;
+        const double gapAfterTitle = 4.0;
         const double gapBeforeArrow = 4.0;
 
-        // Text metrics
-        double lineH(double font, double height) => font * height;
-        final double titleLineH = lineH(titleFont, 1.15);
-        final double hintLineH = lineH(hintFont, 1.12);
+        // === Fix overflow: include textScale + safety margin ===
+        final textScale =
+            MediaQuery.of(context).textScaleFactor.clamp(0.8, 1.6);
+        double lineH(double font, double height) => font * height * textScale;
 
-        // Allow up to 2 lines for title, 1 for hint
+        final double titleLineH = lineH(titleFont, 1.18);
+        final double hintLineH = lineH(hintFont, 1.14);
+
+        // Up to 2 lines title, 1 line hint
         final double titleBlockH = titleLineH * 2;
         final double hintBlockH = hintLineH;
 
-        // *** EXACT MIN content height (so the cell equals content height) ***
-        final double minContentHeight = (cardPadV * 2) + // top + bottom padding
+        // Safety pixels to absorb per-platform font differences & rounding
+        final double safety = isMobile ? 6.0 : (isTablet ? 5.0 : 4.0);
+
+        final double minContentHeight = (cardPadV * 2) +
             iconBox +
             gapAfterIcon +
             titleBlockH +
             gapAfterTitle +
             hintBlockH +
             gapBeforeArrow +
-            arrowSz;
+            arrowSz +
+            safety; // <-- safety buffer
 
-        // Force cell height == minContentHeight (no extra white gap)
         final double cellH = minContentHeight;
-        final childAspectRatio = cardW / cellH;
+        final double childAspectRatio = cardW / cellH;
 
-        final titleTopPadding =
-            w < 900 ? 16.0 : 0.0; // small nudge below appbar
+        final titleTopPadding = w < 900 ? 16.0 : 0.0;
 
         return Container(
           width: double.infinity,
-          // slimmer section padding to avoid extra white above/below the grid
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +147,7 @@ class ExpertiseAreasSection extends StatelessWidget {
                   crossAxisSpacing: spacing,
                   mainAxisSpacing: spacing,
                   childAspectRatio:
-                      childAspectRatio, // cell height == content height
+                      childAspectRatio, // height ~= content + safety
                 ),
                 itemBuilder: (context, index) => _CompactOfferCard(
                   item: _offers[index],
@@ -222,25 +203,22 @@ class _CompactOfferCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final background = isDark
-        ? theme.cardColor
-        : theme.colorScheme.surface; // no extra opacity
+    final background = isDark ? theme.cardColor : theme.colorScheme.surface;
 
     return InkWell(
       onTap: () => _showDetailsDialog(context),
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        // **No extra height**: fills the cell exactly
         padding: EdgeInsets.symmetric(horizontal: padH, vertical: padV),
-        clipBehavior: Clip.antiAlias, // trim any visual overflow
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: background,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: item.color,
+            color:
+                item.color.withOpacity(0.7), // kept visible but not too heavy
             width: 1,
           ),
-          // very soft shadow (kept tiny so it doesn't look like extra gap)
           boxShadow: isDark
               ? const []
               : [
@@ -252,11 +230,10 @@ class _CompactOfferCard extends StatelessWidget {
                 ],
         ),
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.spaceBetween, // uses the full cell height
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // packed block (icon + title + hint)
+            // Icon
             Container(
               width: iconBox,
               height: iconBox,
@@ -269,6 +246,8 @@ class _CompactOfferCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: gapAfterIcon),
+
+            // Title (2 lines max by design)
             Text(
               item.label,
               textAlign: TextAlign.center,
@@ -283,6 +262,8 @@ class _CompactOfferCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             SizedBox(height: gapAfterTitle),
+
+            // Hint
             Text(
               'Tap for details',
               textAlign: TextAlign.center,
@@ -295,7 +276,7 @@ class _CompactOfferCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
 
-            // Arrow anchored at bottom (consumes the remaining few pixels)
+            // Arrow at bottom
             Icon(Icons.arrow_forward_ios, size: arrowSz, color: item.color),
           ],
         ),
