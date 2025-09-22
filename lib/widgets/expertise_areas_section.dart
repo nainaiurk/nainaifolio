@@ -3,10 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/offer_item.dart';
 
+/// Expertise section:
+/// - Mobile (<600px): 2 cards per row
+/// - Tablet/Desktop (>=600px): 4 cards per row
+/// - Cards are **as tight as possible**: cell height == exact content height (no white gap top/bottom)
 class ExpertiseAreasSection extends StatelessWidget {
   const ExpertiseAreasSection({super.key});
-
-  static const double _titleFontSize = 28;
 
   static const List<OfferItem> _offers = [
     OfferItem(
@@ -27,7 +29,7 @@ class ExpertiseAreasSection extends StatelessWidget {
       icon: FontAwesomeIcons.brain,
       label: 'TinyML & Edge Intelligence',
       description:
-          'Deploying TinyML frameworks for low powered embedded devices(Microcontrollers) optimizing edge inference for sustainable monitoring.',
+          'Deploying TinyML frameworks for low powered embedded devices (Microcontrollers) optimizing edge inference for sustainable monitoring.',
       color: Color(0xFF3B4F73),
     ),
     OfferItem(
@@ -42,158 +44,259 @@ class ExpertiseAreasSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final headingStyle = theme.textTheme.headlineSmall?.copyWith(
-      fontSize: _titleFontSize,
+    final baseTitleStyle = theme.textTheme.headlineSmall?.copyWith(
       fontWeight: FontWeight.w700,
       letterSpacing: 0.6,
       color: theme.colorScheme.primary,
     );
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = constraints.maxWidth;
+        final isMobile = w < 600;
+        final isTablet = w >= 600 && w < 1100;
+
+        // Grid columns
+        final cols = isMobile ? 2 : 4;
+        const spacing = 8.0; // tighter spacing
+        final totalSpacing = spacing * (cols - 1);
+        final cardW = (w - totalSpacing) / cols;
+
+        double clamp(double v, double min, double max) =>
+            v < min ? min : (v > max ? max : v);
+
+        // Compact section title sizes
+        final sectionTitleFont = clamp(cardW * 0.12, 16, 22);
+        final iconLeadingSize = clamp(sectionTitleFont * 0.6, 16, 20);
+
+        // ===== Ultra-compact card metrics (smaller → less white gap) =====
+        final double iconBox = isMobile
+            ? 18.0
+            : isTablet
+                ? 26.0
+                : 30.0;
+        final double iconSize = isMobile
+            ? 16.0
+            : isTablet
+                ? 18.0
+                : 20.0;
+        final double titleFont = isMobile
+            ? 10.5
+            : isTablet
+                ? 11.5
+                : 12.5;
+        final double hintFont = isMobile
+            ? 8.5
+            : isTablet
+                ? 9.0
+                : 10.0;
+        final double arrowSz = isMobile
+            ? 8.0
+            : isTablet
+                ? 9.0
+                : 10.0;
+
+        // Tighter internal paddings
+        const double cardPadV = 5.0; // ↓↓ trimmed vertical padding
+        const double cardPadH = 6.0;
+
+        // Tighter gaps
+        const double gapAfterIcon = 4.0;
+        const double gapAfterTitle = 5.0;
+        const double gapBeforeArrow = 4.0;
+
+        // Text metrics
+        double lineH(double font, double height) => font * height;
+        final double titleLineH = lineH(titleFont, 1.15);
+        final double hintLineH = lineH(hintFont, 1.12);
+
+        // Allow up to 2 lines for title, 1 for hint
+        final double titleBlockH = titleLineH * 2;
+        final double hintBlockH = hintLineH;
+
+        // *** EXACT MIN content height (so the cell equals content height) ***
+        final double minContentHeight = (cardPadV * 2) + // top + bottom padding
+            iconBox +
+            gapAfterIcon +
+            titleBlockH +
+            gapAfterTitle +
+            hintBlockH +
+            gapBeforeArrow +
+            arrowSz;
+
+        // Force cell height == minContentHeight (no extra white gap)
+        final double cellH = minContentHeight;
+        final childAspectRatio = cardW / cellH;
+
+        final titleTopPadding =
+            w < 900 ? 16.0 : 0.0; // small nudge below appbar
+
+        return Container(
+          width: double.infinity,
+          // slimmer section padding to avoid extra white above/below the grid
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                FontAwesomeIcons.solidCircleCheck,
-                size: 24,
-                color: theme.colorScheme.primary,
+              Padding(
+                padding: EdgeInsets.only(top: titleTopPadding, bottom: 6.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.solidCircleCheck,
+                      size: iconLeadingSize,
+                      color: theme.colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Expertise Areas',
+                      style: (baseTitleStyle ?? const TextStyle())
+                          .copyWith(fontSize: sectionTitleFont),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(width: 16),
-              Text('Expertise Areas', style: headingStyle),
+              const SizedBox(height: 8),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _offers.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: cols, // 2 on mobile, 4 otherwise
+                  crossAxisSpacing: spacing,
+                  mainAxisSpacing: spacing,
+                  childAspectRatio:
+                      childAspectRatio, // cell height == content height
+                ),
+                itemBuilder: (context, index) => _CompactOfferCard(
+                  item: _offers[index],
+                  iconBox: iconBox,
+                  iconSize: iconSize,
+                  titleFont: titleFont,
+                  hintFont: hintFont,
+                  arrowSz: arrowSz,
+                  padH: cardPadH,
+                  padV: cardPadV,
+                  gapAfterIcon: gapAfterIcon,
+                  gapAfterTitle: gapAfterTitle,
+                  gapBeforeArrow: gapBeforeArrow,
+                ),
+              ),
             ],
           ),
-          // const SizedBox(height: 16),
-          // Text(
-          //   'Click on any expertise area below to explore detailed information about my specialized skills and experience.',
-          //   style: descriptionStyle,
-          // ),
-          const SizedBox(height: 40),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              childAspectRatio: 3.2,
-            ),
-            itemCount: _offers.length,
-            itemBuilder: (context, index) =>
-                _CompactOfferCard(item: _offers[index]),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
 class _CompactOfferCard extends StatelessWidget {
-  const _CompactOfferCard({required this.item});
+  const _CompactOfferCard({
+    required this.item,
+    required this.iconBox,
+    required this.iconSize,
+    required this.titleFont,
+    required this.hintFont,
+    required this.arrowSz,
+    required this.padH,
+    required this.padV,
+    required this.gapAfterIcon,
+    required this.gapAfterTitle,
+    required this.gapBeforeArrow,
+  });
 
   final OfferItem item;
+  final double iconBox;
+  final double iconSize;
+  final double titleFont;
+  final double hintFont;
+  final double arrowSz;
+
+  final double padH;
+  final double padV;
+  final double gapAfterIcon;
+  final double gapAfterTitle;
+  final double gapBeforeArrow;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final background =
-        isDark ? theme.cardColor : theme.colorScheme.surface.withOpacity(0.98);
+    final background = isDark
+        ? theme.cardColor
+        : theme.colorScheme.surface; // no extra opacity
 
     return InkWell(
       onTap: () => _showDetailsDialog(context),
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(10),
       child: Container(
-        padding: const EdgeInsets.all(12),
+        // **No extra height**: fills the cell exactly
+        padding: EdgeInsets.symmetric(horizontal: padH, vertical: padV),
+        clipBehavior: Clip.antiAlias, // trim any visual overflow
         decoration: BoxDecoration(
           color: background,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: item.color.withOpacity(0.3),
+            color: item.color,
             width: 1,
           ),
+          // very soft shadow (kept tiny so it doesn't look like extra gap)
           boxShadow: isDark
               ? const []
               : [
                   BoxShadow(
-                    color: item.color.withOpacity(0.08),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    color: item.color.withOpacity(0.8),
+                    blurRadius: 6,
+                    offset: const Offset(0, 1),
                   ),
                 ],
         ),
-        child: Row(
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.spaceBetween, // uses the full cell height
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            // packed block (icon + title + hint)
             Container(
-              width: 32,
-              height: 32,
+              width: iconBox,
+              height: iconBox,
               decoration: BoxDecoration(
                 color: item.color.withOpacity(0.12),
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: FaIcon(
-                  item.icon,
-                  size: 18,
-                  color: item.color,
-                ),
+                child: FaIcon(item.icon, size: iconSize, color: item.color),
               ),
             ),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(
-                      item.label,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.3,
-                            color: theme.colorScheme.primary,
-                            fontSize: 14,
-                          ) ??
-                          TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.3,
-                            color: theme.colorScheme.primary,
-                          ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Flexible(
-                    child: Text(
-                      'Tap for details',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.textTheme.bodySmall?.color
-                                ?.withOpacity(0.8),
-                            fontSize: 9,
-                          ) ??
-                          TextStyle(
-                            fontSize: 9,
-                            color: theme.textTheme.bodySmall?.color
-                                ?.withOpacity(0.8),
-                          ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                ],
+            SizedBox(height: gapAfterIcon),
+            Text(
+              item.label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: titleFont,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.15,
+                color: theme.colorScheme.primary,
+                height: 1.12,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 10,
-              color: item.color.withOpacity(0.6),
+            SizedBox(height: gapAfterTitle),
+            Text(
+              'Tap for details',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: hintFont,
+                color: theme.textTheme.bodySmall?.color?.withOpacity(0.9),
+                height: 1.1,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
+
+            // Arrow anchored at bottom (consumes the remaining few pixels)
+            Icon(Icons.arrow_forward_ios, size: arrowSz, color: item.color),
           ],
         ),
       ),
@@ -207,12 +310,13 @@ class _CompactOfferCard extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Container(
-            padding: const EdgeInsets.all(24),
-            constraints: const BoxConstraints(maxWidth: 500),
+            padding: const EdgeInsets.all(16),
+            constraints: const BoxConstraints(maxWidth: 520),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,21 +324,17 @@ class _CompactOfferCard extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      width: 56,
-                      height: 56,
+                      width: 50,
+                      height: 50,
                       decoration: BoxDecoration(
                         color: item.color.withOpacity(0.12),
                         shape: BoxShape.circle,
                       ),
                       child: Center(
-                        child: FaIcon(
-                          item.icon,
-                          size: 24,
-                          color: item.color,
-                        ),
+                        child: FaIcon(item.icon, size: 20, color: item.color),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         item.label,
@@ -243,7 +343,7 @@ class _CompactOfferCard extends StatelessWidget {
                               color: theme.colorScheme.primary,
                             ) ??
                             TextStyle(
-                              fontSize: 24,
+                              fontSize: 22,
                               fontWeight: FontWeight.w600,
                               color: theme.colorScheme.primary,
                             ),
@@ -251,30 +351,29 @@ class _CompactOfferCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 12),
                 Text(
                   item.description,
                   style: theme.textTheme.bodyLarge?.copyWith(
-                        height: 1.6,
+                        height: 1.45,
                         color: theme.textTheme.bodyLarge?.color,
                       ) ??
                       TextStyle(
-                        fontSize: 16,
-                        height: 1.6,
+                        fontSize: 15,
+                        height: 1.45,
                         color: theme.textTheme.bodyLarge?.color,
                       ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
+                          horizontal: 16, vertical: 8),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                     child: Text(
                       'Close',
