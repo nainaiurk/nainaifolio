@@ -25,7 +25,7 @@ Research interests include: wearable sensing systems, ultra-low-power IoT device
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -182,21 +182,18 @@ class _IntroContentState extends State<_IntroContent> {
           ),
         ],
 
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
 
         // Learn more button (kept from your sample)
         // Subtle scroll indicator (text only, no button)
         Align(
           alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              "↓ Learn More Below",
-              style: TextStyle(
-                fontSize: widget.bodyFontSize - 2,
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+          child: Text(
+            "↓ Learn More Below",
+            style: TextStyle(
+              fontSize: widget.bodyFontSize,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ),
