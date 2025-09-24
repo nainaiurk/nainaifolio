@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:percent_indicator/percent_indicator.dart';
+// removed percent_indicator package usage; using a custom progress bar
 
 import '../models/skill_item.dart';
 
@@ -9,7 +9,7 @@ class SkillsSection extends StatelessWidget {
 
   SkillsSection({this.key}) : super(key: key);
 
-  static const double _titleFontSize = 28;
+  // title font handled via responsive variables in build()
 
   // Organized skill categories for CV-style presentation
   final Map<String, List<SkillItem>> skillCategories = {
@@ -18,13 +18,16 @@ class SkillsSection extends StatelessWidget {
       SkillItem(label: 'STM32CubeIDE', level: 0.80),
       SkillItem(label: 'Arduino IDE', level: 0.90),
     ],
-    'Microcontrollers & Platforms': [
+    'Microcontrollers & Microprocessors': [
       SkillItem(label: 'ESP32', level: 0.88),
       SkillItem(label: 'STM32', level: 0.85),
       SkillItem(label: 'Raspberry Pi Pico', level: 0.75),
+      SkillItem(label: 'Raspberry Pi', level: 0.75),
+      SkillItem(label: 'Jetson Nano', level: 0.75),
     ],
-    'RTOS & Embedded OS': [
-      SkillItem(label: 'FreeRTOS', level: 0.80),
+    'RTOS & Embedded ML': [
+      SkillItem(label: 'FreeRTOS', level: 1.00),
+      SkillItem(label: 'TensorFlow Lite', level: 0.8),
     ],
     'IoT & Communication Protocols': [
       SkillItem(label: 'MQTT', level: 0.85),
@@ -35,6 +38,8 @@ class SkillsSection extends StatelessWidget {
     ],
     'Programming Languages': [
       SkillItem(label: 'C/C++', level: 0.90),
+      SkillItem(label: 'Python', level: 0.85),
+      SkillItem(label: 'MATLAB', level: 0.75),
     ],
     'PCB Design & CAD Tools': [
       SkillItem(label: 'EasyEDA', level: 0.85),
@@ -45,25 +50,56 @@ class SkillsSection extends StatelessWidget {
     'Simulation & Analysis': [
       SkillItem(label: 'LTSpice', level: 0.80),
       SkillItem(label: 'Proteus', level: 0.75),
+      SkillItem(label: 'MATLAB Simulink', level: 0.70),
     ],
     'Currently Learning': [
       SkillItem(label: 'FPGA', level: 0.40),
+      SkillItem(label: 'Rust', level: 0.30),
+      SkillItem(label: 'Zephyr RTOS', level: 0.25),
     ],
   };
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
+    final isMobile = w < 700;
+    final isTablet = w >= 700 && w < 1100;
+
+    double rem(double v) {
+      final base = (w < h ? w : h) * 0.01;
+      final clamped = base.clamp(8.0, 18.0);
+      return clamped * v;
+    }
+
+    final titleFont = isMobile ? 20.0 : (isTablet ? 22.0 : 28.0);
     final headingStyle = theme.textTheme.headlineSmall?.copyWith(
-      fontSize: _titleFontSize,
+      fontSize: titleFont,
       fontWeight: FontWeight.w700,
       letterSpacing: 0.6,
       color: theme.colorScheme.primary,
     );
 
+    final sectionV = rem(3.5);
+    final sectionH = isMobile ? 16.0 : 24.0;
+    final preCardGap = isMobile ? 10.0 : 20.0;
+
+    final wrapSpacing = isMobile ? 12.0 : 16.0;
+    final wrapRunSpacing = isMobile ? 12.0 : 16.0;
+    // On mobile compute width so 3 cards fit per row (accounting for paddings)
+    final cardWidth = isMobile
+        ? (((w - 2 * sectionH - 2 * wrapSpacing) / 3).clamp(70.0, 120.0))
+            .toDouble()
+        : 220.0;
+    final cardPad = isMobile ? 5.0 : 10.0;
+    final cardRadius = isMobile ? 10.0 : 16.0;
+    final titleIconSize = isMobile ? 18.0 : (isTablet ? 20.0 : 24.0);
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 24.0),
+      padding: EdgeInsets.symmetric(vertical: sectionV, horizontal: sectionH),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -71,37 +107,53 @@ class SkillsSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Icon(FontAwesomeIcons.screwdriverWrench,
-                  size: 24, color: theme.colorScheme.primary),
-              const SizedBox(width: 20),
+                  size: titleIconSize, color: theme.colorScheme.primary),
+              SizedBox(width: isMobile ? 10 : 20),
               Text(
                 "Technical Skills",
                 style: headingStyle,
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: isMobile ? 8 : 16),
           Text(
             'Specialized expertise in embedded systems development, IoT solutions, and hardware-software integration',
             style: theme.textTheme.bodyMedium?.copyWith(
-                  height: 1.6,
+                  height: 1.55,
+                  fontSize: isMobile ? 11.5 : (isTablet ? 14.5 : 16),
                   color: theme.textTheme.bodyMedium?.color?.withOpacity(0.85),
                 ) ??
                 TextStyle(
-                  fontSize: 16,
-                  height: 1.6,
+                  fontSize: isMobile ? 13.5 : (isTablet ? 14.5 : 16),
+                  height: 1.55,
                   color: theme.colorScheme.onSurface.withOpacity(0.85),
                 ),
           ),
-          const SizedBox(height: 40),
-          ...skillCategories.entries.map((category) =>
-              _buildSkillCategory(context, category.key, category.value)),
+          SizedBox(height: preCardGap),
+          ...skillCategories.entries.map((category) => _buildSkillCategory(
+              context,
+              category.key,
+              category.value,
+              cardWidth,
+              cardPad,
+              cardRadius,
+              wrapSpacing,
+              wrapRunSpacing)),
         ],
       ),
     );
   }
 
   Widget _buildSkillCategory(
-      BuildContext context, String categoryName, List<SkillItem> skills) {
+    BuildContext context,
+    String categoryName,
+    List<SkillItem> skills,
+    double cardWidth,
+    double cardPad,
+    double cardRadius,
+    double wrapSpacing,
+    double wrapRunSpacing,
+  ) {
     final theme = Theme.of(context);
 
     return Padding(
@@ -115,9 +167,9 @@ class SkillsSection extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
               color: theme.colorScheme.primary.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: theme.colorScheme.primary.withOpacity(0.2),
+                color: theme.colorScheme.secondary,
                 width: 1,
               ),
             ),
@@ -127,10 +179,10 @@ class SkillsSection extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.primary,
                     letterSpacing: 0.3,
-                    fontSize: 14,
+                    fontSize: 12,
                   ) ??
                   TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.primary,
                     letterSpacing: 0.3,
@@ -139,35 +191,37 @@ class SkillsSection extends StatelessWidget {
           ),
           // Skills Grid - More Compact
           Wrap(
-            spacing: 12, // Reduced from 16
-            runSpacing: 12, // Reduced from 16
-            children:
-                skills.map((skill) => _buildSkillCard(context, skill)).toList(),
+            spacing: wrapSpacing,
+            runSpacing: wrapRunSpacing,
+            children: skills
+                .map((skill) => _buildSkillCard(
+                    context, skill, cardWidth, cardPad, cardRadius))
+                .toList(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSkillCard(BuildContext context, SkillItem skill) {
+  Widget _buildSkillCard(BuildContext context, SkillItem skill,
+      double cardWidth, double cardPad, double cardRadius) {
     final theme = Theme.of(context);
 
     return Container(
-      width: 220, // Further reduced for compact layout
-      padding: const EdgeInsets.all(12), // Reduced from 16 for compact layout
+      width: cardWidth,
+      padding: EdgeInsets.all(cardPad),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(12), // Reduced from 16
+        borderRadius: BorderRadius.circular(cardRadius),
         border: Border.all(
-          color: theme.colorScheme.primary.withOpacity(0.15), // Reduced opacity
+          color: theme.colorScheme.primary.withOpacity(0.15),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.secondary
-                .withOpacity(0.08), // Reduced opacity
-            blurRadius: 8, // Reduced from 12
-            offset: const Offset(0, 2), // Reduced from (0, 4)
+            color: theme.colorScheme.secondary.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -180,25 +234,50 @@ class SkillsSection extends StatelessWidget {
             style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface,
-                  fontSize: 14,
+                  fontSize: 12,
                 ) ??
                 TextStyle(
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface,
                 ),
           ),
-          const SizedBox(height: 8), // Further reduced for compact layout
-          // Progress Bar
-          LinearPercentIndicator(
-            lineHeight: 6.0, // Reduced from 8.0
-            percent: skill.level,
-            backgroundColor: theme.colorScheme.surface.withOpacity(0.3),
-            progressColor: _getProgressColor(skill.level, theme),
-            barRadius: const Radius.circular(3), // Reduced from 4
-            animation: true,
-            animationDuration: 1200, // Reduced from 1500
-          ),
+          SizedBox(height: cardPad * 0.6),
+          // Progress Bar: explicitly align left and size to card content width
+          LayoutBuilder(builder: (ctx, constraints) {
+            final barWidth = constraints.maxWidth;
+            final lineH = cardPad > 12 ? 8.0 : 4.0;
+            return Align(
+              alignment: Alignment.centerLeft,
+              child: SizedBox(
+                width: barWidth,
+                height: lineH,
+                child: Stack(
+                  children: [
+                    Container(
+                      width: barWidth,
+                      height: lineH,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    FractionallySizedBox(
+                      alignment: Alignment.centerLeft,
+                      widthFactor: skill.level.clamp(0.0, 1.0),
+                      child: Container(
+                        height: lineH,
+                        decoration: BoxDecoration(
+                          color: _getProgressColor(skill.level, theme),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
         ],
       ),
     );
