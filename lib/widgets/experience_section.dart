@@ -228,12 +228,12 @@ class _ExperienceCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: theme.colorScheme.primary.withOpacity(0.35)),
+        border: Border.all(color: theme.colorScheme.primary.withOpacity(0.5)),
         boxShadow: isDark
             ? const []
             : [
                 BoxShadow(
-                  color: theme.colorScheme.primary.withOpacity(0.5),
+                  color: theme.colorScheme.secondary.withOpacity(0.5),
                   blurRadius: 16,
                   offset: const Offset(0, 10),
                 ),

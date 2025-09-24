@@ -7,8 +7,6 @@ import '../models/publication_item.dart';
 class PublicationsSection extends StatelessWidget {
   const PublicationsSection({super.key});
 
-  static const double _titleFontSize = 28;
-
   static const List<PublicationItem> _publications = [
     PublicationItem(
       title:
@@ -73,8 +71,32 @@ class PublicationsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
+    final isMobile = w < 700;
+    final isTablet = w >= 700 && w < 1100;
+
+    double rem(double v) {
+      final base = (w < h ? w : h) * 0.01;
+      final clamped = base.clamp(8.0, 18.0);
+      return clamped * v;
+    }
+
+    // heading titleFont already applied via headingStyle; no separate var needed
+    // Align sizes with ExperienceSection
+    final titleFont = isMobile ? 20.0 : (isTablet ? 22.0 : 28.0);
+    final pubTitleFont = isMobile ? 12.0 : (isTablet ? 14.0 : 16.0);
+    final venueFont = isMobile ? 11.0 : (isTablet ? 12.5 : 13.5);
+    final summaryFont = isMobile ? 10.0 : (isTablet ? 12.0 : 13.0);
+    final sectionV = rem(3.5);
+    final sectionH = isMobile ? 16.0 : 24.0;
+    final cardPad = isMobile ? 8.0 : 12.0;
+    final cardRadius = isMobile ? 10.0 : 14.0;
+    final cardGap = isMobile ? 12.0 : 16.0;
+
     final headingStyle = theme.textTheme.headlineSmall?.copyWith(
-      fontSize: _titleFontSize,
+      fontSize: titleFont,
       fontWeight: FontWeight.w700,
       letterSpacing: 0.6,
       color: theme.colorScheme.primary,
@@ -82,29 +104,57 @@ class PublicationsSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 24.0),
+      padding: EdgeInsets.symmetric(vertical: sectionV, horizontal: sectionH),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Peer-Reviewed Publications',
-            style: headingStyle,
-            textAlign: TextAlign.start,
+          Row(
+            children: [
+              FaIcon(
+                FontAwesomeIcons.fileLines,
+                size: isMobile ? 18 : (isTablet ? 20 : 22),
+                color: theme.colorScheme.primary,
+              ),
+              SizedBox(width: rem(0.8)),
+              Text(
+                'Peer-Reviewed Publications',
+                style: headingStyle,
+                textAlign: TextAlign.start,
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            'Selected journal and IEEE conference publications demonstrating embedded intelligence, edge analytics, and autonomous system design.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              height: 1.6,
-              color: theme.textTheme.bodyMedium?.color?.withOpacity(0.85),
-            ),
-            textAlign: TextAlign.start,
-          ),
-          const SizedBox(height: 32),
+          SizedBox(height: isMobile ? 8 : 12),
+
+          // Publication counts line (journals vs conferences)
+          Builder(builder: (ctx) {
+            // Per user's instruction: the first publication in the list is the only journal
+            final journals = _publications.isNotEmpty ? 1 : 0;
+            final conferences = _publications.length - journals;
+            final counts = '${journals} Journals · ${conferences} Conferences';
+            return Text(
+              counts,
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontSize: isMobile ? 11.0 : (isTablet ? 12.0 : 13.0),
+                color: theme.textTheme.bodySmall?.color?.withOpacity(0.8),
+              ),
+            );
+          }),
+
+          SizedBox(height: isMobile ? 8 : 12),
+
           ..._publications.map(
             (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: _PublicationCard(item: item),
+              padding: EdgeInsets.only(bottom: cardGap),
+              child: _PublicationCard(
+                item: item,
+                pubTitleFont: pubTitleFont,
+                venueFont: venueFont,
+                summaryFont: summaryFont,
+                isMobile: isMobile,
+                isTablet: isTablet,
+                cardPad: cardPad,
+                cardRadius: cardRadius,
+              ),
             ),
           ),
         ],
@@ -114,9 +164,25 @@ class PublicationsSection extends StatelessWidget {
 }
 
 class _PublicationCard extends StatelessWidget {
-  const _PublicationCard({required this.item});
+  const _PublicationCard({
+    required this.item,
+    required this.pubTitleFont,
+    required this.venueFont,
+    required this.summaryFont,
+    required this.isMobile,
+    required this.isTablet,
+    required this.cardPad,
+    required this.cardRadius,
+  });
 
   final PublicationItem item;
+  final double pubTitleFont;
+  final double venueFont;
+  final double summaryFont;
+  final bool isMobile;
+  final bool isTablet;
+  final double cardPad;
+  final double cardRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -125,83 +191,100 @@ class _PublicationCard extends StatelessWidget {
     final background =
         isDark ? theme.cardColor : theme.colorScheme.surface.withOpacity(0.96);
 
+    final double pad = cardPad;
+    final double radius = cardRadius;
+
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: theme.colorScheme.secondary.withOpacity(0.25),
+        width: double.infinity,
+        padding: EdgeInsets.all(pad),
+        decoration: BoxDecoration(
+          color: background,
+          borderRadius: BorderRadius.circular(radius),
+          border: Border.all(
+            color: theme.colorScheme.secondary.withOpacity(0.4),
+          ),
+          boxShadow: isDark
+              ? const []
+              : [
+                  BoxShadow(
+                    color: theme.colorScheme.secondary.withOpacity(0.5),
+                    blurRadius: 18,
+                    offset: const Offset(0, 12),
+                  ),
+                ],
         ),
-        boxShadow: isDark
-            ? const []
-            : [
-                BoxShadow(
-                  color: theme.colorScheme.secondary.withOpacity(0.08),
-                  blurRadius: 18,
-                  offset: const Offset(0, 12),
-                ),
-              ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            item.title,
-            style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.4,
-                  color: theme.colorScheme.primary,
-                ) ??
-                TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.4,
-                  color: theme.colorScheme.primary,
-                ),
-            textAlign: TextAlign.start,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            '${item.venue} – ${item.year}',
-            style: theme.textTheme.bodySmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.3,
-              color: theme.textTheme.bodySmall?.color?.withOpacity(0.85),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              item.title,
+              style: theme.textTheme.titleLarge?.copyWith(
+                    fontSize: pubTitleFont,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.4,
+                    color: theme.colorScheme.primary,
+                  ) ??
+                  TextStyle(
+                    fontSize: pubTitleFont,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.4,
+                    color: theme.colorScheme.primary,
+                  ),
+              textAlign: TextAlign.start,
             ),
-            textAlign: TextAlign.start,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            item.summary,
-            style: theme.textTheme.bodyMedium?.copyWith(
-                  height: 1.6,
-                  color: theme.textTheme.bodyMedium?.color,
-                ) ??
-                TextStyle(
-                  fontSize: 15,
-                  height: 1.6,
-                  color: theme.textTheme.bodyMedium?.color,
+            SizedBox(height: isMobile ? 10 : 12),
+            Text(
+              '${item.venue} – ${item.year}',
+              style: theme.textTheme.bodySmall?.copyWith(
+                    fontSize: venueFont,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.3,
+                    color: theme.textTheme.bodySmall?.color?.withOpacity(0.85),
+                  ) ??
+                  TextStyle(
+                    fontSize: venueFont,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.3,
+                    color: theme.textTheme.bodySmall?.color?.withOpacity(0.85),
+                  ),
+              textAlign: TextAlign.start,
+            ),
+            // SizedBox(height: isMobile ? 6 : 10),
+            Text(
+              item.summary,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                    fontSize: summaryFont,
+                    height: 1.6,
+                    color: theme.textTheme.bodyMedium?.color,
+                  ) ??
+                  TextStyle(
+                    fontSize: summaryFont,
+                    height: 1.6,
+                    color: theme.textTheme.bodyMedium?.color,
+                  ),
+              textAlign: TextAlign.start,
+            ),
+            // SizedBox(height: isMobile ? 8 : 16),
+            TextButton.icon(
+                onPressed: () => _launchLink(item.link),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  foregroundColor: theme.primaryColor,
                 ),
-            textAlign: TextAlign.start,
-          ),
-          const SizedBox(height: 16),
-          TextButton.icon(
-            onPressed: () => _launchLink(item.link),
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.zero,
-              foregroundColor: theme.primaryColor,
-            ),
-            icon: const FaIcon(
-              FontAwesomeIcons.arrowUpRightFromSquare,
-              size: 14,
-            ),
-            label: const Text('View publication'),
-          ),
-        ],
-      ),
-    );
+                icon: FaIcon(
+                  FontAwesomeIcons.arrowUpRightFromSquare,
+                  size: isMobile ? 10 : 14,
+                ),
+                label: Text(
+                  'View publication',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontSize: isMobile ? 11.0 : (isTablet ? 12.0 : 14.0),
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.3,
+                  ),
+                )),
+          ],
+        ));
   }
 }
 
