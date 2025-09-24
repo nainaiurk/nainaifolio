@@ -19,35 +19,44 @@ class ProjectsSection extends StatelessWidget {
     ProjectItem(
       title: 'Microcontroller Board Design',
       subtitle: 'Custom PCB for Embedded Systems',
-    imageUrl:
-      'https://lh3.googleusercontent.com/d/1ZLJ4FenmNw7xBQ2KcebhDvJ7IKtYkqLz',
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZLJ4FenmNw7xBQ2KcebhDvJ7IKtYkqLz',
       documentationUrl: 'https://example.com/docs/microcontroller-board',
       images: [
         'https://via.placeholder.com/800x400.png?text=PCB+1',
         'https://via.placeholder.com/800x400.png?text=PCB+2',
       ],
-      description: 'Designed a compact microcontroller development board optimized for low-power IoT nodes. Features USB-C power, multiple sensor headers, and an onboard LiPo charger.',
-      achievements: ['Designed for University Embedded System Lab', 'Now Used in Research Projects by Students', 'Validated power sequencing and bootloader'],
+      description:
+          'Designed a compact microcontroller development board optimized for low-power IoT nodes. Features USB-C power, multiple sensor headers, and an onboard LiPo charger.',
+      achievements: [
+        'Designed for University Embedded System Lab',
+        'Now Used in Research Projects by Students',
+        'Validated power sequencing and bootloader'
+      ],
       contest: null,
     ),
     ProjectItem(
       title: 'PCB Drones',
       subtitle: 'Design and Development of Drones',
-    imageUrl:
-      'https://lh3.googleusercontent.com/d/1ZGET_Cgg8Q7w8fFHS2KSjtu5pL10Ac0n',
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZGET_Cgg8Q7w8fFHS2KSjtu5pL10Ac0n',
       documentationUrl: 'https://oshwlab.com/nainaiu.rakhaine/mini-cam-drone',
       videoUrl: 'https://example.com/videos/pcb-drones.mp4',
       description:
           'Built a custom PCB drone around an ESP32-S3 and camera for low-latency video streaming and remote monitoring. Focused on lightweight design, reliable telemetry and low-latency video pipeline.',
-      achievements: ['Featured as Star Project of the Open Source Hardware Lab (OSHWLAB)', 'Open-sourced flight controller schematics'],
+      achievements: [
+        'Featured as Star Project of the Open Source Hardware Lab (OSHWLAB)',
+        'Open-sourced flight controller schematics'
+      ],
       contest: null,
     ),
     ProjectItem(
       title: 'AUV (Autonomous Underwater Vehicle)',
       subtitle: 'Design of Autonomous Underwater Vehicles',
-    imageUrl:
-      'https://lh3.googleusercontent.com/d/1ZO5brHNF0UImesYNftWbbe93ArYloDRd',
-      documentationUrl: 'https://github.com/Ad-Deen/AUV-project-Electrical-stack',
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZO5brHNF0UImesYNftWbbe93ArYloDRd',
+      documentationUrl:
+          'https://github.com/Ad-Deen/AUV-project-Electrical-stack',
       images: [
         'https://via.placeholder.com/800x400.png?text=ORCA+AUV+1',
       ],
@@ -63,36 +72,48 @@ class ProjectsSection extends StatelessWidget {
     ProjectItem(
       title: 'Electric Vehicle',
       subtitle: 'Electric Car Development',
-    imageUrl:
-      'https://lh3.googleusercontent.com/d/1ZRRegB9bHrYeZ_4QCu-v5Z_VncM6FFRD',
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZRRegB9bHrYeZ_4QCu-v5Z_VncM6FFRD',
       documentationUrl: 'https://example.com/docs/electric-vehicle',
       images: ['https://via.placeholder.com/800x400.png?text=EV+1'],
-      description: 'Worked on battery management system (BMS) and motor controller integration for a lightweight electric vehicle prototype.',
-      achievements: ['Designed BMS for 48V pack', 'Implemented regenerative braking control'],
+      description:
+          'Worked on battery management system (BMS) and motor controller integration for a lightweight electric vehicle prototype.',
+      achievements: [
+        'Designed BMS for 48V pack',
+        'Implemented regenerative braking control'
+      ],
       otherLinks: ['https://example.com/ev/repo'],
     ),
     ProjectItem(
       title: 'Line Follower Robot',
       subtitle: 'Robotics and Automation',
-    imageUrl:
-      'https://lh3.googleusercontent.com/d/1ZT-vIBzM1FTTGnj39H1K6vuZ2wINaXLs',
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZT-vIBzM1FTTGnj39H1K6vuZ2wINaXLs',
       documentationUrl: 'https://github.com/nainaiurk/InfiniteBot.git',
-      images: ['https://via.placeholder.com/800x400.png?text=Advanced+Line+Follower+1'],
+      images: [
+        'https://via.placeholder.com/800x400.png?text=Advanced+Line+Follower+1'
+      ],
       description:
           'Advanced Line Follower Robot with multi-modal operation, PID-based high-speed line following and maze navigation. Includes an interactive display for on-the-fly mode selection and telemetry.',
-      achievements: ['Developed high-speed PID control and maze navigation modes', 'Interactive mode selection UI for runtime tuning'],
+      achievements: [
+        'Developed high-speed PID control and maze navigation modes',
+        'Interactive mode selection UI for runtime tuning'
+      ],
       otherLinks: ['https://github.com/nainaiurk/InfiniteBot.git'],
     ),
     ProjectItem(
       title: 'LoRa Messenger',
       subtitle: 'Long Range Communication Project',
-    imageUrl:
-      'https://lh3.googleusercontent.com/d/1ZNiOikXJjXsQHgfMWLwObXjfePd-1bqE',
+      imageUrl:
+          'https://lh3.googleusercontent.com/d/1ZNiOikXJjXsQHgfMWLwObXjfePd-1bqE',
       documentationUrl: 'https://github.com/nainaiurk/LoRa-Messenger',
       images: ['https://via.placeholder.com/800x400.png?text=LoRa+Messenger+1'],
       description:
           'Implemented a secure long-range LoRa messaging device with a custom antenna, reaching nearly 5 km in field trials. Emphasized low cost and long battery life for remote IoT deployments.',
-      achievements: ['Achieved nearly 5 km range with custom antenna', 'Low-power firmware achieving 30+ day battery life'],
+      achievements: [
+        'Achieved nearly 5 km range with custom antenna',
+        'Low-power firmware achieving 30+ day battery life'
+      ],
       otherLinks: ['https://github.com/nainaiurk/LoRa-Messenger'],
     ),
     ProjectItem(
@@ -100,8 +121,12 @@ class ProjectsSection extends StatelessWidget {
       subtitle: 'Flutter-based Chat Application',
       imageUrl: '',
       documentationUrl: 'https://example.com/docs/chat-app',
-      description: 'A secure chat client built with Flutter supporting real-time messaging, media sharing, and end-to-end encryption.',
-      achievements: ['Implemented realtime syncing and media upload', 'End-to-end encryption using libsodium'],
+      description:
+          'A secure chat client built with Flutter supporting real-time messaging, media sharing, and end-to-end encryption.',
+      achievements: [
+        'Implemented realtime syncing and media upload',
+        'End-to-end encryption using libsodium'
+      ],
       otherLinks: ['https://example.com/chat-app/repo'],
     ),
   ];
@@ -109,9 +134,9 @@ class ProjectsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-  final bool isMobile = Responsive.isMobile(context);
-  final bool isTablet = Responsive.isTablet(context);
-  final titleFont = isMobile ? 18.0 : (isTablet ? 22.0 : 28.0);
+    final bool isMobile = Responsive.isMobile(context);
+    final bool isTablet = Responsive.isTablet(context);
+    final titleFont = isMobile ? 18.0 : (isTablet ? 22.0 : 28.0);
     final headingStyle = theme.textTheme.headlineSmall?.copyWith(
       fontSize: titleFont,
       fontWeight: FontWeight.w700,
@@ -273,7 +298,7 @@ class ProjectsSection extends StatelessWidget {
               ),
             ),
             Positioned.fill(
-                  child: Material(
+              child: Material(
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(15),
@@ -317,7 +342,8 @@ class ProjectsSection extends StatelessWidget {
       builder: (ctx) {
         final theme = Theme.of(ctx);
         return Dialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 800, maxHeight: 600),
             child: Column(
@@ -325,11 +351,13 @@ class ProjectsSection extends StatelessWidget {
               children: [
                 // Header with title and close
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text(item.title, style: theme.textTheme.headlineSmall),
+                        child: Text(item.title,
+                            style: theme.textTheme.headlineSmall),
                       ),
                       IconButton(
                         icon: const Icon(Icons.close),
@@ -347,7 +375,8 @@ class ProjectsSection extends StatelessWidget {
                       children: item.images!
                           .map((src) => src.isNotEmpty
                               ? InteractiveViewer(
-                                  child: Image.network(src, fit: BoxFit.contain),
+                                  child:
+                                      Image.network(src, fit: BoxFit.contain),
                                 )
                               : const SizedBox())
                           .toList(),
@@ -358,7 +387,8 @@ class ProjectsSection extends StatelessWidget {
                     height: 180,
                     child: item.imageUrl.isNotEmpty
                         ? InteractiveViewer(
-                            child: Image.network(item.imageUrl, fit: BoxFit.contain),
+                            child: Image.network(item.imageUrl,
+                                fit: BoxFit.contain),
                           )
                         : Center(
                             child: Icon(
@@ -380,28 +410,35 @@ class ProjectsSection extends StatelessWidget {
                           const SizedBox(height: 12),
                           if (item.contest != null) ...[
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 6),
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withOpacity(0.08),
+                                color:
+                                    theme.colorScheme.primary.withOpacity(0.08),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: Text('Contest: ${item.contest}', style: theme.textTheme.bodySmall),
+                              child: Text('Contest: ${item.contest}',
+                                  style: theme.textTheme.bodySmall),
                             ),
                             const SizedBox(height: 12),
                           ],
                           if (item.description != null) ...[
-                            Text(item.description!, style: theme.textTheme.bodyMedium),
+                            Text(item.description!,
+                                style: theme.textTheme.bodyMedium),
                             const SizedBox(height: 12),
                           ],
                           if ((item.achievements ?? []).isNotEmpty) ...[
-                            Text('Achievements', style: theme.textTheme.titleSmall),
+                            Text('Achievements',
+                                style: theme.textTheme.titleSmall),
                             const SizedBox(height: 8),
                             ...item.achievements!.map((a) => Padding(
                                   padding: const EdgeInsets.only(bottom: 6.0),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      const Text('• ', style: TextStyle(fontSize: 18)),
+                                      const Text('• ',
+                                          style: TextStyle(fontSize: 18)),
                                       Expanded(child: Text(a)),
                                     ],
                                   ),
@@ -410,7 +447,8 @@ class ProjectsSection extends StatelessWidget {
                           ],
                           if (item.documentationUrl != null)
                             TextButton.icon(
-                              onPressed: () => _launchURL(item.documentationUrl!),
+                              onPressed: () =>
+                                  _launchURL(item.documentationUrl!),
                               icon: const Icon(Icons.description),
                               label: const Text('Documentation'),
                             ),
