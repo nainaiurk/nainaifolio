@@ -78,7 +78,7 @@ class ExperienceSection extends StatelessWidget {
       return clamped * v;
     }
 
-    final titleFont = isMobile ? 20.0 : (isTablet ? 22.0 : 28.0);
+  final titleFont = isMobile ? 18.0 : (isTablet ? 20.0 : 28.0);
     final roleSize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
     final orgLocSize = isMobile ? 12.0 : (isTablet ? 13.5 : 14.5);
     final periodSize = isMobile ? 11.0 : (isTablet ? 12.0 : 13.0);

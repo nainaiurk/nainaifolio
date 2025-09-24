@@ -40,12 +40,12 @@ class EducationSection extends StatelessWidget {
                 ? 26.0
                 : 30.0;
 
-        // Title sizing by breakpoint
-        final double titleFontSize = isMobile
-            ? 20.0
-            : isTablet
-                ? 24.0
-                : 28.0;
+    // Title sizing by breakpoint (reduced by 2px for mobile/tablet)
+    final double titleFontSize = isMobile
+      ? 18.0
+      : isTablet
+        ? 22.0
+        : 28.0;
         final double titleIconSize = isMobile
             ? 20.0
             : isTablet

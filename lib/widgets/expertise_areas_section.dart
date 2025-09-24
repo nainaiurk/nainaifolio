@@ -65,8 +65,8 @@ class ExpertiseAreasSection extends StatelessWidget {
         final totalSpacing = spacing * (cols - 1);
         final cardW = (w - totalSpacing) / cols;
 
-        // Title sizes
-        final sectionTitleFont = isMobile ? 20.0 : (isTablet ? 24.0 : 28.0);
+  // Title sizes (reduced by 2px on mobile/tablet)
+  final sectionTitleFont = isMobile ? 18.0 : (isTablet ? 22.0 : 28.0);
         final iconLeadingSize = clamp(sectionTitleFont * 0.6, 16, 20);
 
         // ===== Compact card metrics =====

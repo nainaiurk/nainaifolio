@@ -85,7 +85,7 @@ class PublicationsSection extends StatelessWidget {
 
     // heading titleFont already applied via headingStyle; no separate var needed
     // Align sizes with ExperienceSection
-    final titleFont = isMobile ? 20.0 : (isTablet ? 22.0 : 28.0);
+  final titleFont = isMobile ? 18.0 : (isTablet ? 20.0 : 28.0);
     final pubTitleFont = isMobile ? 12.0 : (isTablet ? 14.0 : 16.0);
     final venueFont = isMobile ? 11.0 : (isTablet ? 12.5 : 13.5);
     final summaryFont = isMobile ? 10.0 : (isTablet ? 12.0 : 13.0);

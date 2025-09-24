@@ -21,7 +21,7 @@ class _ContactSectionState extends State<ContactSection> {
   final _messageController = TextEditingController();
   bool _isSending = false;
 
-  static const double _titleFontSize = 28;
+  static const double _titleFontSize = 26;
 
   @override
   void dispose() {

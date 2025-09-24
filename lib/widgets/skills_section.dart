@@ -74,7 +74,7 @@ class SkillsSection extends StatelessWidget {
       return clamped * v;
     }
 
-    final titleFont = isMobile ? 20.0 : (isTablet ? 22.0 : 28.0);
+  final titleFont = isMobile ? 18.0 : (isTablet ? 20.0 : 28.0);
     final headingStyle = theme.textTheme.headlineSmall?.copyWith(
       fontSize: titleFont,
       fontWeight: FontWeight.w700,

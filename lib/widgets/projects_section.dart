@@ -13,7 +13,7 @@ class ProjectsSection extends StatelessWidget {
 
   ProjectsSection({this.key}) : super(key: key);
 
-  static const double _titleFontSize = 28;
+  // Title font is computed per-build for responsive sizing (mobile/tablet reduced)
 
   final List<ProjectItem> projectList = [
     ProjectItem(
@@ -109,8 +109,12 @@ class ProjectsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // final w = MediaQuery.of(context).size.width;
+    // final isMobile = w < 700;
+    // final isTablet = w >= 700 && w < 1100;
+    final titleFont = isMobile ? 18.0 : (isTablet ? 22.0 : 28.0);
     final headingStyle = theme.textTheme.headlineSmall?.copyWith(
-      fontSize: _titleFontSize,
+      fontSize: titleFont,
       fontWeight: FontWeight.w700,
       letterSpacing: 0.6,
       color: theme.colorScheme.primary,
