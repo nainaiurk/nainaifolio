@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// Using locally-bundled fonts (defined in pubspec.yaml). Replace GoogleFonts runtime usage
+// with direct fontFamily references to avoid remote font fetches on first load.
 
 var image =
     'https://scontent.fcgp17-1.fna.fbcdn.net/v/t39.30808-6/432934437_379672724910396_8625477020084735141_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeG5BsXZvr2Sg6GlHC8y6Se1LhOu4QnDi98uE67hCcOL33QU7tkhiOymrj4PTEF3bxUKl3EBOsDIKYGCc6rHW1Xw&_nc_ohc=k6czQtmUyh0Q7kNvgHwtgbY&_nc_ht=scontent.fcgp17-1.fna&oh=00_AYBc7JWboKXLTOC7OGXq6fBCddNBmLzQvYdv6HZUbL83TQ&oe=66C75C94';
@@ -37,19 +38,39 @@ const Color kDarkBackgroundColor = _darkBackground;
 const Color kDarkSurfaceColor = _darkSurface;
 const Color kDarkBodyText = _darkBodyText;
 
-final TextTheme _lightTextTheme = GoogleFonts.loraTextTheme(
-  ThemeData.light().textTheme,
-).apply(
-  bodyColor: _bodyText, // Body text color
-  displayColor: _primary,
-);
+final TextTheme _lightTextTheme = ThemeData.light()
+    .textTheme
+    .apply(
+      bodyColor: _bodyText,
+      displayColor: _primary,
+    )
+    .copyWith(
+      bodyLarge:
+          ThemeData.light().textTheme.bodyLarge?.copyWith(fontFamily: 'Lora'),
+      bodyMedium:
+          ThemeData.light().textTheme.bodyMedium?.copyWith(fontFamily: 'Lora'),
+      headlineSmall: ThemeData.light()
+          .textTheme
+          .headlineSmall
+          ?.copyWith(fontFamily: 'Lora'),
+    );
 
-final TextTheme _darkTextTheme = GoogleFonts.loraTextTheme(
-  ThemeData.dark().textTheme,
-).apply(
-  bodyColor: _darkBodyText,
-  displayColor: _darkPrimary,
-);
+final TextTheme _darkTextTheme = ThemeData.dark()
+    .textTheme
+    .apply(
+      bodyColor: _darkBodyText,
+      displayColor: _darkPrimary,
+    )
+    .copyWith(
+      bodyLarge:
+          ThemeData.dark().textTheme.bodyLarge?.copyWith(fontFamily: 'Lora'),
+      bodyMedium:
+          ThemeData.dark().textTheme.bodyMedium?.copyWith(fontFamily: 'Lora'),
+      headlineSmall: ThemeData.dark()
+          .textTheme
+          .headlineSmall
+          ?.copyWith(fontFamily: 'Lora'),
+    );
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -74,7 +95,8 @@ ThemeData lightTheme = ThemeData(
       backgroundColor: _primary,
       foregroundColor: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-      textStyle: GoogleFonts.lora(
+      textStyle: const TextStyle(
+        fontFamily: 'Lora',
         fontWeight: FontWeight.w600,
         fontSize: 16,
       ),
@@ -83,7 +105,8 @@ ThemeData lightTheme = ThemeData(
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       foregroundColor: _primary,
-      textStyle: GoogleFonts.lora(
+      textStyle: const TextStyle(
+        fontFamily: 'Lora',
         fontWeight: FontWeight.w600,
       ),
     ),
@@ -116,7 +139,8 @@ ThemeData darkTheme = ThemeData(
       backgroundColor: _darkPrimary,
       foregroundColor: _darkBackground,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-      textStyle: GoogleFonts.lora(
+      textStyle: const TextStyle(
+        fontFamily: 'Lora',
         fontWeight: FontWeight.w600,
         fontSize: 16,
       ),
@@ -125,7 +149,8 @@ ThemeData darkTheme = ThemeData(
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       foregroundColor: _darkPrimary,
-      textStyle: GoogleFonts.lora(
+      textStyle: const TextStyle(
+        fontFamily: 'Lora',
         fontWeight: FontWeight.w600,
       ),
     ),

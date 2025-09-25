@@ -45,6 +45,16 @@
   <title>nainaifolio</title>
   <link rel="manifest" href="manifest.json">
 
+  <!-- Preconnect & preload Google Fonts to reduce FOIT/FOUT while fonts are fetched -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Combined Google Fonts stylesheet for families used in the app -->
+  <!-- Preload the stylesheet and apply it onload to avoid render-blocking while ensuring it gets applied quickly -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" onload="this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  </noscript>
+
   <script>
     // The value below is injected by flutter build, do not touch.
     const serviceWorkerVersion = null;
@@ -121,6 +131,8 @@
       cMapPacked: true,
     }
   </script>
+  <!-- pdf.js removed from eager load. It will be lazy-loaded when the CV viewer opens. -->
+  <!-- The CV viewer will inject pdf.js and the worker at runtime to avoid blocking the initial page load. -->
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js

@@ -238,21 +238,17 @@ class ProjectsSection extends StatelessWidget {
                         return _buildProjectIconPlaceholder(item, context);
                       },
                       loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        } else {
-                          return Container(
-                            width: double.infinity,
-                            height: _getRandomHeight(context),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.surface,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
+                        if (loadingProgress == null) return child;
+                        return Container(
+                          width: double.infinity,
+                          height: _getRandomHeight(context),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child:
+                              const Center(child: CircularProgressIndicator()),
+                        );
                       },
                     )
                   : _buildProjectIconPlaceholder(item, context),
@@ -376,8 +372,20 @@ class ProjectsSection extends StatelessWidget {
                       children: item.images!
                           .map((src) => src.isNotEmpty
                               ? InteractiveViewer(
-                                  child:
-                                      Image.network(src, fit: BoxFit.contain),
+                                  child: Image.network(
+                                    src,
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (c, e, st) {
+                                      debugPrint(
+                                          'Failed to load carousel image: $src');
+                                      return const SizedBox();
+                                    },
+                                    loadingBuilder: (c, child, progress) {
+                                      if (progress == null) return child;
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    },
+                                  ),
                                 )
                               : const SizedBox())
                           .toList(),
@@ -388,8 +396,24 @@ class ProjectsSection extends StatelessWidget {
                     height: 180,
                     child: item.imageUrl.isNotEmpty
                         ? InteractiveViewer(
-                            child: Image.network(item.imageUrl,
-                                fit: BoxFit.contain),
+                            child: Image.network(
+                              item.imageUrl,
+                              fit: BoxFit.contain,
+                              errorBuilder: (c, e, st) {
+                                debugPrint(
+                                    'Failed to load dialog image: ${item.imageUrl}');
+                                return Center(
+                                  child: Icon(_getProjectIcon(item.title),
+                                      size: 72,
+                                      color: theme.colorScheme.primary),
+                                );
+                              },
+                              loadingBuilder: (c, child, progress) {
+                                if (progress == null) return child;
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              },
+                            ),
                           )
                         : Center(
                             child: Icon(

@@ -2,6 +2,7 @@
 // layout and display them stacked. This preserves the exact visual of the CV PDF
 // while keeping the page responsive and scrollable.
 import 'dart:typed_data';
+import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,40 @@ class CVViewerPage extends StatefulWidget {
 class _CVViewerPageState extends State<CVViewerPage> {
   Future<List<Uint8List>>? _pagesFuture;
   double? _lastRequestedWidth;
+
+  Future<void> _ensurePdfJsLoaded() async {
+    if (!kIsWeb) return;
+    try {
+      final win = html.window as dynamic;
+      if (win.pdfjsLib != null) return;
+    } catch (e) {
+      // ignore
+    }
+
+    final doc = html.document;
+    final completer = Completer<void>();
+    final script = doc.createElement('script') as html.ScriptElement;
+    // Use a CDN copy of pdf.js; we lazy-load it to avoid blocking initial page load.
+    script.src =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js';
+    script.type = 'text/javascript';
+    script.async = true;
+    script.onLoad.listen((event) {
+      try {
+        final win = html.window as dynamic;
+        // Set worker src for pdf.js to the CDN worker file.
+        win.pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.worker.min.js';
+      } catch (e) {
+        // ignore
+      }
+      completer.complete();
+    });
+    script.onError
+        .listen((err) => completer.completeError('Failed to load pdf.js'));
+    doc.body?.append(script);
+    return completer.future;
+  }
 
   Future<void> _downloadPdf() async {
     try {
@@ -81,6 +116,11 @@ class _CVViewerPageState extends State<CVViewerPage> {
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     final targetWidth =
         (layoutWidth * devicePixelRatio).clamp(100, 4000).toInt();
+
+    if (kIsWeb) {
+      // Ensure pdf.js is available on web before asking pdfx to open the asset.
+      await _ensurePdfJsLoaded();
+    }
 
     final doc = await PdfDocument.openAsset('assets/cv.pdf');
     final count = doc.pagesCount;

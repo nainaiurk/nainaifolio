@@ -6,7 +6,7 @@ import 'dart:math' as math;
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
+// Using locally bundled fonts; avoid runtime Google Fonts fetches for faster first load.
 import 'package:url_launcher/url_launcher.dart';
 
 class AnimatedHeader extends StatelessWidget {
@@ -255,7 +255,8 @@ class AnimatedHeader extends StatelessWidget {
                       children: [
                         Text(
                           'NAINAIU',
-                          style: GoogleFonts.montserrat(
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
                             fontSize: nameSize,
                             color: primary,
                             fontWeight: FontWeight.w300,
@@ -275,7 +276,8 @@ class AnimatedHeader extends StatelessWidget {
                         ),
                         Text(
                           'RAKHAINE',
-                          style: GoogleFonts.montserrat(
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
                             fontSize: nameSize,
                             color: primary,
                             fontWeight: FontWeight.w700,

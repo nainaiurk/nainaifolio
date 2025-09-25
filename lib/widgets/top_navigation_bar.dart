@@ -1,5 +1,5 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// Use locally-bundled fonts declared in pubspec.yaml to avoid remote font fetches.
 import '../utils/responsive.dart';
 
 enum ScrollSection {
@@ -55,7 +55,8 @@ class TopNavigationBar extends StatelessWidget {
     final theme = Theme.of(context);
     return Text(
       Responsive.isMobile(context) ? 'Nainaiu' : 'Nainaiu Rakhaine',
-      style: GoogleFonts.merriweather(
+      style: TextStyle(
+        fontFamily: 'Merriweather',
         fontSize: Responsive.isMobile(context) ? 16 : 22,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,
@@ -96,7 +97,8 @@ class TopNavigationBar extends StatelessWidget {
             final theme = Theme.of(inner);
             return Text(
               title,
-              style: GoogleFonts.lora(
+              style: TextStyle(
+                fontFamily: 'Lora',
                 color: theme.colorScheme.primary,
                 fontSize: Responsive.isMobile(context) ? 14 : 16,
                 fontWeight: FontWeight.w500,
@@ -133,7 +135,8 @@ class TopNavigationBar extends StatelessWidget {
       value: section,
       child: Text(
         title,
-        style: GoogleFonts.lora(
+        style: const TextStyle(
+          fontFamily: 'Lora',
           fontSize: 16,
           fontWeight: FontWeight.w500,
         ),
