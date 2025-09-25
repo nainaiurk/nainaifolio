@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'cv_viewer_page.dart';
 
 class AnimatedHeader extends StatelessWidget {
   const AnimatedHeader({super.key});
@@ -142,7 +143,12 @@ class AnimatedHeader extends StatelessWidget {
                     // CV Button
                     Center(
                       child: OutlinedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (_) => const CVViewerPage()),
+                          );
+                        },
                         icon: Icon(
                           Icons.description,
                           // reduce icon size on mobile

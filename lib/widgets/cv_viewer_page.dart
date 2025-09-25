@@ -1,10 +1,14 @@
-// ignore_for_file: use_build_context_synchronously
+// PDF rendering view: render each PDF page to an image sized for the current
+// layout and display them stacked. This preserves the exact visual of the CV PDF
+// while keeping the page responsive and scrollable.
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:io' show File, Directory, Platform;
 import 'package:pdfx/pdfx.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:universal_html/html.dart' as html;
 
 class CVViewerPage extends StatefulWidget {
@@ -15,91 +19,97 @@ class CVViewerPage extends StatefulWidget {
 }
 
 class _CVViewerPageState extends State<CVViewerPage> {
-  PdfController? _pdfController;
-  bool _isLoading = true;
-  String? _errorMessage;
-  double _zoomLevel = 1.5; // Start with 1.5x zoom
+  Future<List<Uint8List>>? _pagesFuture;
+  double? _lastRequestedWidth;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadPdf();
+  Future<void> _downloadPdf() async {
+    try {
+      final data = await rootBundle.load('assets/cv.pdf');
+      final bytes = data.buffer.asUint8List();
+
+      if (kIsWeb) {
+        // Use an anchor + blob to trigger download in web
+        final blob = html.Blob([bytes], 'application/pdf');
+        final url = html.Url.createObjectUrlFromBlob(blob);
+        final anchor = html.document.createElement('a') as html.AnchorElement;
+        anchor.href = url;
+        anchor.download = 'Nainaiu_Rakhaine_cv.pdf';
+        anchor.style.display = 'none';
+        html.document.body?.append(anchor);
+        anchor.click();
+        anchor.remove();
+        html.Url.revokeObjectUrl(url);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Download started')));
+        return;
+      }
+
+      // Non-web platforms: write to system temp and offer to open
+      final tmp = Directory.systemTemp;
+      final file = File(
+          '${tmp.path}${Platform.pathSeparator}Nainaiu_Rakhaine_cv_${DateTime.now().millisecondsSinceEpoch}.pdf');
+      await file.writeAsBytes(bytes);
+
+      final uri = Uri.file(file.path);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Saved to ${file.path}'),
+          action: SnackBarAction(
+            label: 'Open',
+            onPressed: () async {
+              try {
+                if (!await launchUrl(uri)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Could not open file')));
+                }
+              } catch (e) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text('Open failed: $e')));
+              }
+            },
+          ),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Failed to download: $e')));
+    }
   }
 
-  void _loadPdf() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
+  Future<List<Uint8List>> _renderPagesForWidth(double layoutWidth) async {
+    // Render pages at device pixel ratio to keep text crisp
+    final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+    final targetWidth =
+        (layoutWidth * devicePixelRatio).clamp(100, 4000).toInt();
 
-    try {
-      // For demo purposes, we'll try to load the CV PDF
-      // If it doesn't exist, we'll show a placeholder
-      final document = await PdfDocument.openAsset('assets/cv.pdf');
+    final doc = await PdfDocument.openAsset('assets/cv.pdf');
+    final count = doc.pagesCount;
+    final List<Uint8List> images = [];
 
-      setState(() {
-        _pdfController = PdfController(
-          document: Future.value(document),
-          initialPage: 0,
+    for (var i = 1; i <= count; i++) {
+      final page = await doc.getPage(i);
+      try {
+        // compute height preserving aspect ratio
+        final pw = page.width;
+        final ph = page.height;
+        final scale = targetWidth / pw;
+        final renderHeight = (ph * scale).toInt();
+
+        final pageImage = await page.render(
+          width: targetWidth.toDouble(),
+          height: renderHeight.toDouble(),
+          format: PdfPageImageFormat.jpeg,
         );
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMessage =
-            'CV PDF not available yet. Please add your CV as assets/cv.pdf to enable this feature.';
-        _isLoading = false;
-      });
+        if (pageImage != null) images.add(pageImage.bytes);
+      } finally {
+        await page.close();
+      }
+      // yield a small delay so UI can update if needed
+      await Future.delayed(const Duration(milliseconds: 8));
     }
-  }
 
-  @override
-  void dispose() {
-    _pdfController?.dispose();
-    super.dispose();
-  }
-
-  void _zoomIn() {
-    setState(() {
-      _zoomLevel = (_zoomLevel * 1.2).clamp(0.5, 3.0);
-    });
-  }
-
-  void _zoomOut() {
-    setState(() {
-      _zoomLevel = (_zoomLevel / 1.2).clamp(0.5, 3.0);
-    });
-  }
-
-  void _resetZoom() {
-    setState(() {
-      _zoomLevel = 1.0;
-    });
-  }
-
-  Future<void> _downloadCV() async {
-    try {
-      // Load the PDF data
-      final ByteData data = await rootBundle.load('assets/cv.pdf');
-      final List<int> bytes = data.buffer.asUint8List();
-
-      // Create a blob and download link for web
-      final blob = html.Blob([bytes]);
-      final url = html.Url.createObjectUrlFromBlob(blob);
-
-      // Create a download link
-
-      // Clean up
-      html.Url.revokeObjectUrl(url);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('CV downloaded successfully!')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Download failed: ${e.toString()}')),
-      );
-    }
+    await doc.close();
+    return images;
   }
 
   @override
@@ -113,147 +123,68 @@ class _CVViewerPageState extends State<CVViewerPage> {
         foregroundColor: theme.colorScheme.onPrimary,
         elevation: 0,
         actions: [
-          if (_pdfController != null) ...[
-            IconButton(
-              icon: const Icon(Icons.zoom_in),
-              onPressed: _zoomIn,
-              tooltip: 'Zoom In',
-            ),
-            IconButton(
-              icon: const Icon(Icons.zoom_out),
-              onPressed: _zoomOut,
-              tooltip: 'Zoom Out',
-            ),
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: _resetZoom,
-              tooltip: 'Reset Zoom',
-            ),
-          ],
           IconButton(
-            icon: const Icon(Icons.download),
-            onPressed: _downloadCV,
-            tooltip: 'Download CV',
+            tooltip: 'Download PDF',
+            icon: const Icon(Icons.download_rounded),
+            onPressed: _downloadPdf,
           ),
         ],
-        bottom: _pdfController != null
-            ? PreferredSize(
-                preferredSize: const Size.fromHeight(30),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  color: theme.colorScheme.primary.withOpacity(0.1),
-                  child: Text(
-                    'Ctrl+wheel: Zoom • Pinch: Zoom • Buttons: Zoom • Swipe: Scroll',
-                    style: TextStyle(
-                      color: theme.colorScheme.onPrimary.withOpacity(0.8),
-                      fontSize: 12,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              )
-            : null,
       ),
-      body: _isLoading
-          ? const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Loading CV...'),
-                ],
-              ),
-            )
-          : _errorMessage != null
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.error_outline,
-                        size: 64,
-                        color: theme.colorScheme.error,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        _errorMessage!,
-                        style: theme.textTheme.bodyLarge,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'To add your CV:\n1. Add your CV PDF as assets/cv.pdf\n2. Update pubspec.yaml assets section\n3. Run flutter pub get',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: _loadPdf,
-                        child: const Text('Retry'),
-                      ),
-                    ],
-                  ),
-                )
-              : _pdfController != null
-                  ? Container(
-                      color: Colors.grey[100],
-                      child: Listener(
-                        onPointerSignal: (pointerSignal) {
-                          if (pointerSignal is PointerScrollEvent) {
-                            // Handle Ctrl+mouse wheel zoom for desktop
-                            if (HardwareKeyboard.instance.isControlPressed ||
-                                HardwareKeyboard.instance.isMetaPressed) {
-                              final delta = pointerSignal.scrollDelta.dy;
-                              if (delta > 0) {
-                                _zoomOut();
-                              } else {
-                                _zoomIn();
-                              }
-                            }
-                          }
-                        },
-                        child: GestureDetector(
-                          onScaleUpdate: (details) {
-                            // Handle pinch-to-zoom for mobile
-                            if (defaultTargetPlatform ==
-                                    TargetPlatform.android ||
-                                defaultTargetPlatform == TargetPlatform.iOS) {
-                              setState(() {
-                                _zoomLevel = (_zoomLevel * details.scale)
-                                    .clamp(0.5, 3.0);
-                              });
-                            }
-                          },
-                          onScaleEnd: (details) {
-                            // Reset scale detection for next gesture
-                          },
-                          child: Transform.scale(
-                            scale: _zoomLevel,
-                            alignment: Alignment.topCenter,
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height - 200,
-                              child: PdfView(
-                                controller: _pdfController!,
-                                scrollDirection: Axis.vertical,
-                                onDocumentLoaded: (document) {
-                                  // Optional: Handle document loaded event
-                                },
-                                onPageChanged: (page) {
-                                  // Optional: Handle page change event
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  : const Center(
-                      child: Text('PDF controller not initialized'),
+      body: LayoutBuilder(builder: (context, constraints) {
+        final layoutWidth =
+            kIsWeb ? constraints.maxWidth * 0.9 : constraints.maxWidth;
+        final contentWidth = layoutWidth.clamp(0.0, 1000.0);
+
+        // Only re-render when width changes significantly
+        if (_pagesFuture == null ||
+            (_lastRequestedWidth == null) ||
+            (_lastRequestedWidth! - contentWidth).abs() > 2) {
+          _lastRequestedWidth = contentWidth;
+          _pagesFuture = _renderPagesForWidth(contentWidth);
+        }
+
+        return Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: contentWidth),
+            child: FutureBuilder<List<Uint8List>>(
+              future: _pagesFuture,
+              builder: (context, snap) {
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snap.hasError) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text('Failed to load CV PDF: ${snap.error}'),
                     ),
+                  );
+                }
+                final pages = snap.data ?? [];
+                if (pages.isEmpty) {
+                  return const Center(child: Text('CV not available'));
+                }
+
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: pages.map((bytes) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        child: Image.memory(
+                          bytes,
+                          fit: BoxFit.fitWidth,
+                          width: contentWidth,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      }),
     );
   }
 }
