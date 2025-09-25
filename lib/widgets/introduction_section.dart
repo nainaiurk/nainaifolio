@@ -124,7 +124,7 @@ class _IntroContentState extends State<_IntroContent> {
           style: TextStyle(
             fontSize: widget.titleFontSize,
             fontWeight: FontWeight.bold,
-            color: color,
+            color: Theme.of(context).colorScheme.secondary.withOpacity(0.7),
             fontFamily: 'FontAwesome', // kept from your sample
             height: 1.2, // slightly tighter title line-height
           ),
@@ -169,20 +169,32 @@ class _IntroContentState extends State<_IntroContent> {
         if (widget.isCollapsible &&
             paragraphs.length >
                 (widget.collapsedParagraphs ?? paragraphs.length)) ...[
-          const SizedBox(height: 8),
+          SizedBox(height: Responsive.isMobile(context) ? 6 : 8),
           TextButton.icon(
             onPressed: () => setState(() => _expanded = !_expanded),
-            icon: Icon(_expanded
-                ? Icons.keyboard_arrow_up
-                : Icons.keyboard_arrow_down),
-            label: Text(_expanded ? 'See less' : 'See more'),
+            icon: Icon(
+              _expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+              size: Responsive.isMobile(context) ? 18 : 24,
+            ),
+            label: Text(
+              _expanded ? 'See less' : 'See more',
+              style: TextStyle(
+                fontSize: Responsive.isMobile(context)
+                    ? (widget.bodyFontSize - 2)
+                    : widget.bodyFontSize,
+              ),
+            ),
             style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: EdgeInsets.symmetric(
+                  horizontal: Responsive.isMobile(context) ? 8 : 12,
+                  vertical: Responsive.isMobile(context) ? 4 : 8),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
         ],
 
-        const SizedBox(height: 10),
+        SizedBox(height: Responsive.isMobile(context) ? 6 : 10),
 
         // Learn more button (kept from your sample)
         // Subtle scroll indicator (text only, no button)

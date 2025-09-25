@@ -74,7 +74,7 @@ class SkillsSection extends StatelessWidget {
       return clamped * v;
     }
 
-  final titleFont = isMobile ? 18.0 : (isTablet ? 20.0 : 28.0);
+    final titleFont = isMobile ? 18.0 : (isTablet ? 20.0 : 28.0);
     final headingStyle = theme.textTheme.headlineSmall?.copyWith(
       fontSize: titleFont,
       fontWeight: FontWeight.w700,
@@ -83,15 +83,16 @@ class SkillsSection extends StatelessWidget {
     );
 
     final sectionV = rem(3.5);
-    final sectionH = isMobile ? 16.0 : 24.0;
+    // Reduce horizontal padding on mobile to make container narrower
+    final sectionH = isMobile ? 10.0 : 24.0;
     final preCardGap = isMobile ? 10.0 : 20.0;
 
     final wrapSpacing = isMobile ? 12.0 : 16.0;
     final wrapRunSpacing = isMobile ? 12.0 : 16.0;
     // On mobile compute width so 3 cards fit per row (accounting for paddings)
+    // On mobile make the skill cards slightly narrower and allow 2 per row
     final cardWidth = isMobile
-        ? (((w - 2 * sectionH - 2 * wrapSpacing) / 3).clamp(70.0, 120.0))
-            .toDouble()
+        ? (((w - 2 * sectionH - wrapSpacing) / 2).clamp(70.0, 110.0)).toDouble()
         : 220.0;
     final cardPad = isMobile ? 5.0 : 10.0;
     final cardRadius = isMobile ? 10.0 : 16.0;
@@ -119,13 +120,14 @@ class SkillsSection extends StatelessWidget {
           Text(
             'Specialized expertise in embedded systems development, IoT solutions, and hardware-software integration',
             style: theme.textTheme.bodyMedium?.copyWith(
-                  height: 1.55,
-                  fontSize: isMobile ? 11.5 : (isTablet ? 14.5 : 16),
+                  height: 1.45,
+                  // reduce body font size on mobile
+                  fontSize: isMobile ? 10.5 : (isTablet ? 14.5 : 16),
                   color: theme.textTheme.bodyMedium?.color?.withOpacity(0.85),
                 ) ??
                 TextStyle(
-                  fontSize: isMobile ? 13.5 : (isTablet ? 14.5 : 16),
-                  height: 1.55,
+                  fontSize: isMobile ? 11.5 : (isTablet ? 14.5 : 16),
+                  height: 1.45,
                   color: theme.colorScheme.onSurface.withOpacity(0.85),
                 ),
           ),
@@ -206,6 +208,10 @@ class SkillsSection extends StatelessWidget {
   Widget _buildSkillCard(BuildContext context, SkillItem skill,
       double cardWidth, double cardPad, double cardRadius) {
     final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final isMobile = w < 700;
+    final isTablet = w >= 700 && w < 1100;
 
     return Container(
       width: cardWidth,
@@ -234,10 +240,10 @@ class SkillsSection extends StatelessWidget {
             style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface,
-                  fontSize: 12,
+                  fontSize: isMobile ? 11 : (isTablet ? 12 : 14),
                 ) ??
                 TextStyle(
-                  fontSize: 12,
+                  fontSize: isMobile ? 11 : (isTablet ? 12 : 14),
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface,
                 ),

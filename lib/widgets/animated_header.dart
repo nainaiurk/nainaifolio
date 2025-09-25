@@ -143,12 +143,19 @@ class AnimatedHeader extends StatelessWidget {
                     Center(
                       child: OutlinedButton.icon(
                         onPressed: () {},
-                        icon: Icon(Icons.description, size: icon(1.0)),
+                        icon: Icon(
+                          Icons.description,
+                          // reduce icon size on mobile
+                          size: isMobile ? icon(0.2) : icon(1.0),
+                        ),
                         label: Text(
                           'View My CV',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: titleSize - 0.5,
+                            // slightly smaller font on mobile
+                            fontSize: isMobile
+                                ? (titleSize - 0.9)
+                                : (titleSize - 0.5),
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
@@ -159,12 +166,14 @@ class AnimatedHeader extends StatelessWidget {
                                     ? rem(1.2)
                                     : rem(1.5),
                             vertical: isMobile
-                                ? rem(0)
+                                ? rem(0.3)
                                 : isTablet
                                     ? rem(0.8)
                                     : rem(1.0),
                           ),
-                          side: BorderSide(color: primary, width: 1),
+                          side: BorderSide(
+                              color: Theme.of(context).colorScheme.secondary,
+                              width: 1),
                           foregroundColor: primary,
                           backgroundColor: primary.withOpacity(0.06),
                           shape: RoundedRectangleBorder(
