@@ -87,6 +87,27 @@ lib/
 - **LinkedIn**: [Nainaiu Rakhaine](https://www.linkedin.com/in/nainaiu-rakhaine)
 - **WhatsApp**: +8801605544977
 
+## Web OAuth Setup (Gmail send)
+
+If you plan to deploy the app as a web application and use the client-side Gmail send flow, follow these steps:
+
+- Register an OAuth 2.0 client in Google Cloud Console of type `Web application`.
+- Add your deployed domain and any local testing origins (for example `http://localhost:5000`) to **Authorized JavaScript origins**.
+- Use the generated Web client ID when testing the Google Sign-In flow in the browser.
+- For development, keep the OAuth consent in **Testing** and add your Google account as a test user.
+- Optionally add a meta tag to `web/index.html` with the Web client ID:
+
+```html
+<meta name="google-signin-client_id" content="YOUR_WEB_CLIENT_ID.apps.googleusercontent.com">
+```
+
+Notes:
+- The app uses `google_sign_in` with the `gmail.send` scope. The user must sign in and grant permission to send email on their behalf.
+- If you do not want users to sign in, consider a server-side sending endpoint instead.
+
+Security note:
+- Do NOT commit `client_secret_*.json` files or any client secret to source control. The web flow only needs the **Web client ID** (public); the client secret in your downloaded JSON is for server-side use only.
+
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).

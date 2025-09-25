@@ -1,8 +1,13 @@
 ﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../utils/responsive.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:universal_html/html.dart' as html;
+import 'dart:convert';
+import 'dart:js_util' as js_util;
+import 'package:http/http.dart' as http;
 
 class ContactSection extends StatefulWidget {
   final Key? key;
@@ -22,6 +27,32 @@ class _ContactSectionState extends State<ContactSection> {
   bool _isSending = false;
 
   static const double _titleFontSize = 26;
+
+  // Destination address for contact messages
+  static const String _destinationEmail = 'nainaiu.rakhaine@gmail.com';
+
+  late GoogleSignIn _googleSignIn;
+
+  @override
+  void initState() {
+    super.initState();
+    // On web we can optionally read a meta tag with the web client id
+    String? webClientId;
+    try {
+      final meta =
+          html.document.querySelector('meta[name="google-signin-client_id"]');
+      if (meta != null) {
+        webClientId = meta.getAttribute('content');
+      }
+    } catch (_) {
+      webClientId = null;
+    }
+
+    _googleSignIn = GoogleSignIn(
+      scopes: <String>['https://www.googleapis.com/auth/gmail.send'],
+      clientId: webClientId,
+    );
+  }
 
   @override
   void dispose() {
@@ -53,36 +84,117 @@ class _ContactSectionState extends State<ContactSection> {
         print('DEBUG: Subject: $subject');
       }
 
-      final Email emailToSend = Email(
-        body: '''
-Hello Nainai,
-
-My name is: $name
-My email is: $email
-
-Message:
-$message
-
-Best regards,
-$name
-        ''',
-        subject: subject,
-        recipients: ['nainaiu.rk1234@gmail.com'],
-        cc: [],
-        bcc: [],
-        attachmentPaths: [],
-        isHTML: false,
-      );
+      // Build a plain-text message body (used for mailto fallback).
+      // Per request: body should be only the message with sender's name at last.
+      final String emailBody = [
+        message,
+        '',
+        name,
+      ].join('\r\n');
 
       if (kDebugMode) {
-        print('DEBUG: Email object created successfully');
-        print('DEBUG: Recipients: ${emailToSend.recipients}');
-        print('DEBUG: Subject: ${emailToSend.subject}');
+        print('DEBUG: Prepared message body');
+        print('DEBUG: Recipient: $_destinationEmail');
+        print('DEBUG: Subject: $subject');
       }
 
-      await FlutterEmailSender.send(emailToSend);
-      if (kDebugMode) {
-        print('DEBUG: Email sent successfully');
+      // Try sending via Gmail API (client-side).
+      try {
+        String? accessToken;
+
+        if (kIsWeb) {
+          // Prefer Google Identity Services token client injected in web/index.html
+          try {
+            final promise =
+                js_util.getProperty(js_util.globalThis, 'requestGisToken');
+            if (promise != null) {
+              final future = js_util.promiseToFuture(js_util
+                  .callMethod(js_util.globalThis, 'requestGisToken', []));
+              final tokenResp = await future;
+              accessToken =
+                  js_util.getProperty(tokenResp, 'access_token') as String?;
+            }
+          } catch (gisError) {
+            if (kDebugMode) print('DEBUG: GIS token helper failed: $gisError');
+          }
+        }
+
+        // If not web or GIS helper failed, fall back to google_sign_in package
+        if (accessToken == null) {
+          GoogleSignInAccount? account = await _googleSignIn.signInSilently();
+          account ??= await _googleSignIn.signIn();
+          if (account == null) throw Exception('Google sign-in required');
+          final auth = await account.authentication;
+          accessToken = auth.accessToken;
+        }
+
+        if (accessToken == null) throw Exception('No access token available');
+
+        String buildRaw(String from, String to, String subject, String body) {
+          final msg = [
+            'From: $from',
+            'To: $to',
+            'Subject: $subject',
+            'MIME-Version: 1.0',
+            'Content-Type: text/plain; charset="utf-8"',
+            '',
+            body,
+          ].join('\r\n');
+          String encoded = base64UrlEncode(utf8.encode(msg));
+          encoded = encoded.replaceAll('=', '');
+          return encoded;
+        }
+
+        final to = _destinationEmail;
+        // Use the email filled in the form for the 'From' header.
+        // Keep it explicit: prefer the form email so recipients see the sender's email.
+        // Note: Gmail may still rewrite the visible sender to the authenticated account.
+        String from = email;
+        // Ensure the message body ends with the sender's name as the last line.
+        // Per request: the email body should be only the message with the sender's name at last.
+        final rawBody = [
+          message,
+          name,
+        ].join('\r\n');
+
+        final raw = buildRaw(from, to,
+            subject.isNotEmpty ? subject : 'Contact from $name', rawBody);
+
+        final resp = await http.post(
+          Uri.parse(
+              'https://gmail.googleapis.com/gmail/v1/users/me/messages/send'),
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json; charset=utf-8',
+          },
+          body: jsonEncode({'raw': raw}),
+        );
+
+        if (resp.statusCode == 200 || resp.statusCode == 202) {
+          if (kDebugMode) print('DEBUG: Gmail API send success');
+        } else {
+          if (kDebugMode)
+            print(
+                'DEBUG: Gmail API send failed: ${resp.statusCode} ${resp.body}');
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text(
+                      'Gmail API send failed (${resp.statusCode}). Opening mail client...')),
+            );
+          }
+          await _sendEmailFallback(name, email, subject, emailBody);
+        }
+      } catch (e) {
+        if (kDebugMode) print('DEBUG: Gmail client send failed: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text(
+                    'Failed to send via Gmail API — opening mail client...')),
+          );
+        }
+        await _sendEmailFallback(name, email, subject, emailBody);
       }
 
       // Clear form on success
@@ -94,7 +206,7 @@ $name
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Email client opened successfully!'),
+            content: Text('Message sent (or opened email composer).'),
             backgroundColor: Colors.green,
             duration: Duration(seconds: 3),
           ),
@@ -122,20 +234,42 @@ $name
         print('DEBUG: Trying fallback email method...');
       }
 
-      final String emailUrl = 'mailto:nainaiu.rk1234@gmail.com?'
+      // Build a mailto body that is only the message with the sender's name on the last line.
+      final String fallbackBody = [
+        message,
+        name,
+      ].join('\r\n');
+
+      final String emailUrl = 'mailto:$_destinationEmail?'
           'subject=${Uri.encodeComponent(subject)}&'
-          'body=${Uri.encodeComponent('Hello Nainai,\n\n'
-              'My name is: $name\n'
-              'My email is: $email\n\n'
-              'Message:\n$message\n\n'
-              'Best regards,\n$name')}';
+          'body=${Uri.encodeComponent(fallbackBody)}';
 
       final Uri uri = Uri.parse(emailUrl);
-      print('DEBUG: Fallback email URL: $emailUrl');
+      if (kDebugMode) print('DEBUG: Fallback email URL: $emailUrl');
+
+      final bool confirm = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Open email client?'),
+              content: const Text(
+                  'This will open your email client to send the message. Continue?'),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: const Text('Cancel')),
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: const Text('Open')),
+              ],
+            ),
+          ) ??
+          false;
+
+      if (!confirm) return;
 
       if (await canLaunchUrl(uri)) {
         await launchUrl(uri);
-        print('DEBUG: Fallback email opened successfully');
+        if (kDebugMode) print('DEBUG: Fallback email opened successfully');
 
         // Clear form on success
         _nameController.clear();
@@ -167,11 +301,11 @@ $name
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Contact Information'),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('📧 Email: nainaiu.rk1234@gmail.com'),
+            Text('📧 Email: $_destinationEmail'),
             SizedBox(height: 8),
             Text('📱 Phone: +1234567890'), // Replace with actual phone
             SizedBox(height: 8),
@@ -196,8 +330,11 @@ $name
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final bool isMobile = Responsive.isMobile(context);
+    final bool isTablet = Responsive.isTablet(context);
+    final titleFont = isMobile ? 18.0 : (isTablet ? 24.0 : _titleFontSize);
     final headingStyle = theme.textTheme.headlineSmall?.copyWith(
-      fontSize: _titleFontSize,
+      fontSize: titleFont,
       fontWeight: FontWeight.w700,
       letterSpacing: 0.6,
       color: theme.textTheme.bodyMedium!.color,
@@ -217,7 +354,7 @@ $name
               children: [
                 Icon(
                   FontAwesomeIcons.phone,
-                  size: 24,
+                  size: isMobile ? 20 : 24,
                   color: theme.textTheme.bodyMedium!.color,
                 ),
                 const SizedBox(width: 20),
@@ -228,34 +365,78 @@ $name
               ],
             ),
             const SizedBox(height: 30),
-            _buildTextField(
-              controller: _nameController,
-              label: 'Name',
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter your name';
-                }
-                return null;
-              },
-              theme: theme,
-            ),
-            const SizedBox(height: 20),
-            _buildTextField(
-              controller: _emailController,
-              label: 'Email',
-              keyboardType: TextInputType.emailAddress,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter your email';
-                }
-                final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                if (!emailRegex.hasMatch(value.trim())) {
-                  return 'Please enter a valid email address';
-                }
-                return null;
-              },
-              theme: theme,
-            ),
+
+            // Responsive Name / Email
+            if (!isMobile)
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildTextField(
+                      controller: _nameController,
+                      label: 'Name',
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        return null;
+                      },
+                      theme: theme,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: _buildTextField(
+                      controller: _emailController,
+                      label: 'Email',
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        final emailRegex =
+                            RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                        if (!emailRegex.hasMatch(value.trim())) {
+                          return 'Please enter a valid email address';
+                        }
+                        return null;
+                      },
+                      theme: theme,
+                    ),
+                  ),
+                ],
+              )
+            else ...[
+              _buildTextField(
+                controller: _nameController,
+                label: 'Name',
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+                theme: theme,
+              ),
+              const SizedBox(height: 20),
+              _buildTextField(
+                controller: _emailController,
+                label: 'Email',
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  final emailRegex =
+                      RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                  if (!emailRegex.hasMatch(value.trim())) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
+                theme: theme,
+              ),
+            ],
+
             const SizedBox(height: 20),
             _buildTextField(
               controller: _subjectController,

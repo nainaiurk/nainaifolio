@@ -134,6 +134,7 @@ class ProjectsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     final bool isMobile = Responsive.isMobile(context);
     final bool isTablet = Responsive.isTablet(context);
     final titleFont = isMobile ? 18.0 : (isTablet ? 22.0 : 28.0);

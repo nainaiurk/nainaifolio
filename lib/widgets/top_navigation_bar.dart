@@ -53,35 +53,31 @@ class TopNavigationBar extends StatelessWidget {
 
   Widget _buildLogo(BuildContext context) {
     final theme = Theme.of(context);
-    return Flexible(
-      child: Text(
-        Responsive.isMobile(context) ? 'Nainaiu' : 'Nainaiu Rakhaine',
-        style: GoogleFonts.merriweather(
-          fontSize: Responsive.isMobile(context) ? 16 : 22,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 1.2,
-          color: theme.colorScheme.primary,
-        ),
+    return Text(
+      Responsive.isMobile(context) ? 'Nainaiu' : 'Nainaiu Rakhaine',
+      style: GoogleFonts.merriweather(
+        fontSize: Responsive.isMobile(context) ? 16 : 22,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 1.2,
+        color: theme.colorScheme.primary,
       ),
     );
   }
 
   Widget _buildDesktopNavItems(BuildContext context) {
-    return Flexible(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            _buildNavItem(context, 'Intro', ScrollSection.introduction),
-            _buildNavItem(context, 'Expertise', ScrollSection.whatICanOffer),
-            _buildNavItem(context, 'Education', ScrollSection.education),
-            _buildNavItem(context, 'Experience', ScrollSection.experience),
-            _buildNavItem(context, 'Publications', ScrollSection.publications),
-            _buildNavItem(context, 'Skills', ScrollSection.skills),
-            _buildNavItem(context, 'Projects', ScrollSection.projects),
-            _buildNavItem(context, 'Contact', ScrollSection.contact),
-          ],
-        ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _buildNavItem(context, 'Intro', ScrollSection.introduction),
+          _buildNavItem(context, 'Expertise', ScrollSection.whatICanOffer),
+          _buildNavItem(context, 'Education', ScrollSection.education),
+          _buildNavItem(context, 'Experience', ScrollSection.experience),
+          _buildNavItem(context, 'Publications', ScrollSection.publications),
+          _buildNavItem(context, 'Skills', ScrollSection.skills),
+          _buildNavItem(context, 'Projects', ScrollSection.projects),
+          _buildNavItem(context, 'Contact', ScrollSection.contact),
+        ],
       ),
     );
   }
