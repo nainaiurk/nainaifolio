@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'cv_viewer_page.dart';
 
 class AnimatedHeader extends StatelessWidget {
   const AnimatedHeader({super.key});
@@ -144,15 +143,12 @@ class AnimatedHeader extends StatelessWidget {
                     Center(
                       child: OutlinedButton.icon(
                         onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const CVViewerPage()),
-                          );
+                          Navigator.of(context).pushNamed('/cv');
                         },
                         icon: Icon(
                           Icons.description,
-                          // reduce icon size on mobile
-                          size: isMobile ? icon(0.2) : icon(1.0),
+                          // further reduce icon size on mobile
+                          size: isMobile ? icon(0.12) : icon(1.0),
                         ),
                         label: Text(
                           'View My CV',
@@ -160,19 +156,22 @@ class AnimatedHeader extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             // slightly smaller font on mobile
                             fontSize: isMobile
-                                ? (titleSize - 0.9)
+                                ? (titleSize - 0.7)
                                 : (titleSize - 0.5),
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
+                          // Keep font size unchanged; only reduce the vertical
+                          // padding (container height) on mobile.
                           padding: EdgeInsets.symmetric(
                             horizontal: isMobile
-                                ? rem(0.5)
+                                ? rem(0.45)
                                 : isTablet
                                     ? rem(1.2)
                                     : rem(1.5),
+                            // even smaller vertical padding on mobile to further reduce height
                             vertical: isMobile
-                                ? rem(0.3)
+                                ? rem(0.12)
                                 : isTablet
                                     ? rem(0.8)
                                     : rem(1.0),
@@ -183,7 +182,8 @@ class AnimatedHeader extends StatelessWidget {
                           foregroundColor: primary,
                           backgroundColor: primary.withOpacity(0.06),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(rem(1.2)),
+                            borderRadius: BorderRadius.circular(
+                                isMobile ? rem(0.7) : rem(1.2)),
                           ),
                         ),
                       ),
@@ -318,11 +318,11 @@ class AnimatedHeader extends StatelessWidget {
                       if (cc.maxWidth < 320) {
                         return Wrap(
                           spacing: isMobile
-                              ? rem(0.6)
+                              ? rem(0.36)
                               : isTablet
                                   ? rem(2.6)
                                   : rem(5.0),
-                          runSpacing: rem(0.4),
+                          runSpacing: isMobile ? rem(0.2) : rem(0.4),
                           children: icons,
                         );
                       }
@@ -332,7 +332,7 @@ class AnimatedHeader extends StatelessWidget {
                                   w,
                                   SizedBox(
                                     width: isMobile
-                                        ? rem(0.6)
+                                        ? rem(0.36)
                                         : isTablet
                                             ? rem(2.6)
                                             : rem(5.0),

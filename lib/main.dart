@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nainaifolio/utils/constant.dart';
 import 'screens/home_screen.dart';
+import 'widgets/cv_viewer_page.dart';
 
 void main() {
   runApp(const PortfolioApp());
@@ -16,7 +17,11 @@ class PortfolioApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.light,
-      home: const HomeScreen(),
+      routes: {
+        '/': (context) => const HomeScreen(),
+        '/cv': (context) => const CVViewerPage(),
+      },
+      initialRoute: '/',
     );
   }
 }
