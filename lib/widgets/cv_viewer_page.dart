@@ -5,9 +5,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show rootBundle, RawKeyboard, LogicalKeyboardKey;
 import 'dart:io' show File, Directory, Platform;
 import 'package:pdfx/pdfx.dart';
+import 'dart:math' as math;
+import 'dart:async';
+import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -21,6 +24,11 @@ class CVViewerPage extends StatefulWidget {
 class _CVViewerPageState extends State<CVViewerPage> {
   Future<List<Uint8List>>? _pagesFuture;
   double? _lastRequestedWidth;
+  List<TransformationController> _controllers = [];
+  // per-page keys so web wheel handler can find the page under cursor
+  List<GlobalKey> _pageKeys = [];
+  // web-only wheel subscription
+  StreamSubscription? _wheelSub;
 
   Future<void> _downloadPdf() async {
     try {
@@ -165,17 +173,64 @@ class _CVViewerPageState extends State<CVViewerPage> {
                   return const Center(child: Text('CV not available'));
                 }
 
+                // Ensure controllers and keys match pages count
+                if (_controllers.length != pages.length) {
+                  for (final c in _controllers) {
+                    c.dispose();
+                  }
+                  _controllers = List.generate(pages.length, (_) => TransformationController());
+                }
+                if (_pageKeys.length != pages.length) {
+                  _pageKeys = List.generate(pages.length, (_) => GlobalKey());
+                }
+
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: pages.map((bytes) {
+                    children: pages.asMap().entries.map((entry) {
+                      final i = entry.key;
+                      final bytes = entry.value;
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        child: Image.memory(
-                          bytes,
-                          fit: BoxFit.fitWidth,
-                          width: contentWidth,
-                        ),
+                        child: LayoutBuilder(builder: (context, box) {
+                          // Use InteractiveViewer for pinch-to-zoom and panning
+                          // Wrap page in a Listener for non-web pointer scroll events
+                          return Listener(
+                            onPointerSignal: (ps) {
+                              if (ps is PointerScrollEvent) {
+                                // require Ctrl key for scroll-to-zoom on non-web
+                                final keys = RawKeyboard.instance.keysPressed;
+                                final isCtrl = keys.contains(LogicalKeyboardKey.controlLeft) ||
+                                    keys.contains(LogicalKeyboardKey.controlRight);
+                                if (!isCtrl) return;
+
+                                final controller = _controllers[i];
+                                final currentScale = controller.value.getMaxScaleOnAxis();
+                                final factor = math.pow(1.001, -ps.scrollDelta.dy);
+                                final newScale = (currentScale * factor).clamp(0.5, 6.0);
+                                controller.value = Matrix4.identity()..scale(newScale);
+                              }
+                            },
+                            child: ConstrainedBox(
+                            key: _pageKeys[i],
+                              constraints: BoxConstraints(maxWidth: contentWidth),
+                              child: InteractiveViewer(
+                                transformationController: _controllers[i],
+                                panEnabled: true,
+                                scaleEnabled: true,
+                                minScale: 0.5,
+                                maxScale: 6.0,
+                                boundaryMargin: const EdgeInsets.all(20),
+                                child: Image.memory(
+                                  bytes,
+                                  fit: BoxFit.fitWidth,
+                                  width: contentWidth,
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
                       );
                     }).toList(),
                   ),
@@ -186,5 +241,52 @@ class _CVViewerPageState extends State<CVViewerPage> {
         );
       }),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (kIsWeb) {
+      // On web, listen to raw wheel events and apply zoom to the page under cursor
+      _wheelSub = html.window.onWheel.listen((html.WheelEvent ev) {
+        // Require the keyboard state (RawKeyboard) to report ctrl/meta pressed.
+        final keys = RawKeyboard.instance.keysPressed;
+        final isCtrlPressed = keys.contains(LogicalKeyboardKey.controlLeft) ||
+            keys.contains(LogicalKeyboardKey.controlRight) ||
+            keys.contains(LogicalKeyboardKey.metaLeft) ||
+            keys.contains(LogicalKeyboardKey.metaRight);
+        if (!isCtrlPressed) return;
+
+        // Find the page under the cursor
+        final px = ev.client.x.toDouble();
+        final py = ev.client.y.toDouble();
+
+        for (var i = 0; i < _pageKeys.length; i++) {
+          final key = _pageKeys[i];
+          final ctx = key.currentContext;
+          if (ctx == null) continue;
+          final box = ctx.findRenderObject() as RenderBox;
+          final pos = box.localToGlobal(Offset.zero);
+          final rect = pos & box.size;
+          if (rect.contains(Offset(px, py))) {
+            final controller = _controllers[i];
+            final currentScale = controller.value.getMaxScaleOnAxis();
+            final factor = math.pow(1.001, -ev.deltaY);
+            final newScale = (currentScale * factor).clamp(0.5, 6.0);
+            controller.value = Matrix4.identity()..scale(newScale);
+            break;
+          }
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    for (final c in _controllers) {
+      c.dispose();
+    }
+    _wheelSub?.cancel();
+    super.dispose();
   }
 }
