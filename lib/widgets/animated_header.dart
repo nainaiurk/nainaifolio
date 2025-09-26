@@ -220,9 +220,12 @@ class AnimatedHeader extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: rem(0.6)),
-                        Image.asset(
-                          'assets/gif/hand_wave.gif',
-                          height: icon(1.8),
+                        // Replace memory-heavy GIF with a lightweight waving hand icon
+                        Icon(
+                          Icons
+                              .pan_tool, // simple hand icon as a lightweight alternative
+                          size: icon(1.8),
+                          color: primary,
                         ),
                       ],
                     ),

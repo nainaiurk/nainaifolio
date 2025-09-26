@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../models/project_item.dart';
 import '../utils/responsive.dart';
@@ -228,27 +229,23 @@ class ProjectsSection extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: item.imageUrl.isNotEmpty
-                  ? Image.network(
-                      item.imageUrl,
+                  ? CachedNetworkImage(
+                      imageUrl: item.imageUrl,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: _getRandomHeight(context),
-                      errorBuilder: (context, error, stackTrace) {
+                      placeholder: (context, url) => Container(
+                        width: double.infinity,
+                        height: _getRandomHeight(context),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                      errorWidget: (context, url, error) {
                         debugPrint('Failed to load image: ${item.imageUrl}');
                         return _buildProjectIconPlaceholder(item, context);
-                      },
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Container(
-                          width: double.infinity,
-                          height: _getRandomHeight(context),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child:
-                              const Center(child: CircularProgressIndicator()),
-                        );
                       },
                     )
                   : _buildProjectIconPlaceholder(item, context),

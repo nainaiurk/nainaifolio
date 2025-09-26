@@ -38,6 +38,30 @@ Write-Host "Using Vercel token from environment or local file."
 Write-Host "Building Flutter web release (HTML renderer)... (flutter build web --release --web-renderer html)"
 flutter build web --release --web-renderer html
 
+# Some previous builds may leave a 'canvaskit' folder in build/web. Even when
+# building with the HTML renderer that folder can remain and some hosting
+# configurations / loaders may still serve CanvasKit assets causing Safari to
+# attempt to use WebGL which can repeatedly crash on iOS. Remove it to force
+# a pure-HTML renderer deployment.
+$canvaskitPath = Join-Path (Get-Location) 'build\web\canvaskit'
+if (Test-Path $canvaskitPath) {
+    try {
+        Remove-Item -Recurse -Force $canvaskitPath
+        Write-Host "Removed leftover canvaskit directory to avoid serving CanvasKit assets."
+    } catch {
+        Write-Host "Warning: Failed to remove canvaskit directory: $($_.Exception.Message)"
+    }
+}
+
+# Sanity check: warn if index.html references canvaskit (unlikely for HTML renderer)
+$indexHtml = Join-Path (Get-Location) 'build\web\index.html'
+if (Test-Path $indexHtml) {
+    $contents = Get-Content $indexHtml -Raw -ErrorAction SilentlyContinue
+    if ($contents -match 'canvaskit') {
+        Write-Host "Warning: index.html contains a reference to 'canvaskit' - review build output."
+    }
+}
+
 # Default the project name to your 'nainaifolio' project if not provided
 if ([string]::IsNullOrWhiteSpace($Project)) {
     $Project = 'nainaifolio'
@@ -56,11 +80,8 @@ if ($Scope -ne '') { $args += @('--scope', $Scope) }
 # Link the current directory to the named Vercel project so the deploy target is explicit
 Write-Host "Linking local directory to Vercel project: $Project (non-interactive)..."
 $linkArgs = @('--yes','--token',$env:VERCEL_TOKEN)
-Write-Host ("Running: npx vercel link " + ($linkArgs -join ' ') + " (project: $Project)")
+Write-Host "Running: npx vercel link $($linkArgs -join ' ')"
 try {
-    # Newer Vercel CLI versions don't accept --name. Run a non-interactive link and rely on
-    # the existing .vercel/project.json or previous link state. If you need to target a
-    # different project, link interactively or update .vercel/project.json manually.
     & npx vercel link @linkArgs
 } catch {
     Write-Host "Note: 'vercel link' returned an error or non-zero exit; continuing to deploy as it may already be linked. Error: $($_.Exception.Message)"
@@ -68,6 +89,6 @@ try {
 
 $args += 'build/web'
 
-Write-Host ("Running: npx vercel " + ($args -join ' '))
+Write-Host "Running: npx vercel $($args -join ' ')"
 
 & npx vercel @args

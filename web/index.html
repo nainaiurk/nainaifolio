@@ -164,5 +164,41 @@
       } catch (e) { /* no-op */ }
     });
   </script>
+  <!-- Simple error capture overlay for debugging JS errors in Safari -->
+  <style>
+    #flutter-error-overlay { position: fixed; right: 12px; bottom: 12px; z-index: 2147483647; max-width: 360px; font-family: monospace; font-size: 12px; }
+    #flutter-error-overlay .err { background: rgba(0,0,0,0.85); color: #ffdddd; padding: 8px; margin-top: 8px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+    #flutter-error-overlay .err .time { color: #ccc; font-size: 11px; display:block; margin-bottom:6px; }
+    #flutter-error-overlay .err pre { white-space: pre-wrap; max-height: 160px; overflow: auto; margin:0; }
+    #flutter-error-overlay .clear { text-align:right; color:#ddd; cursor:pointer; font-size:11px; }
+  </style>
+  <div id="flutter-error-overlay" aria-hidden="false"></div>
+  <script>
+    (function(){
+      var overlay = document.getElementById('flutter-error-overlay');
+      function addError(msg){
+        console.error('Captured error:', msg);
+        var node = document.createElement('div'); node.className='err';
+        var d = new Date();
+        var t = d.toISOString();
+        var h = document.createElement('div'); h.className='time'; h.textContent = t;
+        var p = document.createElement('pre'); p.textContent = msg;
+        var c = document.createElement('div'); c.className='clear'; c.textContent='✕'; c.onclick = function(){ overlay.innerHTML=''; };
+        node.appendChild(h); node.appendChild(p); node.appendChild(c);
+        overlay.appendChild(node);
+      }
+
+      window.addEventListener('error', function(ev){
+        try{ var s = ev && ev.error ? (ev.error.stack || ev.error.message || String(ev.error)) : (ev.message || String(ev)); addError(s); }catch(e){}
+      }, true);
+
+      window.addEventListener('unhandledrejection', function(ev){
+        try{ var reason = ev && ev.reason ? (ev.reason.stack || ev.reason.message || String(ev.reason)) : String(ev); addError('UnhandledRejection: '+reason); }catch(e){}
+      }, true);
+
+      // Expose a helper so Flutter code can push errors to the overlay if needed
+      window.__flutterReportError = function(msg){ try{ addError(msg); }catch(e){} };
+    })();
+  </script>
 </body>
 </html>

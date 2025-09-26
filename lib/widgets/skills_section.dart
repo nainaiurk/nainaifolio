@@ -147,7 +147,9 @@ class SkillsSection extends StatelessWidget {
               cardPad,
               cardRadius,
               wrapSpacing,
-              wrapRunSpacing)),
+              wrapRunSpacing,
+              isMobile,
+              isTablet)),
         ],
       ),
     );
@@ -162,6 +164,8 @@ class SkillsSection extends StatelessWidget {
     double cardRadius,
     double wrapSpacing,
     double wrapRunSpacing,
+    bool isMobile,
+    bool isTablet,
   ) {
     final theme = Theme.of(context);
 
@@ -211,7 +215,13 @@ class SkillsSection extends StatelessWidget {
               runSpacing: wrapRunSpacing,
               children: skills
                   .map((skill) => _buildSkillCard(
-                      context, skill, computedCardWidth, cardPad, cardRadius))
+                      context,
+                      skill,
+                      computedCardWidth,
+                      cardPad,
+                      cardRadius,
+                      isMobile,
+                      isTablet))
                   .toList(),
             );
           }),
@@ -220,86 +230,97 @@ class SkillsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSkillCard(BuildContext context, SkillItem skill,
-      double cardWidth, double cardPad, double cardRadius) {
+  Widget _buildSkillCard(
+      BuildContext context,
+      SkillItem skill,
+      double cardWidth,
+      double cardPad,
+      double cardRadius,
+      bool isMobile,
+      bool isTablet) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
-    final w = size.width;
-    final isMobile = w < 700;
-    final isTablet = w >= 700 && w < 1100;
 
-    return Container(
-      width: cardWidth,
-      padding: EdgeInsets.all(cardPad),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(cardRadius),
-        border: Border.all(
-          color: theme.colorScheme.primary.withOpacity(0.15),
-          width: 1,
+    // Reduce shadow cost on mobile to improve performance
+    final List<BoxShadow> shadow = isMobile
+        ? []
+        : [
+            BoxShadow(
+              color: theme.colorScheme.secondary.withOpacity(0.06),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ];
+
+    final double fontSize = isMobile ? 11 : (isTablet ? 12 : 14);
+
+    return RepaintBoundary(
+      child: Container(
+        width: cardWidth,
+        padding: EdgeInsets.all(cardPad),
+        decoration: BoxDecoration(
+          color: theme.cardColor,
+          borderRadius: BorderRadius.circular(cardRadius),
+          border: Border.all(
+            color: theme.colorScheme.primary.withOpacity(0.15),
+            width: 1,
+          ),
+          boxShadow: shadow,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.secondary.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Skill Name
-          Text(
-            skill.label,
-            style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface,
-                  fontSize: isMobile ? 11 : (isTablet ? 12 : 14),
-                ) ??
-                TextStyle(
-                  fontSize: isMobile ? 11 : (isTablet ? 12 : 14),
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface,
-                ),
-          ),
-          SizedBox(height: cardPad * 0.6),
-          // Progress Bar: explicitly align left and size to card content width
-          LayoutBuilder(builder: (ctx, constraints) {
-            final barWidth = constraints.maxWidth;
-            final lineH = cardPad > 12 ? 8.0 : 4.0;
-            return Align(
-              alignment: Alignment.centerLeft,
-              child: SizedBox(
-                width: barWidth,
-                height: lineH,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: barWidth,
-                      height: lineH,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surface.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                    FractionallySizedBox(
-                      alignment: Alignment.centerLeft,
-                      widthFactor: skill.level.clamp(0.0, 1.0),
-                      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Skill Name
+            Text(
+              skill.label,
+              style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
+                    fontSize: fontSize,
+                  ) ??
+                  TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
+                  ),
+            ),
+            SizedBox(height: cardPad * 0.6),
+            // Progress Bar: explicitly align left and size to card content width
+            LayoutBuilder(builder: (ctx, constraints) {
+              final barWidth = constraints.maxWidth;
+              final lineH = cardPad > 12 ? 8.0 : 4.0;
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: SizedBox(
+                  width: barWidth,
+                  height: lineH,
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: barWidth,
                         height: lineH,
                         decoration: BoxDecoration(
-                          color: _getProgressColor(skill.level, theme),
+                          color: theme.colorScheme.surface.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
-                    ),
-                  ],
+                      FractionallySizedBox(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: skill.level.clamp(0.0, 1.0),
+                        child: Container(
+                          height: lineH,
+                          decoration: BoxDecoration(
+                            color: _getProgressColor(skill.level, theme),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }),
-        ],
+              );
+            }),
+          ],
+        ),
       ),
     );
   }
