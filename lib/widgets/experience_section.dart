@@ -4,6 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/experience_item.dart';
+import '../utils/link_style.dart';
+import '../utils/responsive.dart';
 
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
@@ -66,19 +68,12 @@ class ExperienceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
-    final w = size.width;
-    final h = size.height;
-    final isMobile = w < 700;
-    final isTablet = w >= 700 && w < 1100;
+    final isMobile = ResponsiveUtils.isMobile(context);
+    final isTablet = ResponsiveUtils.isTablet(context);
 
-    double rem(double v) {
-      final base = (w < h ? w : h) * 0.01;
-      final clamped = base.clamp(8.0, 18.0);
-      return clamped * v;
-    }
+    double rem(double v) => ResponsiveUtils.rem(context, v);
 
-  final titleFont = isMobile ? 18.0 : (isTablet ? 20.0 : 28.0);
+    final titleFont = isMobile ? 18.0 : (isTablet ? 20.0 : 28.0);
     final roleSize = isMobile ? 14.0 : (isTablet ? 16.0 : 18.0);
     final orgLocSize = isMobile ? 12.0 : (isTablet ? 13.5 : 14.5);
     final periodSize = isMobile ? 11.0 : (isTablet ? 12.0 : 13.0);
@@ -91,6 +86,8 @@ class ExperienceSection extends StatelessWidget {
       builder: (context, constraints) {
         return Container(
           width: double.infinity,
+          // Force an opaque background to avoid web compositing glitches on mobile
+          color: theme.colorScheme.background,
           padding: EdgeInsets.symmetric(
             horizontal: isMobile ? 16 : 24,
             vertical: 24,
@@ -155,15 +152,17 @@ class ExperienceSection extends StatelessWidget {
 
               // Cards
               ..._experiences.map(
-                (e) => _ExperienceCard(
-                  item: e,
-                  radius: cardRadius,
-                  padding: cardPad,
-                  marginBottom: cardGap,
-                  roleSize: roleSize,
-                  orgLocSize: orgLocSize,
-                  periodSize: periodSize,
-                  bodySize: bodySize,
+                (e) => RepaintBoundary(
+                  child: _ExperienceCard(
+                    item: e,
+                    radius: cardRadius,
+                    padding: cardPad,
+                    marginBottom: cardGap,
+                    roleSize: roleSize,
+                    orgLocSize: orgLocSize,
+                    periodSize: periodSize,
+                    bodySize: bodySize,
+                  ),
                 ),
               ),
             ],
@@ -200,8 +199,8 @@ class _ExperienceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final background =
-        isDark ? theme.cardColor : theme.colorScheme.surface.withOpacity(0.98);
+    // Use fully opaque surface/card colors to avoid blending artifacts on web
+    final background = isDark ? theme.cardColor : theme.colorScheme.surface;
 
     String truncate(String s, [int max = 140]) {
       if (s.length <= max) return s;
@@ -221,6 +220,17 @@ class _ExperienceCard extends StatelessWidget {
       return null;
     }
 
+    // Keep the card lightweight: smaller shadow on light themes, none on dark.
+    final boxShadow = isDark
+        ? const <BoxShadow>[]
+        : [
+            BoxShadow(
+              color: theme.colorScheme.secondary.withOpacity(0.32),
+              blurRadius: 8,
+              offset: const Offset(0, 6),
+            ),
+          ];
+
     return Container(
       width: double.infinity,
       margin: EdgeInsets.only(bottom: marginBottom),
@@ -228,16 +238,8 @@ class _ExperienceCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: theme.colorScheme.primary.withOpacity(0.5)),
-        boxShadow: isDark
-            ? const []
-            : [
-                BoxShadow(
-                  color: theme.colorScheme.secondary.withOpacity(0.5),
-                  blurRadius: 16,
-                  offset: const Offset(0, 10),
-                ),
-              ],
+        border: Border.all(color: theme.colorScheme.primary),
+        boxShadow: boxShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,6 +321,8 @@ class _ExperienceCard extends StatelessWidget {
 
             Widget nameWidget;
             if (sup != null) {
+              // Show plain supervisor name. If a link exists, render as a
+              // clickable underlined Hyperlink for visual consistency.
               nameWidget = Text(
                 sup,
                 style: theme.textTheme.bodySmall?.copyWith(
@@ -334,9 +338,9 @@ class _ExperienceCard extends StatelessWidget {
                           theme.textTheme.bodySmall?.color?.withOpacity(0.85),
                     ),
               );
-              // If a link exists, wrap the explicit name to make it clickable.
               if (hasLink) {
-                nameWidget = GestureDetector(
+                nameWidget = Hyperlink(
+                  sup,
                   onTap: () async {
                     final uri = Uri.parse(item.professorLink!);
                     if (await canLaunchUrl(uri)) {
@@ -344,27 +348,20 @@ class _ExperienceCard extends StatelessWidget {
                           mode: LaunchMode.externalApplication);
                     }
                   },
-                  child: nameWidget,
+                  style: linkTextStyle(context, fontSize: orgLocSize),
                 );
               }
             } else {
               // No explicit name; show generic clickable label when link exists.
-              nameWidget = GestureDetector(
+              nameWidget = Hyperlink(
+                'Supervisor',
                 onTap: () async {
                   final uri = Uri.parse(item.professorLink!);
                   if (await canLaunchUrl(uri)) {
                     await launchUrl(uri, mode: LaunchMode.externalApplication);
                   }
                 },
-                child: Text(
-                  'Supervisor',
-                  style: TextStyle(
-                    fontSize: orgLocSize,
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w600,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
+                style: linkTextStyle(context, fontSize: orgLocSize),
               );
             }
 

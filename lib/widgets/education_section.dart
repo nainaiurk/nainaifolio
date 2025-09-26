@@ -2,6 +2,7 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/education.dart';
+import '../utils/responsive.dart';
 
 class EducationSection extends StatelessWidget {
   final Key? key;
@@ -25,8 +26,10 @@ class EducationSection extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final w = constraints.maxWidth;
-        final isMobile = w < 600;
-        final isTablet = w >= 600 && w < 1100;
+        final isMobile =
+            ResponsiveUtils.isMobile(context, mobileBreakpoint: 600);
+        final isTablet = ResponsiveUtils.isTablet(context,
+            mobileBreakpoint: 600, tabletBreakpoint: 1100);
 
         // Section paddings by breakpoint
         final horizPad = isMobile
@@ -40,17 +43,9 @@ class EducationSection extends StatelessWidget {
                 ? 26.0
                 : 30.0;
 
-    // Title sizing by breakpoint (reduced by 2px for mobile/tablet)
-    final double titleFontSize = isMobile
-      ? 18.0
-      : isTablet
-        ? 22.0
-        : 28.0;
-        final double titleIconSize = isMobile
-            ? 20.0
-            : isTablet
-                ? 22.0
-                : 24.0;
+        // Title sizing by breakpoint (reduced by 2px for mobile/tablet)
+        final double titleFontSize = isMobile ? 18.0 : (isTablet ? 22.0 : 28.0);
+        final double titleIconSize = isMobile ? 20.0 : (isTablet ? 22.0 : 24.0);
         final double titleGap = isMobile ? 10.0 : 14.0;
 
         // Card metrics by breakpoint
@@ -93,55 +88,61 @@ class EducationSection extends StatelessWidget {
 
         return Container(
           width: double.infinity,
+          // Force opaque background for the whole section to avoid mobile ghosting
+          color: theme.colorScheme.background,
           padding:
               EdgeInsets.symmetric(vertical: vertPad, horizontal: horizPad),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    top: titleTopPadding, bottom: isMobile ? 16.0 : 24.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.book,
-                      size: titleIconSize,
-                      color: theme.colorScheme.primary,
-                    ),
-                    SizedBox(width: titleGap),
-                    Flexible(
-                      child: Text(
-                        'Educational Qualifications',
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                              fontSize: titleFontSize,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.6,
-                              color: theme.colorScheme.primary,
-                            ) ??
-                            TextStyle(
-                              fontSize: titleFontSize,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.6,
-                              color: theme.colorScheme.primary,
-                            ),
+              RepaintBoundary(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      top: titleTopPadding, bottom: isMobile ? 16.0 : 24.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.book,
+                        size: titleIconSize,
+                        color: theme.colorScheme.primary,
                       ),
-                    ),
-                  ],
+                      SizedBox(width: titleGap),
+                      Flexible(
+                        child: Text(
+                          'Educational Qualifications',
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                                fontSize: titleFontSize,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.6,
+                                color: theme.colorScheme.primary,
+                              ) ??
+                              TextStyle(
+                                fontSize: titleFontSize,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.6,
+                                color: theme.colorScheme.primary,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
               // Cards
               ...educationList.map(
-                (edu) => _EducationCard(
-                  education: edu,
-                  cardRadius: cardRadius,
-                  cardPadding: cardPad,
-                  degreeSize: degreeSize,
-                  institutionSize: institutionSz,
-                  durationSize: durationSz,
-                  bodySize: bodySize,
-                  marginBottom: cardGap,
+                (edu) => RepaintBoundary(
+                  child: _EducationCard(
+                    education: edu,
+                    cardRadius: cardRadius,
+                    cardPadding: cardPad,
+                    degreeSize: degreeSize,
+                    institutionSize: institutionSz,
+                    durationSize: durationSz,
+                    bodySize: bodySize,
+                    marginBottom: cardGap,
+                  ),
                 ),
               ),
             ],
@@ -185,14 +186,14 @@ class _EducationCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(cardRadius),
-        border: Border.all(color: theme.colorScheme.primary.withOpacity(0.6)),
+        border: Border.all(color: theme.colorScheme.primary),
         boxShadow: isDark
             ? const []
             : [
                 BoxShadow(
-                  color: theme.colorScheme.secondary.withOpacity(0.5),
-                  blurRadius: 14,
-                  offset: const Offset(0, 8),
+                  color: theme.colorScheme.secondary.withOpacity(0.28),
+                  blurRadius: 8,
+                  offset: const Offset(0, 6),
                 ),
               ],
       ),

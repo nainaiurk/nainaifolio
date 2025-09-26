@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/offer_item.dart';
+import '../utils/responsive.dart';
 
 /// Expertise section:
 /// - Mobile (<600px): 2 cards per row
@@ -56,8 +57,10 @@ class ExpertiseAreasSection extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final w = constraints.maxWidth;
-        final isMobile = w < 600;
-        final isTablet = w >= 600 && w < 1100;
+        final isMobile =
+            ResponsiveUtils.isMobile(context, mobileBreakpoint: 600);
+        final isTablet = ResponsiveUtils.isTablet(context,
+            mobileBreakpoint: 600, tabletBreakpoint: 1100);
 
         // Grid columns
         final cols = isMobile ? 2 : 4;
@@ -65,8 +68,8 @@ class ExpertiseAreasSection extends StatelessWidget {
         final totalSpacing = spacing * (cols - 1);
         final cardW = (w - totalSpacing) / cols;
 
-  // Title sizes (reduced by 2px on mobile/tablet)
-  final sectionTitleFont = isMobile ? 18.0 : (isTablet ? 22.0 : 28.0);
+        // Title sizes (reduced by 2px on mobile/tablet)
+        final sectionTitleFont = isMobile ? 18.0 : (isTablet ? 22.0 : 28.0);
         final iconLeadingSize = clamp(sectionTitleFont * 0.6, 16, 20);
 
         // ===== Compact card metrics =====
@@ -149,18 +152,20 @@ class ExpertiseAreasSection extends StatelessWidget {
                   childAspectRatio:
                       childAspectRatio, // height ~= content + safety
                 ),
-                itemBuilder: (context, index) => _CompactOfferCard(
-                  item: _offers[index],
-                  iconBox: iconBox,
-                  iconSize: iconSize,
-                  titleFont: titleFont,
-                  hintFont: hintFont,
-                  arrowSz: arrowSz,
-                  padH: cardPadH,
-                  padV: cardPadV,
-                  gapAfterIcon: gapAfterIcon,
-                  gapAfterTitle: gapAfterTitle,
-                  gapBeforeArrow: gapBeforeArrow,
+                itemBuilder: (context, index) => RepaintBoundary(
+                  child: _CompactOfferCard(
+                    item: _offers[index],
+                    iconBox: iconBox,
+                    iconSize: iconSize,
+                    titleFont: titleFont,
+                    hintFont: hintFont,
+                    arrowSz: arrowSz,
+                    padH: cardPadH,
+                    padV: cardPadV,
+                    gapAfterIcon: gapAfterIcon,
+                    gapAfterTitle: gapAfterTitle,
+                    gapBeforeArrow: gapBeforeArrow,
+                  ),
                 ),
               ),
             ],
@@ -223,8 +228,8 @@ class _CompactOfferCard extends StatelessWidget {
               ? const []
               : [
                   BoxShadow(
-                    color: item.color.withOpacity(0.8),
-                    blurRadius: 6,
+                    color: item.color.withOpacity(0.28),
+                    blurRadius: 4,
                     offset: const Offset(0, 1),
                   ),
                 ],

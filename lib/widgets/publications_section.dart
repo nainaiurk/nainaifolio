@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/publication_item.dart';
+import '../utils/link_style.dart';
+import '../utils/responsive.dart';
 
 class PublicationsSection extends StatelessWidget {
   const PublicationsSection({super.key});
@@ -71,21 +73,13 @@ class PublicationsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
-    final w = size.width;
-    final h = size.height;
-    final isMobile = w < 700;
-    final isTablet = w >= 700 && w < 1100;
-
-    double rem(double v) {
-      final base = (w < h ? w : h) * 0.01;
-      final clamped = base.clamp(8.0, 18.0);
-      return clamped * v;
-    }
+    final isMobile = ResponsiveUtils.isMobile(context);
+    final isTablet = ResponsiveUtils.isTablet(context);
+    double rem(double v) => ResponsiveUtils.rem(context, v);
 
     // heading titleFont already applied via headingStyle; no separate var needed
     // Align sizes with ExperienceSection
-  final titleFont = isMobile ? 18.0 : (isTablet ? 20.0 : 28.0);
+    final titleFont = isMobile ? 18.0 : (isTablet ? 20.0 : 28.0);
     final pubTitleFont = isMobile ? 12.0 : (isTablet ? 14.0 : 16.0);
     final venueFont = isMobile ? 11.0 : (isTablet ? 12.5 : 13.5);
     final summaryFont = isMobile ? 10.0 : (isTablet ? 12.0 : 13.0);
@@ -104,6 +98,7 @@ class PublicationsSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
+      color: theme.colorScheme.background,
       padding: EdgeInsets.symmetric(vertical: sectionV, horizontal: sectionH),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,15 +140,17 @@ class PublicationsSection extends StatelessWidget {
           ..._publications.map(
             (item) => Padding(
               padding: EdgeInsets.only(bottom: cardGap),
-              child: _PublicationCard(
-                item: item,
-                pubTitleFont: pubTitleFont,
-                venueFont: venueFont,
-                summaryFont: summaryFont,
-                isMobile: isMobile,
-                isTablet: isTablet,
-                cardPad: cardPad,
-                cardRadius: cardRadius,
+              child: RepaintBoundary(
+                child: _PublicationCard(
+                  item: item,
+                  pubTitleFont: pubTitleFont,
+                  venueFont: venueFont,
+                  summaryFont: summaryFont,
+                  isMobile: isMobile,
+                  isTablet: isTablet,
+                  cardPad: cardPad,
+                  cardRadius: cardRadius,
+                ),
               ),
             ),
           ),
@@ -188,11 +185,21 @@ class _PublicationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final background =
-        isDark ? theme.cardColor : theme.colorScheme.surface.withOpacity(0.96);
+    // Use opaque backgrounds to avoid subpixel blending and ghosting on web
+    final background = isDark ? theme.cardColor : theme.colorScheme.surface;
 
     final double pad = cardPad;
     final double radius = cardRadius;
+
+    final pgShadow = isDark
+        ? const <BoxShadow>[]
+        : [
+            BoxShadow(
+              color: theme.colorScheme.secondary.withOpacity(0.32),
+              blurRadius: 10,
+              offset: const Offset(0, 8),
+            ),
+          ];
 
     return Container(
         width: double.infinity,
@@ -201,17 +208,9 @@ class _PublicationCard extends StatelessWidget {
           color: background,
           borderRadius: BorderRadius.circular(radius),
           border: Border.all(
-            color: theme.colorScheme.secondary.withOpacity(0.4),
+            color: theme.colorScheme.secondary,
           ),
-          boxShadow: isDark
-              ? const []
-              : [
-                  BoxShadow(
-                    color: theme.colorScheme.secondary.withOpacity(0.5),
-                    blurRadius: 18,
-                    offset: const Offset(0, 12),
-                  ),
-                ],
+          boxShadow: pgShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,24 +264,19 @@ class _PublicationCard extends StatelessWidget {
               textAlign: TextAlign.start,
             ),
             // SizedBox(height: isMobile ? 8 : 16),
-            TextButton.icon(
-                onPressed: () => _launchLink(item.link),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  foregroundColor: theme.primaryColor,
-                ),
-                icon: FaIcon(
-                  FontAwesomeIcons.arrowUpRightFromSquare,
-                  size: isMobile ? 10 : 14,
-                ),
-                label: Text(
+            Row(
+              children: [
+                FaIcon(FontAwesomeIcons.arrowUpRightFromSquare,
+                    size: isMobile ? 10 : 14, color: theme.colorScheme.primary),
+                const SizedBox(width: 8),
+                Hyperlink(
                   'View publication',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontSize: isMobile ? 11.0 : (isTablet ? 12.0 : 14.0),
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.3,
-                  ),
-                )),
+                  onTap: () => _launchLink(item.link),
+                  style: linkTextStyle(context,
+                      fontSize: isMobile ? 11.0 : (isTablet ? 12.0 : 14.0)),
+                ),
+              ],
+            ),
           ],
         ));
   }

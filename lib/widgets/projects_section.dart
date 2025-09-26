@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../utils/link_style.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../models/project_item.dart';
@@ -335,6 +336,7 @@ class ProjectsSection extends StatelessWidget {
       context: context,
       builder: (ctx) {
         final theme = Theme.of(ctx);
+        final bool isMobileDialog = MediaQuery.of(ctx).size.width < 700;
         return Dialog(
           insetPadding:
               const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -342,6 +344,9 @@ class ProjectsSection extends StatelessWidget {
             constraints: BoxConstraints(maxWidth: 800, maxHeight: 600),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
+              // Compute dialog breakpoint once
+              // (cannot declare variables inside the children list)
+
               children: [
                 // Header with title and close
                 Padding(
@@ -361,28 +366,41 @@ class ProjectsSection extends StatelessWidget {
                   ),
                 ),
                 const Divider(height: 1),
-                // Image carousel or placeholder (use contain + InteractiveViewer to avoid cropping)
+                // Image carousel or placeholder (use contain + InteractiveViewer on larger screens only)
                 if ((item.images ?? []).isNotEmpty)
                   SizedBox(
                     height: 220,
                     child: PageView(
                       children: item.images!
                           .map((src) => src.isNotEmpty
-                              ? InteractiveViewer(
-                                  child: Image.network(
-                                    src,
-                                    fit: BoxFit.contain,
-                                    errorBuilder: (c, e, st) {
-                                      debugPrint(
-                                          'Failed to load carousel image: $src');
-                                      return const SizedBox();
-                                    },
-                                    loadingBuilder: (c, child, progress) {
-                                      if (progress == null) return child;
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    },
-                                  ),
+                              ? RepaintBoundary(
+                                  child: isMobileDialog
+                                      ? CachedNetworkImage(
+                                          imageUrl: src,
+                                          fit: BoxFit.contain,
+                                          errorWidget: (c, u, e) {
+                                            debugPrint(
+                                                'Failed to load carousel image: $src');
+                                            return const SizedBox();
+                                          },
+                                          placeholder: (c, u) => const Center(
+                                              child:
+                                                  CircularProgressIndicator()),
+                                        )
+                                      : InteractiveViewer(
+                                          child: CachedNetworkImage(
+                                            imageUrl: src,
+                                            fit: BoxFit.contain,
+                                            errorWidget: (c, u, e) {
+                                              debugPrint(
+                                                  'Failed to load carousel image: $src');
+                                              return const SizedBox();
+                                            },
+                                            placeholder: (c, u) => const Center(
+                                                child:
+                                                    CircularProgressIndicator()),
+                                          ),
+                                        ),
                                 )
                               : const SizedBox())
                           .toList(),
@@ -392,25 +410,41 @@ class ProjectsSection extends StatelessWidget {
                   SizedBox(
                     height: 180,
                     child: item.imageUrl.isNotEmpty
-                        ? InteractiveViewer(
-                            child: Image.network(
-                              item.imageUrl,
-                              fit: BoxFit.contain,
-                              errorBuilder: (c, e, st) {
-                                debugPrint(
-                                    'Failed to load dialog image: ${item.imageUrl}');
-                                return Center(
-                                  child: Icon(_getProjectIcon(item.title),
-                                      size: 72,
-                                      color: theme.colorScheme.primary),
-                                );
-                              },
-                              loadingBuilder: (c, child, progress) {
-                                if (progress == null) return child;
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              },
-                            ),
+                        ? RepaintBoundary(
+                            child: isMobileDialog
+                                ? CachedNetworkImage(
+                                    imageUrl: item.imageUrl,
+                                    fit: BoxFit.contain,
+                                    errorWidget: (c, u, e) {
+                                      debugPrint(
+                                          'Failed to load dialog image: ${item.imageUrl}');
+                                      return Center(
+                                        child: Icon(_getProjectIcon(item.title),
+                                            size: 72,
+                                            color: theme.colorScheme.primary),
+                                      );
+                                    },
+                                    placeholder: (c, u) => const Center(
+                                        child: CircularProgressIndicator()),
+                                  )
+                                : InteractiveViewer(
+                                    child: CachedNetworkImage(
+                                      imageUrl: item.imageUrl,
+                                      fit: BoxFit.contain,
+                                      errorWidget: (c, u, e) {
+                                        debugPrint(
+                                            'Failed to load dialog image: ${item.imageUrl}');
+                                        return Center(
+                                          child: Icon(
+                                              _getProjectIcon(item.title),
+                                              size: 72,
+                                              color: theme.colorScheme.primary),
+                                        );
+                                      },
+                                      placeholder: (c, u) => const Center(
+                                          child: CircularProgressIndicator()),
+                                    ),
+                                  ),
                           )
                         : Center(
                             child: Icon(
@@ -468,24 +502,30 @@ class ProjectsSection extends StatelessWidget {
                             const SizedBox(height: 12),
                           ],
                           if (item.documentationUrl != null)
-                            TextButton.icon(
-                              onPressed: () =>
-                                  _launchURL(item.documentationUrl!),
-                              icon: const Icon(Icons.description),
-                              label: const Text('Documentation'),
-                            ),
+                            Row(children: [
+                              const Icon(Icons.description, size: 18),
+                              const SizedBox(width: 8),
+                              Hyperlink('Documentation',
+                                  onTap: () =>
+                                      _launchURL(item.documentationUrl!),
+                                  style: linkTextStyle(context)),
+                            ]),
                           if (item.videoUrl != null)
-                            TextButton.icon(
-                              onPressed: () => _launchURL(item.videoUrl!),
-                              icon: const Icon(Icons.play_circle_fill),
-                              label: const Text('Video'),
-                            ),
+                            Row(children: [
+                              const Icon(Icons.play_circle_fill, size: 18),
+                              const SizedBox(width: 8),
+                              Hyperlink('Video',
+                                  onTap: () => _launchURL(item.videoUrl!),
+                                  style: linkTextStyle(context)),
+                            ]),
                           if ((item.otherLinks ?? []).isNotEmpty)
-                            ...item.otherLinks!.map((l) => TextButton.icon(
-                                  onPressed: () => _launchURL(l),
-                                  icon: const Icon(Icons.link),
-                                  label: Text(l),
-                                )),
+                            ...item.otherLinks!.map((l) => Row(children: [
+                                  const Icon(Icons.link, size: 16),
+                                  const SizedBox(width: 8),
+                                  Hyperlink(l,
+                                      onTap: () => _launchURL(l),
+                                      style: linkTextStyle(context)),
+                                ])),
                         ],
                       ),
                     ),
