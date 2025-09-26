@@ -89,17 +89,18 @@ class SkillsSection extends StatelessWidget {
 
     final wrapSpacing = isMobile ? 12.0 : 16.0;
     final wrapRunSpacing = isMobile ? 12.0 : 16.0;
-  // Compute number of columns based on width. Requirement: mobile should show 3
-  final int columns = isMobile ? 3 : (isTablet ? 4 : 6);
+    // Compute number of columns based on width. Requirement: mobile should show 3
+    final int columns = isMobile ? 3 : (isTablet ? 4 : 6);
 
-  // Compute card width so `columns` cards fit per row, accounting for horizontal padding
-  // and spacing between cards. We must guarantee the configured number of columns
-  // (3 on mobile) — therefore compute the exact width (available/columns) and only
-  // cap the maximum width so cards don't grow too large. Do NOT enforce a lower
-  // clamp which could break the mandatory column requirement on narrow screens.
-  final double availableWidth = w - 2 * sectionH - (wrapSpacing * (columns - 1));
-  final double computedWidth = (availableWidth / columns).toDouble();
-  final cardWidth = computedWidth > 320.0 ? 320.0 : computedWidth;
+    // Compute card width so `columns` cards fit per row, accounting for horizontal padding
+    // and spacing between cards. We must guarantee the configured number of columns
+    // (3 on mobile) — therefore compute the exact width (available/columns) and only
+    // cap the maximum width so cards don't grow too large. Do NOT enforce a lower
+    // clamp which could break the mandatory column requirement on narrow screens.
+    final double availableWidth =
+        w - 2 * sectionH - (wrapSpacing * (columns - 1));
+    final double computedWidth = (availableWidth / columns).toDouble();
+    final cardWidth = computedWidth > 320.0 ? 320.0 : computedWidth;
     final cardPad = isMobile ? 5.0 : 10.0;
     final cardRadius = isMobile ? 10.0 : 16.0;
     final titleIconSize = isMobile ? 18.0 : (isTablet ? 20.0 : 24.0);

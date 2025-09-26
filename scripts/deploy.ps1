@@ -34,9 +34,14 @@ $env:VERCEL_TOKEN = $Token
 
 Write-Host "Using Vercel token from environment or local file."
 
-if (-not (Test-Path -Path .\build\web)) {
-    Write-Host "build/web not found - running 'flutter build web --release'"
-    flutter build web --release
+# Explicitly build a production web release first (requested behavior)
+Write-Host "Building Flutter web release (HTML renderer)... (flutter build web --release --web-renderer html)"
+flutter build web --release --web-renderer html
+
+# Default the project name to your 'nainaifolio' project if not provided
+if ([string]::IsNullOrWhiteSpace($Project)) {
+    $Project = 'nainaifolio'
+    Write-Host "No -Project supplied; defaulting to '$Project' for deployment."
 }
 
 
@@ -48,11 +53,17 @@ $args = @('--prod','--yes','--token',$env:VERCEL_TOKEN,'--local-config','vercel.
 # or deploy under a specific scope (team or personal) with `--scope`.
 if ($Scope -ne '') { $args += @('--scope', $Scope) }
 
-# If Project was provided, suggest linking rather than passing the deprecated --name flag.
-if ($Project -ne '') {
-    Write-Host "Project parameter supplied ('$Project'). The Vercel CLI's --name flag is deprecated."
-    Write-Host 'To deploy to an existing project non-interactively, run: npx vercel link --name' $Project '--token <token> --yes'
-    Write-Host 'Or omit -Project and use --scope <team-or-username> to deploy under a different account/team.'
+# Link the current directory to the named Vercel project so the deploy target is explicit
+Write-Host "Linking local directory to Vercel project: $Project (non-interactive)..."
+$linkArgs = @('--yes','--token',$env:VERCEL_TOKEN)
+Write-Host ("Running: npx vercel link " + ($linkArgs -join ' ') + " (project: $Project)")
+try {
+    # Newer Vercel CLI versions don't accept --name. Run a non-interactive link and rely on
+    # the existing .vercel/project.json or previous link state. If you need to target a
+    # different project, link interactively or update .vercel/project.json manually.
+    & npx vercel link @linkArgs
+} catch {
+    Write-Host "Note: 'vercel link' returned an error or non-zero exit; continuing to deploy as it may already be linked. Error: $($_.Exception.Message)"
 }
 
 $args += 'build/web'
