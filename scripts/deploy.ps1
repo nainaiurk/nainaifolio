@@ -43,9 +43,17 @@ if (-not (Test-Path -Path .\build\web)) {
 # Deploy the static build/web directory directly. Avoid --prebuilt (it expects a .vercel/output layout).
 $args = @('--prod','--yes','--token',$env:VERCEL_TOKEN,'--local-config','vercel.json')
 
-# If a .vercel project link exists, the CLI will use it; only add name/scope if explicitly provided.
-if ($Project -ne '') { $args += @('--name', $Project) }
+# NOTE: The `--name` flag is deprecated in newer Vercel CLI releases. To target a specific
+# project non-interactively prefer linking the directory to a project first using `vercel link`
+# or deploy under a specific scope (team or personal) with `--scope`.
 if ($Scope -ne '') { $args += @('--scope', $Scope) }
+
+# If Project was provided, suggest linking rather than passing the deprecated --name flag.
+if ($Project -ne '') {
+    Write-Host "Project parameter supplied ('$Project'). The Vercel CLI's --name flag is deprecated."
+    Write-Host 'To deploy to an existing project non-interactively, run: npx vercel link --name' $Project '--token <token> --yes'
+    Write-Host 'Or omit -Project and use --scope <team-or-username> to deploy under a different account/team.'
+}
 
 $args += 'build/web'
 

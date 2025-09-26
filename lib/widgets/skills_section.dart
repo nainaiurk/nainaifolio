@@ -89,11 +89,17 @@ class SkillsSection extends StatelessWidget {
 
     final wrapSpacing = isMobile ? 12.0 : 16.0;
     final wrapRunSpacing = isMobile ? 12.0 : 16.0;
-    // On mobile compute width so 3 cards fit per row (accounting for paddings)
-    // On mobile make the skill cards slightly narrower and allow 2 per row
-    final cardWidth = isMobile
-        ? (((w - 2 * sectionH - wrapSpacing) / 2).clamp(70.0, 110.0)).toDouble()
-        : 220.0;
+  // Compute number of columns based on width. Requirement: mobile should show 3
+  final int columns = isMobile ? 3 : (isTablet ? 4 : 6);
+
+  // Compute card width so `columns` cards fit per row, accounting for horizontal padding
+  // and spacing between cards. We must guarantee the configured number of columns
+  // (3 on mobile) — therefore compute the exact width (available/columns) and only
+  // cap the maximum width so cards don't grow too large. Do NOT enforce a lower
+  // clamp which could break the mandatory column requirement on narrow screens.
+  final double availableWidth = w - 2 * sectionH - (wrapSpacing * (columns - 1));
+  final double computedWidth = (availableWidth / columns).toDouble();
+  final cardWidth = computedWidth > 320.0 ? 320.0 : computedWidth;
     final cardPad = isMobile ? 5.0 : 10.0;
     final cardRadius = isMobile ? 10.0 : 16.0;
     final titleIconSize = isMobile ? 18.0 : (isTablet ? 20.0 : 24.0);
@@ -191,15 +197,23 @@ class SkillsSection extends StatelessWidget {
                   ),
             ),
           ),
-          // Skills Grid - More Compact
-          Wrap(
-            spacing: wrapSpacing,
-            runSpacing: wrapRunSpacing,
-            children: skills
-                .map((skill) => _buildSkillCard(
-                    context, skill, cardWidth, cardPad, cardRadius))
-                .toList(),
-          ),
+          // Skills Grid - compute columns and card width based on the available space
+          LayoutBuilder(builder: (ctx, constraints) {
+            final double avail = constraints.maxWidth;
+            // enforce mandatory 3 columns on small widths
+            final int cols = avail < 700 ? 3 : (avail < 1100 ? 4 : 6);
+            final double computedCardWidth =
+                (avail - (wrapSpacing * (cols - 1))) / cols;
+
+            return Wrap(
+              spacing: wrapSpacing,
+              runSpacing: wrapRunSpacing,
+              children: skills
+                  .map((skill) => _buildSkillCard(
+                      context, skill, computedCardWidth, cardPad, cardRadius))
+                  .toList(),
+            );
+          }),
         ],
       ),
     );

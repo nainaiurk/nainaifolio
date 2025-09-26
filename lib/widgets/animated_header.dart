@@ -33,7 +33,7 @@ class AnimatedHeader extends StatelessWidget {
       // === YOUR ORIGINAL SIZE MATH (unchanged) ===
       final titleSize = clamp(
           rem(isMobile
-              ? 0.08
+              ? 0.1
               : isTablet
                   ? 2
                   : 3),
@@ -82,10 +82,10 @@ class AnimatedHeader extends StatelessWidget {
           top: extraTop,
           bottom: rem(
             isMobile
-                ? 0.0
+                ? 2.0
                 : isTablet
-                    ? 1.8
-                    : 3.0,
+                    ? 2.8
+                    : 4.0,
           ),
         ),
         child: SafeArea(
@@ -94,11 +94,11 @@ class AnimatedHeader extends StatelessWidget {
           child: Row(
             // align left/right cleanly without stretching
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               // LEFT: Portrait (YOUR WIDTH/HEIGHT PERCENTAGES)
               Container(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.bottomLeft,
                 height: isMobile
                     ? h * 0.25
                     : isTablet
@@ -123,7 +123,7 @@ class AnimatedHeader extends StatelessWidget {
               // RIGHT: Text column (YOUR WIDTH/HEIGHT PERCENTAGES)
               Container(
                 color: Colors.transparent,
-                alignment: Alignment.centerRight,
+                alignment: Alignment.bottomLeft,
                 width: isMobile
                     ? w * 0.45
                     : isTablet
@@ -135,58 +135,68 @@ class AnimatedHeader extends StatelessWidget {
                         ? h * 0.4
                         : h * 0.6,
                 child: Column(
+                  // ensure children are left-aligned inside this right container
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment:
                       MainAxisAlignment.end, // like your earlier rhythm
                   children: [
-                    // CV Button
-                    Center(
-                      child: OutlinedButton.icon(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/cv');
-                        },
-                        icon: Icon(
-                          Icons.description,
-                          // further reduce icon size on mobile
-                          size: isMobile ? icon(0.12) : icon(1.0),
-                        ),
-                        label: Text(
-                          'View My CV',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            // slightly smaller font on mobile
-                            fontSize: isMobile
-                                ? (titleSize - 0.7)
-                                : (titleSize - 0.5),
+                    // CV Button - keep it at the top-right visually by using a row
+                    // with expanded spacer so socials below remain left-aligned.
+                    Row(
+                      children: [
+                        const Spacer(),
+                        Container(
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.only(right: rem(10.0)),
+                          child: OutlinedButton.icon(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('/cv');
+                            },
+                            icon: Icon(
+                              Icons.description,
+                              // further reduce icon size on mobile
+                              size: isMobile ? icon(0.12) : icon(1.0),
+                            ),
+                            label: Text(
+                              'View My CV',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                // slightly smaller font on mobile
+                                fontSize: isMobile
+                                    ? (titleSize - 0.7)
+                                    : (titleSize - 0.5),
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              // Keep font size unchanged; only reduce the vertical
+                              // padding (container height) on mobile.
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isMobile
+                                    ? rem(0.45)
+                                    : isTablet
+                                        ? rem(1.2)
+                                        : rem(1.5),
+                                // even smaller vertical padding on mobile to further reduce height
+                                vertical: isMobile
+                                    ? rem(0.12)
+                                    : isTablet
+                                        ? rem(0.8)
+                                        : rem(1.0),
+                              ),
+                              side: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  width: 1),
+                              foregroundColor: primary,
+                              backgroundColor: primary.withOpacity(0.06),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    isMobile ? rem(0.7) : rem(1.2)),
+                              ),
+                            ),
                           ),
                         ),
-                        style: OutlinedButton.styleFrom(
-                          // Keep font size unchanged; only reduce the vertical
-                          // padding (container height) on mobile.
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isMobile
-                                ? rem(0.45)
-                                : isTablet
-                                    ? rem(1.2)
-                                    : rem(1.5),
-                            // even smaller vertical padding on mobile to further reduce height
-                            vertical: isMobile
-                                ? rem(0.12)
-                                : isTablet
-                                    ? rem(0.8)
-                                    : rem(1.0),
-                          ),
-                          side: BorderSide(
-                              color: Theme.of(context).colorScheme.secondary,
-                              width: 1),
-                          foregroundColor: primary,
-                          backgroundColor: primary.withOpacity(0.06),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                isMobile ? rem(0.7) : rem(1.2)),
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
 
                     SizedBox(
@@ -293,55 +303,109 @@ class AnimatedHeader extends StatelessWidget {
 
                     SizedBox(
                       height: isMobile
-                          ? rem(0.6)
+                          ? rem(0.8)
                           : isTablet
                               ? rem(2.4)
                               : rem(4.0),
                     ),
 
-                    // Socials (row; wrap if tight)
+                    // Socials (responsive: try to fit 4 in one row)
+                    // Left-align the social icons so they sit at the left-most edge
+                    // of this right-side container.
                     LayoutBuilder(builder: (context, cc) {
-                      final icons = [
-                        _social(
-                            primary,
-                            FontAwesomeIcons.facebook,
-                            'https://www.facebook.com/nainaiu.rk1234/',
-                            icon(2.2)),
-                        _social(
-                            primary,
-                            FontAwesomeIcons.linkedin,
-                            'https://www.linkedin.com/in/nainaiu-rakhaine',
-                            icon(2.2)),
-                        _social(primary, FontAwesomeIcons.twitter,
-                            'https://x.com/nainaiu_rk', icon(2.2)),
-                        _social(primary, FontAwesomeIcons.github,
-                            'https://github.com/nainaiurk', icon(2.2)),
+                      final iconsData = [
+                        FontAwesomeIcons.facebook,
+                        FontAwesomeIcons.linkedin,
+                        FontAwesomeIcons.github,
                       ];
-                      if (cc.maxWidth < 320) {
-                        return Wrap(
-                          spacing: isMobile
-                              ? rem(0.36)
-                              : isTablet
-                                  ? rem(2.6)
-                                  : rem(5.0),
-                          runSpacing: isMobile ? rem(0.2) : rem(0.4),
-                          children: icons,
-                        );
+
+                      // Always show 4 icons in one row. Compute icon sizes and
+                      // spacing from the available width so they remain consistent
+                      // across mobile, tablet, and desktop.
+                      final int count = iconsData.length;
+                      final double targetIcon = icon(2.2);
+
+                      // Desired icon sizes per breakpoint
+                      double desiredIconSize = isMobile
+                          ? math.min(targetIcon * 1.1, 30.0)
+                          : isTablet
+                              ? math.min(targetIcon * 1.2, 42.0)
+                              : math.min(targetIcon * 1.4, 48.0);
+
+                      // Base desired gap per breakpoint (used as a target)
+                      double desiredGap = isMobile
+                          ? rem(0.1)
+                          : isTablet
+                              ? rem(1.6)
+                              : rem(5.0);
+
+                      // Calculate the maximum icon size that fits given desiredGap
+                      final double availableForIcons =
+                          cc.maxWidth - (count - 1) * desiredGap;
+                      double maxIconSize = availableForIcons / count;
+
+                      // Final icon size: can't exceed desiredIconSize and must fit
+                      double finalIconSize =
+                          math.min(desiredIconSize, maxIconSize);
+
+                      // Enforce mandatory single-row fit: compute a very small minimum gap
+                      // and, if necessary, shrink icons so all icons + gaps fit within cc.maxWidth.
+                      final double minGap = rem(0.02);
+                      double totalWithMinGap =
+                          finalIconSize * count + minGap * (count - 1);
+                      if (totalWithMinGap > cc.maxWidth) {
+                        // Shrink icons uniformly so that with minGap they fit exactly.
+                        finalIconSize =
+                            (cc.maxWidth - (count - 1) * minGap) / count;
                       }
-                      return Row(
-                        children: icons
-                            .expand((w) => [
-                                  w,
-                                  SizedBox(
-                                    width: isMobile
-                                        ? rem(0.36)
-                                        : isTablet
-                                            ? rem(2.6)
-                                            : rem(5.0),
-                                  ),
-                                ])
-                            .toList()
-                          ..removeLast(),
+
+                      // Clamp to a sensible usable size but allow smaller than before if needed.
+                      finalIconSize = finalIconSize.clamp(8.0, desiredIconSize);
+
+                      // Recompute gap based on finalIconSize so icons fill the space
+                      double finalGap =
+                          (cc.maxWidth - count * finalIconSize) / (count - 1);
+                      // Clamp final gap into reasonable bounds but allow very small gaps
+                      finalGap = finalGap.clamp(minGap, rem(8.6));
+
+                      // Ensure the social icons align with the name on the left
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: iconsData.map((ic) {
+                            // Tighter spacing on mobile: reduce the finalGap by a factor
+                            // and clamp to a small positive value so padding never goes negative.
+                            // Make mobile spacing noticeably tighter and aligned
+                            double mobileGap =
+                                (finalGap * 0.28).clamp(rem(0.02), finalGap);
+                            double tabletGap =
+                                (finalGap * 0.7).clamp(rem(0.1), finalGap);
+                            double desktopGap =
+                                (finalGap * 0.85).clamp(rem(0.5), finalGap);
+
+                            double useGap = isMobile
+                                ? mobileGap
+                                : isTablet
+                                    ? tabletGap
+                                    : desktopGap;
+
+                            return Padding(
+                              padding: EdgeInsets.only(right: useGap),
+                              child: IconButton(
+                                onPressed: () => _launchURL(_socialUrl(ic)),
+                                icon: Icon(ic),
+                                iconSize: finalIconSize,
+                                color: primary,
+                                tooltip: _socialUrl(ic),
+                                padding: EdgeInsets.zero,
+                                constraints:
+                                    BoxConstraints(minWidth: 0, minHeight: 0),
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       );
                     }),
                   ],
@@ -362,6 +426,14 @@ class AnimatedHeader extends StatelessWidget {
       color: color,
       tooltip: url,
     );
+  }
+
+  String _socialUrl(IconData iconData) {
+    if (iconData == FontAwesomeIcons.facebook)
+      return 'https://www.facebook.com/nainaiu.rk1234/';
+    if (iconData == FontAwesomeIcons.linkedin)
+      return 'https://www.linkedin.com/in/nainaiu-rakhaine';
+    return 'https://github.com/nainaiurk';
   }
 }
 

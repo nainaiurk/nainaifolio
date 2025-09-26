@@ -31,7 +31,7 @@
   -->
   <!-- Inserted web client id provided by user -->
   <meta name="google-signin-client_id" content="221048638961-t78ind2ilunvf6a297pi85h9n203f5ug.apps.googleusercontent.com">
-  -->
+  
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -123,6 +123,14 @@
   </script>
 </head>
 <body>
+  <!-- Simple loading overlay shown before Flutter UI initializes -->
+  <div id="flt-loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background-color:var(--loader-bg,#ffffff);z-index:9999;">
+    <div style="text-align:center;color:#333;font-family:Arial,Helvetica,sans-serif;">
+      <div style="width:48px;height:48px;border:6px solid #eee;border-top-color:#3b82f6;border-radius:50%;animation:flt-spin 1s linear infinite;margin:0 auto 12px"></div>
+      <div style="font-size:14px;">Loading…</div>
+    </div>
+  </div>
+  <style>@keyframes flt-spin{to{transform:rotate(360deg)}}</style>
   <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.js" type="text/javascript"></script>
   <script type="text/javascript">
     pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.worker.min.js";
@@ -146,6 +154,14 @@
           });
         }
       });
+      // Hide the loader once the engine signals the first frame
+      try {
+        document.addEventListener('flutter-first-frame', function() {
+          var el = document.getElementById('flt-loader'); if (el) el.style.display = 'none';
+        });
+        // Fallback: hide loader after load+1s if event isn't fired
+        setTimeout(function(){var el=document.getElementById('flt-loader'); if(el) el.style.display='none';}, 1200);
+      } catch (e) { /* no-op */ }
     });
   </script>
 </body>

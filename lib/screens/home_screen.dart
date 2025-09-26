@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:nainaifolio/utils/constant.dart';
+import 'package:nainaifolio/utils/responsive.dart';
 import 'package:nainaifolio/widgets/portfolio_drawer.dart';
 import 'package:nainaifolio/widgets/projects_section.dart';
 import 'package:nainaifolio/widgets/expertise_areas_section.dart';
@@ -92,8 +93,11 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           else
             Container(
-              padding:
-                  EdgeInsets.symmetric(horizontal: getMaxWidth(context) * 0.05),
+              padding: EdgeInsets.symmetric(
+                horizontal: Responsive.isMobile(context)
+                    ? 12.0
+                    : getMaxWidth(context) * 0.05,
+              ),
               child: SingleChildScrollView(
                 controller: _scrollController,
                 child: Column(
