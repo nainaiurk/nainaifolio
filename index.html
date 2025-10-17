@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+  <!--
+    Google OAuth (Web) setup:
+    - Register an OAuth client of type 'Web application' in Google Cloud Console.
+    - Add your deployed domain and any localhost testing origins to 'Authorized JavaScript origins',
+      e.g. http://localhost:5000 or https://yourdomain.com
+    - Optionally add a meta tag below with your Web client ID to make it discoverable by developers.
+
+    Example (replace with your actual client id):
+    <meta name="google-signin-client_id" content="YOUR_WEB_CLIENT_ID.apps.googleusercontent.com">
+  -->
+  <!-- Inserted web client id provided by user -->
+  <meta name="google-signin-client_id" content="221048638961-t78ind2ilunvf6a297pi85h9n203f5ug.apps.googleusercontent.com">
+  
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="nainaifolio">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>nainaifolio</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Preconnect & preload Google Fonts to reduce FOIT/FOUT while fonts are fetched -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Combined Google Fonts stylesheet for families used in the app -->
+  <!-- Preload the stylesheet and apply it onload to avoid render-blocking while ensuring it gets applied quickly -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" onload="this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  </noscript>
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    const serviceWorkerVersion = "4015781311";
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+  <!-- Google Identity Services (GIS) for token requests on web -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    (function() {
+      function safeMeta(name) {
+        try {
+          var m = document.querySelector('meta[name="' + name + '"]');
+          return m ? m.getAttribute('content') : null;
+        } catch (e) { return null; }
+      }
+
+      var clientId = safeMeta('google-signin-client_id');
+      var scope = 'https://www.googleapis.com/auth/gmail.send';
+      window._gisClient = null;
+
+      function initGis() {
+        if (!clientId || !window.google || !google.accounts || !google.accounts.oauth2) return;
+        try {
+          window._gisClient = google.accounts.oauth2.initTokenClient({
+            client_id: clientId,
+            scope: scope,
+            callback: function(resp) {
+              // callback will be replaced per-request
+            }
+          });
+        } catch (e) {
+          console.warn('GIS init error', e);
+        }
+      }
+
+      window.requestGisToken = function() {
+        return new Promise(function(resolve, reject) {
+          if (!window._gisClient) {
+            initGis();
+            if (!window._gisClient) {
+              reject('GIS not available');
+              return;
+            }
+          }
+          window._gisClient.callback = function(tokenResponse) {
+            if (tokenResponse && tokenResponse.access_token) {
+              resolve(tokenResponse);
+            } else {
+              reject(tokenResponse);
+            }
+          };
+          try {
+            window._gisClient.requestAccessToken();
+          } catch (e) {
+            reject(e);
+          }
+        });
+      };
+
+      // Try to initialize on load
+      window.addEventListener('load', function() {
+        initGis();
+      });
+    })();
+  </script>
+</head>
+<body>
+  <!-- Simple loading overlay shown before Flutter UI initializes -->
+  <div id="flt-loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background-color:var(--loader-bg,#ffffff);z-index:9999;">
+    <div style="text-align:center;color:#333;font-family:Arial,Helvetica,sans-serif;">
+      <div style="width:48px;height:48px;border:6px solid #eee;border-top-color:#3b82f6;border-radius:50%;animation:flt-spin 1s linear infinite;margin:0 auto 12px"></div>
+      <div style="font-size:14px;">Loading…</div>
+    </div>
+  </div>
+  <style>@keyframes flt-spin{to{transform:rotate(360deg)}}</style>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.worker.min.js";
+    pdfRenderOptions = {
+      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/cmaps/',
+      cMapPacked: true,
+    }
+  </script>
+  <!-- pdf.js removed from eager load. It will be lazy-loaded when the CV viewer opens. -->
+  <!-- The CV viewer will inject pdf.js and the worker at runtime to avoid blocking the initial page load. -->
+  <script>
+    window.addEventListener('load', function(ev) {
+      // Download main.dart.js
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine().then(function(appRunner) {
+            appRunner.runApp();
+          });
+        }
+      });
+      // Hide the loader once the engine signals the first frame
+      try {
+        document.addEventListener('flutter-first-frame', function() {
+          var el = document.getElementById('flt-loader'); if (el) el.style.display = 'none';
+        });
+        // Fallback: hide loader after load+1s if event isn't fired
+        setTimeout(function(){var el=document.getElementById('flt-loader'); if(el) el.style.display='none';}, 1200);
+      } catch (e) { /* no-op */ }
+    });
+  </script>
+  <!-- Simple error capture overlay for debugging JS errors in Safari -->
+  <style>
+    #flutter-error-overlay { position: fixed; right: 12px; bottom: 12px; z-index: 2147483647; max-width: 360px; font-family: monospace; font-size: 12px; }
+    #flutter-error-overlay .err { background: rgba(0,0,0,0.85); color: #ffdddd; padding: 8px; margin-top: 8px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+    #flutter-error-overlay .err .time { color: #ccc; font-size: 11px; display:block; margin-bottom:6px; }
+    #flutter-error-overlay .err pre { white-space: pre-wrap; max-height: 160px; overflow: auto; margin:0; }
+    #flutter-error-overlay .clear { text-align:right; color:#ddd; cursor:pointer; font-size:11px; }
+  </style>
+  <div id="flutter-error-overlay" aria-hidden="false"></div>
+  <script>
+    (function(){
+      var overlay = document.getElementById('flutter-error-overlay');
+      function addError(msg){
+        console.error('Captured error:', msg);
+        var node = document.createElement('div'); node.className='err';
+        var d = new Date();
+        var t = d.toISOString();
+        var h = document.createElement('div'); h.className='time'; h.textContent = t;
+        var p = document.createElement('pre'); p.textContent = msg;
+        var c = document.createElement('div'); c.className='clear'; c.textContent='✕'; c.onclick = function(){ overlay.innerHTML=''; };
+        node.appendChild(h); node.appendChild(p); node.appendChild(c);
+        overlay.appendChild(node);
+      }
+
+      window.addEventListener('error', function(ev){
+        try{ var s = ev && ev.error ? (ev.error.stack || ev.error.message || String(ev.error)) : (ev.message || String(ev)); addError(s); }catch(e){}
+      }, true);
+
+      window.addEventListener('unhandledrejection', function(ev){
+        try{ var reason = ev && ev.reason ? (ev.reason.stack || ev.reason.message || String(ev.reason)) : String(ev); addError('UnhandledRejection: '+reason); }catch(e){}
+      }, true);
+
+      // Expose a helper so Flutter code can push errors to the overlay if needed
+      window.__flutterReportError = function(msg){ try{ addError(msg); }catch(e){} };
+    })();
+  </script>
+</body>
+</html>
