@@ -87676,35 +87676,34 @@ case 8:s.jE(s.Q)
 break
 case 9:s.jE(s.as)
 break}},
-F(b0){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3,a4=this,a5=null,a6="https://github.com/Ad-Deen/AUV-project-Electrical-stack",a7=u.C,a8=t.p,a9=A.b([],a8)
-if(a4.ax)a9.push(B.cC)
+F(a8){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3=this,a4=null,a5=u.C,a6=t.p,a7=A.b([],a6)
+if(a3.ax)a7.push(B.cC)
 else{s=t.w
-s=A.ai(b0,a5,s).w.a.a<700?12:A.ai(b0,a5,s).w.a.a*0.05
-r=a4.at
+s=A.ai(a8,a4,s).w.a.a<700?12:A.ai(a8,a4,s).w.a.a*0.05
+r=a3.at
 r===$&&A.a()
-q=a4.f
+q=a3.f
 p=A.b([new A.rJ("BSC Engineering in Electrical and Electronic Engineering","Shahjalal Univeristy of Science and Technology, Sylhet","2020 - 2024","Focusd on Digital Electronics, Digital Signal Processing. VLSI, Embedded Systems, Robotics")],t.sQ)
-o=a4.Q
+o=a3.Q
 n=t.s
 m=A.b(["https://via.placeholder.com/800x400.png?text=PCB+1","https://via.placeholder.com/800x400.png?text=PCB+2"],n)
 l=A.b(["Designed for University Embedded System Lab","Now Used in Research Projects by Students","Validated power sequencing and bootloader"],n)
 k=A.b(["Featured as Star Project of the Open Source Hardware Lab (OSHWLAB)","Open-sourced flight controller schematics"],n)
 j=A.b(["https://via.placeholder.com/800x400.png?text=ORCA+AUV+1"],n)
 i=A.b(["Selected for the Singapore AUV Challenge (SAUVC 2025), representing Bangladesh among 25+ countries","Designed depth-rated control electronics and integrated acoustic positioning"],n)
-h=A.b([a6],n)
-g=A.b(["https://via.placeholder.com/800x400.png?text=EV+1"],n)
-f=A.b(["Designed BMS for 48V pack","Implemented regenerative braking control"],n)
-e=A.b(["https://example.com/ev/repo"],n)
-d=A.b(["https://via.placeholder.com/800x400.png?text=Advanced+Line+Follower+1"],n)
-c=A.b(["Developed high-speed PID control and maze navigation modes","Interactive mode selection UI for runtime tuning"],n)
-b=A.b(["https://github.com/nainaiurk/InfiniteBot.git"],n)
-a=A.b(["https://via.placeholder.com/800x400.png?text=LoRa+Messenger+1"],n)
-a0=A.b(["Achieved nearly 5 km range with custom antenna","Low-power firmware achieving 30+ day battery life"],n)
-a1=a4.z
-a2=t.IZ
-a3=a4.as
-a9.push(A.bg(a5,A.On(A.cr(A.b([B.An,new A.KU(a4.d),new A.JY(a4.e),new A.JI(q,p,q),new A.JX(a4.r),new A.N1(a4.y),new A.L6(a4.w),new A.N_(o,A.b([new A.jL("Microcontroller Board Design","Custom PCB for Embedded Systems","https://lh3.googleusercontent.com/d/1ZLJ4FenmNw7xBQ2KcebhDvJ7IKtYkqLz",a5,"https://youtu.be/jr4CWijJ-Eg",a5,m,"Designed a compact microcontroller development board optimized for low-power IoT nodes. Features USB-C power, multiple sensor headers, and an onboard LiPo charger.",l,a5),new A.jL("PCB Drones","Design and Development of Drones","https://lh3.googleusercontent.com/d/1ZGET_Cgg8Q7w8fFHS2KSjtu5pL10Ac0n","https://oshwlab.com/nainaiu.rakhaine/mini-cam-drone",a5,a5,a5,"Built a custom PCB drone around an ESP32-S3 and camera for low-latency video streaming and remote monitoring. Focused on lightweight design, reliable telemetry and low-latency video pipeline.",k,a5),new A.jL("AUV (Autonomous Underwater Vehicle)","Design of Autonomous Underwater Vehicles","https://lh3.googleusercontent.com/d/1ZO5brHNF0UImesYNftWbbe93ArYloDRd",a6,a5,h,j,"Led embedded systems design for the ORCA Autonomous Underwater Vehicle (AUV), focusing on underwater sensor integration, real-time communication, and control algorithms. Worked on power distribution, depth-rated electronics, and acoustic modem integration.",i,"SAUVC 2025"),new A.jL("Autonomous Electric Vehicle","Autonomous Electric Vehicle Development","https://lh3.googleusercontent.com/d/1ZRRegB9bHrYeZ_4QCu-v5Z_VncM6FFRD","https://www.youtube.com/watch?v=2jCTuZDS7PI",a5,e,g,"Worked on battery management system (BMS) and motor controller integration for a lightweight electric vehicle prototype.",f,a5),new A.jL("Line Follower Robot","Robotics and Automation","https://lh3.googleusercontent.com/d/1ZT-vIBzM1FTTGnj39H1K6vuZ2wINaXLs","https://oshwlab.com/nainaiu.rakhaine/lfr_pcb",a5,b,d,"Advanced Line Follower Robot with multi-modal operation, PID-based high-speed line following and maze navigation. Includes an interactive display for on-the-fly mode selection and telemetry.",c,a5),new A.jL("LoRa Messenger","Long Range Communication Project","https://lh3.googleusercontent.com/d/1ZNiOikXJjXsQHgfMWLwObXjfePd-1bqE",a7,a5,A.b([a7],n),a,"Implemented a secure long-range LoRa messaging device with a custom antenna, reaching nearly 5 km in field trials. Emphasized low cost and long battery life for remote IoT deployments.",a0,a5),new A.jL("Chat App","Flutter-based Chat Application","",a5,a5,a5,a5,"A secure chat client built with Flutter supporting real-time messaging, media sharing, and end-to-end encryption.",A.b(["Implemented realtime syncing and media upload","End-to-end encryption using libsodium"],n),a5)],t.cU),o),new A.Oq(a1,A.aA(["Embedded Development Tools",A.b([new A.bZ("PlatformIO",0.85),new A.bZ("STM32CubeIDE",0.8),new A.bZ("Arduino IDE",0.9)],a2),"Microcontrollers & Microprocessors",A.b([new A.bZ("ESP32",0.88),new A.bZ("STM32",0.85),new A.bZ("Raspberry Pi Pico",0.75),new A.bZ("Raspberry Pi",0.75),new A.bZ("Jetson Nano",0.75)],a2),"RTOS & Embedded ML",A.b([new A.bZ("FreeRTOS",1),new A.bZ("TensorFlow Lite",0.8)],a2),"IoT & Communication Protocols",A.b([new A.bZ("MQTT",0.85),new A.bZ("LoRa",0.75),new A.bZ("BLE",0.8),new A.bZ("WiFi",0.88),new A.bZ("GSM",0.7)],a2),"Programming Languages",A.b([new A.bZ("C/C++",0.9),new A.bZ("Python",0.85),new A.bZ("MATLAB",0.75)],a2),"PCB Design & CAD Tools",A.b([new A.bZ("EasyEDA",0.85),new A.bZ("Altium Designer",0.75),new A.bZ("AutoCAD",0.7),new A.bZ("FreeCAD",0.65)],a2),"Simulation & Analysis",A.b([new A.bZ("LTSpice",0.8),new A.bZ("Proteus",0.75),new A.bZ("MATLAB Simulink",0.7)],a2),"Currently Learning",A.b([new A.bZ("FPGA",0.4),new A.bZ("Rust",0.3),new A.bZ("Zephyr RTOS",0.25)],a2)],t.N,t.Fk),a1),new A.I4(a4.x),new A.xp(a3,a3),B.FO],a8),B.E,B.r,B.u),r,a5,B.an),B.i,a5,a5,a5,a5,a5,a5,new A.a1(s,0,s,0),a5,a5,a5))}a9.push(A.MR(a5,new A.PB(a4.gaaI(),a5),a5,a5,0,0,0,a5))
-return A.aBo(a5,A.lv(B.c5,a9,B.M,B.ct),new A.MQ(new A.amP(a4),a5))}}
+h=A.b(["https://via.placeholder.com/800x400.png?text=EV+1"],n)
+g=A.b(["Designed BMS for 48V pack","Implemented regenerative braking control"],n)
+f=A.b(["https://example.com/ev/repo"],n)
+e=A.b(["https://via.placeholder.com/800x400.png?text=Advanced+Line+Follower+1"],n)
+d=A.b(["Developed high-speed PID control and maze navigation modes","Interactive mode selection UI for runtime tuning"],n)
+c=A.b(["https://github.com/nainaiurk/InfiniteBot.git"],n)
+b=A.b(["https://via.placeholder.com/800x400.png?text=LoRa+Messenger+1"],n)
+a=A.b(["Achieved nearly 5 km range with custom antenna","Low-power firmware achieving 30+ day battery life"],n)
+a0=a3.z
+a1=t.IZ
+a2=a3.as
+a7.push(A.bg(a4,A.On(A.cr(A.b([B.An,new A.KU(a3.d),new A.JY(a3.e),new A.JI(q,p,q),new A.JX(a3.r),new A.N1(a3.y),new A.L6(a3.w),new A.N_(o,A.b([new A.jL("Microcontroller Board Design","Custom PCB for Embedded Systems","https://lh3.googleusercontent.com/d/1ZLJ4FenmNw7xBQ2KcebhDvJ7IKtYkqLz",a4,"https://youtu.be/jr4CWijJ-Eg",a4,m,"Designed a compact microcontroller development board optimized for low-power IoT nodes. Features USB-C power, multiple sensor headers, and an onboard LiPo charger.",l,a4),new A.jL("PCB Drones","Design and Development of Drones","https://lh3.googleusercontent.com/d/1ZGET_Cgg8Q7w8fFHS2KSjtu5pL10Ac0n","https://oshwlab.com/nainaiu.rakhaine/mini-cam-drone",a4,a4,a4,"Built a custom PCB drone around an ESP32-S3 and camera for low-latency video streaming and remote monitoring. Focused on lightweight design, reliable telemetry and low-latency video pipeline.",k,a4),new A.jL("AUV (Autonomous Underwater Vehicle)","Design of Autonomous Underwater Vehicles","https://lh3.googleusercontent.com/d/1ZO5brHNF0UImesYNftWbbe93ArYloDRd","https://github.com/Ad-Deen/AUV-project-Electrical-stack","https://youtu.be/2jCTuZDS7PI?si=MNPsF8biv-6rd_Q1",a4,j,"Led embedded systems design for the ORCA Autonomous Underwater Vehicle (AUV), focusing on underwater sensor integration, real-time communication, and control algorithms. Worked on power distribution, depth-rated electronics, and acoustic modem integration.",i,"SAUVC 2025"),new A.jL("Autonomous Electric Vehicle","Autonomous Electric Vehicle Development","https://lh3.googleusercontent.com/d/1ZRRegB9bHrYeZ_4QCu-v5Z_VncM6FFRD","https://www.youtube.com/watch?v=2jCTuZDS7PI",a4,f,h,"Worked on battery management system (BMS) and motor controller integration for a lightweight electric vehicle prototype.",g,a4),new A.jL("Line Follower Robot","Robotics and Automation","https://lh3.googleusercontent.com/d/1ZT-vIBzM1FTTGnj39H1K6vuZ2wINaXLs","https://oshwlab.com/nainaiu.rakhaine/lfr_pcb",a4,c,e,"Advanced Line Follower Robot with multi-modal operation, PID-based high-speed line following and maze navigation. Includes an interactive display for on-the-fly mode selection and telemetry.",d,a4),new A.jL("LoRa Messenger","Long Range Communication Project","https://lh3.googleusercontent.com/d/1ZNiOikXJjXsQHgfMWLwObXjfePd-1bqE",a5,a4,A.b([a5],n),b,"Implemented a secure long-range LoRa messaging device with a custom antenna, reaching nearly 5 km in field trials. Emphasized low cost and long battery life for remote IoT deployments.",a,a4),new A.jL("Chat App","Flutter-based Chat Application","",a4,a4,a4,a4,"A secure chat client built with Flutter supporting real-time messaging, media sharing, and end-to-end encryption.",A.b(["Implemented realtime syncing and media upload","End-to-end encryption using libsodium"],n),a4)],t.cU),o),new A.Oq(a0,A.aA(["Embedded Development Tools",A.b([new A.bZ("PlatformIO",0.85),new A.bZ("STM32CubeIDE",0.8),new A.bZ("Arduino IDE",0.9)],a1),"Microcontrollers & Microprocessors",A.b([new A.bZ("ESP32",0.88),new A.bZ("STM32",0.85),new A.bZ("Raspberry Pi Pico",0.75),new A.bZ("Raspberry Pi",0.75),new A.bZ("Jetson Nano",0.75)],a1),"RTOS & Embedded ML",A.b([new A.bZ("FreeRTOS",1),new A.bZ("TensorFlow Lite",0.8)],a1),"IoT & Communication Protocols",A.b([new A.bZ("MQTT",0.85),new A.bZ("LoRa",0.75),new A.bZ("BLE",0.8),new A.bZ("WiFi",0.88),new A.bZ("GSM",0.7)],a1),"Programming Languages",A.b([new A.bZ("C/C++",0.9),new A.bZ("Python",0.85),new A.bZ("MATLAB",0.75)],a1),"PCB Design & CAD Tools",A.b([new A.bZ("EasyEDA",0.85),new A.bZ("Altium Designer",0.75),new A.bZ("AutoCAD",0.7),new A.bZ("FreeCAD",0.65)],a1),"Simulation & Analysis",A.b([new A.bZ("LTSpice",0.8),new A.bZ("Proteus",0.75),new A.bZ("MATLAB Simulink",0.7)],a1),"Currently Learning",A.b([new A.bZ("FPGA",0.4),new A.bZ("Rust",0.3),new A.bZ("Zephyr RTOS",0.25)],a1)],t.N,t.Fk),a0),new A.I4(a3.x),new A.xp(a2,a2),B.FO],a6),B.E,B.r,B.u),r,a4,B.an),B.i,a4,a4,a4,a4,a4,a4,new A.a1(s,0,s,0),a4,a4,a4))}a7.push(A.MR(a4,new A.PB(a3.gaaI(),a4),a4,a4,0,0,0,a4))
+return A.aBo(a4,A.lv(B.c5,a7,B.M,B.ct),new A.MQ(new A.amP(a3),a4))}}
 A.amN.prototype={
 $0(){this.a.ax=!1},
 $S:0}
@@ -94681,7 +94680,7 @@ B.Fr=new A.kI("Research Assistant","Embedded Systems Lab, SUST","Jul 2023 - Pres
 B.J6=A.b(s(["Built a multimodal biometric attendance platform (face + fingerprint) deployed at university events for secure access control.","Developed a hybrid solar-wind IoT monitoring node with efficient telemetry for off-grid environmental sensing."]),t.s)
 B.Fs=new A.kI("Research Assistant","Sustainable Energy & IoT Group, SUST","Jun 2022 - Present","Asst. Prof. Arif Ahammad",B.J6,u.C)
 B.J3=A.b(s(["Author detailed design guides spanning advanced PCB layout, embedded firmware, and TinyML workflows.","Collaborate with product teams to validate reference designs prior to publication for engineering audiences."]),t.s)
-B.Ft=new A.kI("Electronic Content Engineer","JLCPCB","2025 June - Present",null,B.J3,null)
+B.Ft=new A.kI("Part-Time Electronics Engineer","JLCPCB","Jun 2025 - Present",null,B.J3,null)
 B.jg=new A.kJ(!1,!1,!1,!1)
 B.jh=new A.kJ(!1,!1,!1,!0)
 B.e9=new A.kJ(!0,!1,!1,!1)
@@ -97222,7 +97221,7 @@ $.ou=null
 $.aCP=1
 $.avs=-9007199254740992
 $.aym=A.b([B.Ax,B.Aw],A.ar("A<og>"))
-$.azC=A.b([B.Fq,B.Fr,B.Fs,B.Ft],A.ar("A<kI>"))
+$.azC=A.b([B.Ft,B.Fr,B.Fs,B.Fq],A.ar("A<kI>"))
 $.aDx=null
 $.as9=null
 $.aLK=A.F(t.S,A.ar("aVy"))
