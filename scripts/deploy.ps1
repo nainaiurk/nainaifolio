@@ -35,8 +35,8 @@ $env:VERCEL_TOKEN = $Token
 Write-Host "Using Vercel token from environment or local file."
 
 # Explicitly build a production web release first (requested behavior)
-Write-Host "Building Flutter web release (HTML renderer)... (flutter build web --release --web-renderer html)"
-flutter build web --release --web-renderer html
+Write-Host "Building Flutter web release (HTML renderer, base href '/')..."
+flutter build web --release --web-renderer html --base-href "/"
 
 # Some previous builds may leave a 'canvaskit' folder in build/web. Even when
 # building with the HTML renderer that folder can remain and some hosting
@@ -79,10 +79,11 @@ if ($Scope -ne '') { $args += @('--scope', $Scope) }
 
 # Link the current directory to the named Vercel project so the deploy target is explicit
 Write-Host "Linking local directory to Vercel project: $Project (non-interactive)..."
-$linkArgs = @('--yes','--token',$env:VERCEL_TOKEN)
-Write-Host "Running: npx vercel link $($linkArgs -join ' ')"
+$linkArgs = @('link','--project', $Project, '--yes','--token',$env:VERCEL_TOKEN)
+if ($Scope -ne '') { $linkArgs += @('--scope', $Scope) }
+Write-Host "Running: npx vercel $($linkArgs -join ' ')"
 try {
-    & npx vercel link @linkArgs
+    & npx vercel @linkArgs
 } catch {
     Write-Host "Note: 'vercel link' returned an error or non-zero exit; continuing to deploy as it may already be linked. Error: $($_.Exception.Message)"
 }

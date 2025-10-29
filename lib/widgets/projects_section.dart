@@ -23,7 +23,7 @@ class ProjectsSection extends StatelessWidget {
       subtitle: 'Custom PCB for Embedded Systems',
       imageUrl:
           'https://lh3.googleusercontent.com/d/1ZLJ4FenmNw7xBQ2KcebhDvJ7IKtYkqLz',
-      documentationUrl: 'https://example.com/docs/microcontroller-board',
+      videoUrl: 'https://youtu.be/jr4CWijJ-Eg',
       images: [
         'https://via.placeholder.com/800x400.png?text=PCB+1',
         'https://via.placeholder.com/800x400.png?text=PCB+2',
@@ -43,7 +43,6 @@ class ProjectsSection extends StatelessWidget {
       imageUrl:
           'https://lh3.googleusercontent.com/d/1ZGET_Cgg8Q7w8fFHS2KSjtu5pL10Ac0n',
       documentationUrl: 'https://oshwlab.com/nainaiu.rakhaine/mini-cam-drone',
-      videoUrl: 'https://example.com/videos/pcb-drones.mp4',
       description:
           'Built a custom PCB drone around an ESP32-S3 and camera for low-latency video streaming and remote monitoring. Focused on lightweight design, reliable telemetry and low-latency video pipeline.',
       achievements: [
@@ -72,11 +71,11 @@ class ProjectsSection extends StatelessWidget {
       contest: 'SAUVC 2025',
     ),
     ProjectItem(
-      title: 'Electric Vehicle',
-      subtitle: 'Electric Car Development',
+      title: 'Autonomous Electric Vehicle',
+      subtitle: 'Autonomous Electric Vehicle Development',
       imageUrl:
           'https://lh3.googleusercontent.com/d/1ZRRegB9bHrYeZ_4QCu-v5Z_VncM6FFRD',
-      documentationUrl: 'https://example.com/docs/electric-vehicle',
+      documentationUrl: 'https://www.youtube.com/watch?v=2jCTuZDS7PI',
       images: ['https://via.placeholder.com/800x400.png?text=EV+1'],
       description:
           'Worked on battery management system (BMS) and motor controller integration for a lightweight electric vehicle prototype.',
@@ -91,7 +90,7 @@ class ProjectsSection extends StatelessWidget {
       subtitle: 'Robotics and Automation',
       imageUrl:
           'https://lh3.googleusercontent.com/d/1ZT-vIBzM1FTTGnj39H1K6vuZ2wINaXLs',
-      documentationUrl: 'https://github.com/nainaiurk/InfiniteBot.git',
+      documentationUrl: 'https://oshwlab.com/nainaiu.rakhaine/lfr_pcb',
       images: [
         'https://via.placeholder.com/800x400.png?text=Advanced+Line+Follower+1'
       ],
@@ -122,14 +121,14 @@ class ProjectsSection extends StatelessWidget {
       title: 'Chat App',
       subtitle: 'Flutter-based Chat Application',
       imageUrl: '',
-      documentationUrl: 'https://example.com/docs/chat-app',
+      // documentationUrl: 'https://example.com/docs/chat-app',
       description:
           'A secure chat client built with Flutter supporting real-time messaging, media sharing, and end-to-end encryption.',
       achievements: [
         'Implemented realtime syncing and media upload',
         'End-to-end encryption using libsodium'
       ],
-      otherLinks: ['https://example.com/chat-app/repo'],
+      // otherLinks: ['https://example.com/chat-app/repo'],
     ),
   ];
 

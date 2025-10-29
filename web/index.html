@@ -18,7 +18,17 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  
+  <!-- Force HTTPS -->
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
   <meta name="description" content="A new Flutter project.">
+  
+  <!-- Prefer HTML renderer for faster first paint on mobile/low-end devices -->
+  <meta name="flutter-web-renderer" content="html">
+  
+  <!-- Google Search Console site verification -->
+  <meta name="google-site-verification" content="Ji8mYBFvZF6vSjjddq-aq4ezAymcT9BB09dGeZCkAkA" />
   <!--
     Google OAuth (Web) setup:
     - Register an OAuth client of type 'Web application' in Google Cloud Console.
@@ -48,6 +58,9 @@
   <!-- Preconnect & preload Google Fonts to reduce FOIT/FOUT while fonts are fetched -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Preload main Dart bundle to reduce time-to-first-frame -->
+  <link rel="preload" href="main.dart.js" as="script">
   <!-- Combined Google Fonts stylesheet for families used in the app -->
   <!-- Preload the stylesheet and apply it onload to avoid render-blocking while ensuring it gets applied quickly -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" onload="this.rel='stylesheet'">

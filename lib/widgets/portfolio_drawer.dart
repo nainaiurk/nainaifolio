@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'top_navigation_bar.dart';
+
 class PortfolioDrawer extends StatelessWidget {
-  const PortfolioDrawer({super.key});
+  const PortfolioDrawer({super.key, required this.onSectionSelected});
+
+  final ValueChanged<ScrollSection> onSectionSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -21,36 +25,64 @@ class PortfolioDrawer extends StatelessWidget {
           ListTile(
             title: const Text('About Me'),
             onTap: () {
-              // Scroll to About Me section
               Navigator.pop(context);
+              onSectionSelected(ScrollSection.introduction);
             },
           ),
           ListTile(
             title: const Text('Expertise Areas'),
             onTap: () {
-              // Scroll to Expertise Areas section
               Navigator.pop(context);
+              onSectionSelected(ScrollSection.whatICanOffer);
             },
           ),
           ListTile(
             title: const Text('Experience'),
             onTap: () {
-              // Scroll to Experience section
               Navigator.pop(context);
+              onSectionSelected(ScrollSection.experience);
             },
           ),
           ListTile(
             title: const Text('Publications'),
             onTap: () {
-              // Scroll to Publications section
               Navigator.pop(context);
+              onSectionSelected(ScrollSection.publications);
+            },
+          ),
+          ListTile(
+            title: const Text('Projects'),
+            onTap: () {
+              Navigator.pop(context);
+              onSectionSelected(ScrollSection.projects);
+            },
+          ),
+          ListTile(
+            title: const Text('Skills'),
+            onTap: () {
+              Navigator.pop(context);
+              onSectionSelected(ScrollSection.skills);
+            },
+          ),
+          ListTile(
+            title: const Text('Leadership'),
+            onTap: () {
+              Navigator.pop(context);
+              onSectionSelected(ScrollSection.leadership);
+            },
+          ),
+          ListTile(
+            title: const Text('Awards & Certifications'),
+            onTap: () {
+              Navigator.pop(context);
+              onSectionSelected(ScrollSection.awards);
             },
           ),
           ListTile(
             title: const Text('Contact'),
             onTap: () {
-              // Scroll to Contact section
               Navigator.pop(context);
+              onSectionSelected(ScrollSection.contact);
             },
           ),
         ],

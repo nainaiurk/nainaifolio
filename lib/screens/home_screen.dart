@@ -12,6 +12,8 @@ import '../widgets/top_navigation_bar.dart';
 import '../widgets/introduction_section.dart';
 import '../widgets/education_section.dart';
 import '../widgets/experience_section.dart';
+import '../widgets/awards_certifications_section.dart';
+import '../widgets/leadership_volunteering_section.dart';
 import '../widgets/publications_section.dart';
 import '../widgets/contact_section.dart';
 import '../widgets/footer.dart';
@@ -28,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey whatICanOfferKey = GlobalKey();
   final GlobalKey educationKey = GlobalKey();
   final GlobalKey experienceKey = GlobalKey();
+  final GlobalKey leadershipKey = GlobalKey();
+  final GlobalKey awardsKey = GlobalKey();
   final GlobalKey publicationsKey = GlobalKey();
   final GlobalKey skillsKey = GlobalKey();
   final GlobalKey projectsKey = GlobalKey();
@@ -63,6 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
       alignment = 0.18; // Introduction section
     } else if (key == experienceKey) {
       alignment = -0.1; // Experience section - needs more space
+    } else if (key == leadershipKey) {
+      alignment = -0.08; // Leadership & volunteering
+    } else if (key == awardsKey) {
+      alignment = -0.05; // Awards & certifications timeline
     } else if (key == publicationsKey) {
       alignment = -0.1; // Publications section
     } else if (key == skillsKey) {
@@ -81,10 +89,52 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _handleSectionSelected(ScrollSection section) {
+    switch (section) {
+      case ScrollSection.introduction:
+        scrollToSection(introKey);
+        break;
+      case ScrollSection.whatICanOffer:
+        scrollToSection(whatICanOfferKey);
+        break;
+      case ScrollSection.education:
+        scrollToSection(educationKey);
+        break;
+      case ScrollSection.experience:
+        scrollToSection(experienceKey);
+        break;
+      case ScrollSection.leadership:
+        scrollToSection(leadershipKey);
+        break;
+      case ScrollSection.awards:
+        scrollToSection(awardsKey);
+        break;
+      case ScrollSection.publications:
+        scrollToSection(publicationsKey);
+        break;
+      case ScrollSection.skills:
+        scrollToSection(skillsKey);
+        break;
+      case ScrollSection.projects:
+        scrollToSection(projectsKey);
+        break;
+      case ScrollSection.contact:
+        scrollToSection(contactKey);
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const PortfolioDrawer(),
+      drawer: PortfolioDrawer(
+        onSectionSelected: (section) {
+          // Delay to allow drawer to close fully before scrolling.
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _handleSectionSelected(section);
+          });
+        },
+      ),
       body: Stack(
         children: [
           if (_isLoading)
@@ -108,8 +158,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     EducationSection(key: educationKey),
                     ExperienceSection(key: experienceKey),
                     PublicationsSection(key: publicationsKey),
-                    SkillsSection(key: skillsKey),
+                    LeadershipVolunteeringSection(key: leadershipKey),
                     ProjectsSection(key: projectsKey),
+                    SkillsSection(key: skillsKey),
+                    AwardsCertificationsSection(key: awardsKey),
                     ContactSection(key: contactKey),
                     const Footer(),
                   ],
@@ -121,33 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
             left: 0,
             right: 0,
             child: TopNavigationBar(
-              onItemSelected: (section) {
-                switch (section) {
-                  case ScrollSection.introduction:
-                    scrollToSection(introKey);
-                    break;
-                  case ScrollSection.education:
-                    scrollToSection(educationKey);
-                    break;
-                  case ScrollSection.experience:
-                    scrollToSection(experienceKey);
-                    break;
-                  case ScrollSection.publications:
-                    scrollToSection(publicationsKey);
-                    break;
-                  case ScrollSection.contact:
-                    scrollToSection(contactKey);
-                    break;
-                  case ScrollSection.whatICanOffer:
-                    scrollToSection(whatICanOfferKey);
-                    break;
-                  case ScrollSection.skills:
-                    scrollToSection(skillsKey);
-                    break;
-                  case ScrollSection.projects:
-                    scrollToSection(projectsKey);
-                }
-              },
+              onItemSelected: _handleSectionSelected,
             ),
           ),
         ],
