@@ -92,7 +92,7 @@
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "735759415";
+    const serviceWorkerVersion = "1077832946";
   </script>
   <!-- No Flutter JS: this page is a pure HTML/CSS site for fastest load. -->
   <!-- Google Identity Services (GIS) for token requests on web -->
@@ -184,7 +184,7 @@
         <h1>Nainaiu Rakhaine</h1>
         <p class="tag">Embedded System Developer • Electronics Engineer • PCB Designer</p>
         <div class="cta">
-          <a class="btn primary" href="assets/assets/cv.pdf" target="_blank" rel="noopener">View CV</a>
+          <a class="btn primary" href="assets/assets/cv.pdf" onclick="return openCv(event)">View CV</a>
           <a class="btn ghost" href="mailto:nainaiu.rakhaine@gmail.com">Contact</a>
         </div>
       </div>
@@ -227,6 +227,27 @@
     }
     // Set year
     try { document.getElementById('y').textContent = new Date().getFullYear(); } catch(e){}
+
+    // On-demand CV opener that first clears any old service workers and caches, then navigates to the PDF
+    function openCv(ev){
+      try { if (ev) ev.preventDefault(); } catch(e) {}
+      var go = function(){ window.location.href = 'assets/assets/cv.pdf'; };
+      if ('serviceWorker' in navigator || ('caches' in window)) {
+        var unregister = Promise.resolve();
+        if ('serviceWorker' in navigator) {
+          unregister = navigator.serviceWorker.getRegistrations().then(function(regs){
+            return Promise.all(regs.map(function(r){ return r.unregister().catch(function(){}); }));
+          }).catch(function(){});
+        }
+        var clearCaches = ('caches' in window) ? caches.keys().then(function(keys){
+          return Promise.all(keys.map(function(k){ return caches.delete(k).catch(function(){}); }));
+        }).catch(function(){}) : Promise.resolve();
+        Promise.all([unregister, clearCaches]).then(function(){ setTimeout(go, 100); }).catch(function(){ go(); });
+      } else {
+        go();
+      }
+      return false;
+    }
   </script>
   <style>@keyframes flt-spin{to{transform:rotate(360deg)}}</style>
   <!-- pdf.js is lazy-loaded by CVViewerPage when needed to avoid blocking initial load. -->
