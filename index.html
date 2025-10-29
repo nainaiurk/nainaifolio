@@ -93,9 +93,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Montserrat:wght@400;600;700&family=Merriweather:wght@400;700&display=swap">
   </noscript>
   
-  <!-- Preload main Dart bundle to reduce time-to-first-frame -->
-  <link rel="preload" href="main.dart.js" as="script">
-  
   <!-- Inline critical CSS for instant first paint -->
   <style>
     body{margin:0;padding:0;overflow-x:hidden;font-family:system-ui,-apple-system,sans-serif}
@@ -105,7 +102,7 @@
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "19109235";
+    const serviceWorkerVersion = "3508906571";
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
@@ -202,6 +199,7 @@
   </script>
   
   <!-- Google Identity Services loaded async -->
+  <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
