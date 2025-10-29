@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block common build artifacts
+Disallow: /build/
+
+Sitemap: https://www.nainaiurk.me/sitemap.xml
