@@ -1,11 +1,11 @@
 {
-    "name": "nainaifolio",
-    "short_name": "nainaifolio",
+    "name": "Nainaiu Rakhaine - Embedded System Developer & Electronics Engineer",
+    "short_name": "Nainaiu Rakhaine",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Portfolio of Nainaiu Rakhaine - Embedded System Developer and Electronics Engineer specializing in PCB design, IoT solutions, robotics, and autonomous vehicles. Expert in STM32, ESP32, ROS, machine learning, and embedded hardware development.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
