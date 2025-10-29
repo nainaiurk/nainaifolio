@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Force HTTPS -->
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <!-- Primary Meta Tags for SEO -->
+  <meta name="title" content="Nainaiu Rakhaine - Embedded System Developer, Electronics Engineer & PCB Designer">
+  <meta name="description" content="Nainaiu Rakhaine - Embedded System Developer and Electronics Engineer specializing in PCB design, IoT solutions, robotics, and autonomous vehicles. Expert in STM32, ESP32, ROS, machine learning, embedded software, and hardware development. Winner of multiple hackathons and robotics competitions.">
+  <meta name="keywords" content="Nainaiu Rakhaine, Embedded System Developer, Electronics Engineer, PCB Design, PCB Designer, IoT Developer, STM32, ESP32, ROS, Autonomous Vehicles, Machine Learning, Embedded Software, Hardware Engineer, Circuit Design, Schematic Design, Dhaka Bangladesh, BRAC University, Electrical Engineering">
+  <meta name="author" content="Nainaiu Rakhaine">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  <meta name="revisit-after" content="7 days">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.nainaiurk.me/">
+  <meta property="og:title" content="Nainaiu Rakhaine - Embedded System Developer, Electronics Engineer & PCB Designer">
+  <meta property="og:description" content="Embedded System Developer and Electronics Engineer specializing in PCB design, IoT solutions, robotics, and autonomous vehicles. Expert in STM32, ESP32, ROS, and embedded hardware development.">
+  <meta property="og:image" content="https://www.nainaiurk.me/assets/assets/images/me.png">
+  <meta property="og:site_name" content="Nainaiu Rakhaine Portfolio">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://www.nainaiurk.me/">
+  <meta name="twitter:title" content="Nainaiu Rakhaine - Embedded System Developer, Electronics Engineer & PCB Designer">
+  <meta name="twitter:description" content="Embedded System Developer and Electronics Engineer specializing in PCB design, IoT solutions, robotics, and autonomous vehicles. Expert in STM32, ESP32, ROS, and embedded hardware development.">
+  <meta name="twitter:image" content="https://www.nainaiurk.me/assets/assets/images/me.png">
+  
+  <!-- Prefer HTML renderer for faster first paint on mobile/low-end devices -->
+  <meta name="flutter-web-renderer" content="html">
+  
+  <!-- Google Search Console site verification -->
+  <meta name="google-site-verification" content="Ji8mYBFvZF6vSjjddq-aq4ezAymcT9BB09dGeZCkAkA" />
+  <!--
+    Google OAuth (Web) setup:
+    - Register an OAuth client of type 'Web application' in Google Cloud Console.
+    - Add your deployed domain and any localhost testing origins to 'Authorized JavaScript origins',
+      e.g. http://localhost:5000 or https://yourdomain.com
+    - Optionally add a meta tag below with your Web client ID to make it discoverable by developers.
+
+    Example (replace with your actual client id):
+    <meta name="google-signin-client_id" content="YOUR_WEB_CLIENT_ID.apps.googleusercontent.com">
+  -->
+  <!-- Inserted web client id provided by user -->
+  <meta name="google-signin-client_id" content="221048638961-t78ind2ilunvf6a297pi85h9n203f5ug.apps.googleusercontent.com">
+  
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Nainaiu Rakhaine">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Nainaiu Rakhaine | Embedded System Developer, Electronics Engineer & PCB Designer</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Preconnect & preload Google Fonts to reduce FOIT/FOUT while fonts are fetched -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- No Flutter runtime; do not preload Dart bundle -->
+  <!-- Combined Google Fonts stylesheet for families used in the app -->
+  <!-- Preload the stylesheet and apply it onload to avoid render-blocking while ensuring it gets applied quickly -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" onload="this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  </noscript>
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    const serviceWorkerVersion = "735759415";
+  </script>
+  <!-- No Flutter JS: this page is a pure HTML/CSS site for fastest load. -->
+  <!-- Google Identity Services (GIS) for token requests on web -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    (function() {
+      function safeMeta(name) {
+        try {
+          var m = document.querySelector('meta[name="' + name + '"]');
+          return m ? m.getAttribute('content') : null;
+        } catch (e) { return null; }
+      }
+
+      var clientId = safeMeta('google-signin-client_id');
+      var scope = 'https://www.googleapis.com/auth/gmail.send';
+      window._gisClient = null;
+
+      function initGis() {
+        if (!clientId || !window.google || !google.accounts || !google.accounts.oauth2) return;
+        try {
+          window._gisClient = google.accounts.oauth2.initTokenClient({
+            client_id: clientId,
+            scope: scope,
+            callback: function(resp) {
+              // callback will be replaced per-request
+            }
+          });
+        } catch (e) {
+          console.warn('GIS init error', e);
+        }
+      }
+
+      window.requestGisToken = function() {
+        return new Promise(function(resolve, reject) {
+          if (!window._gisClient) {
+            initGis();
+            if (!window._gisClient) {
+              reject('GIS not available');
+              return;
+            }
+          }
+          window._gisClient.callback = function(tokenResponse) {
+            if (tokenResponse && tokenResponse.access_token) {
+              resolve(tokenResponse);
+            } else {
+              reject(tokenResponse);
+            }
+          };
+          try {
+            window._gisClient.requestAccessToken();
+          } catch (e) {
+            reject(e);
+          }
+        });
+      };
+
+      // Try to initialize on load
+      window.addEventListener('load', function() {
+        initGis();
+      });
+    })();
+  </script>
+  <!-- Pure HTML landing - no Flutter runtime -->
+</head>
+<body style="margin:0;">
+  <style>
+    :root { --ink:#0f172a; --muted:#475569; --brand:#2563eb; --bg:#f8fafc; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 20px; font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; color: var(--ink); }
+    header.hero { display: grid; grid-template-columns: 110px 1fr; gap: 18px; align-items: center; }
+    header.hero img { width: 110px; height: 110px; border-radius: 14px; object-fit: cover; box-shadow: 0 10px 24px rgba(2,6,23,.08); }
+    h1 { font-size: clamp(28px,4.5vw,40px); margin: 0 0 6px; }
+    .tag { color: var(--muted); font-size: clamp(14px,2.2vw,18px); margin: 0 0 10px; }
+    .cta { display:flex; gap: 10px; flex-wrap: wrap; }
+    .btn { display:inline-block; padding: 11px 16px; border-radius: 999px; font-weight: 700; text-decoration: none; font-size: 14px; }
+    .btn.primary { background: var(--brand); color: #fff; }
+    .btn.ghost { border: 1px solid #cbd5e1; color: var(--ink); background: #fff; }
+    section { margin-top: 28px; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; box-shadow: 0 10px 24px rgba(2,6,23,.04); }
+    section h2 { margin: 0 0 12px; font-size: 18px; }
+    ul.clean { margin: 0; padding-left: 18px; }
+    footer { margin: 32px 0 20px; color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width:640px) { header.hero { grid-template-columns: 1fr; text-align: center; } header.hero img { justify-self:center; } .cta { justify-content: center; } }
+    body { background: linear-gradient(180deg,#ffffff,#f6f8ff); }
+  </style>
+
+  <div class="wrap">
+    <header class="hero">
+      <img src="assets/assets/images/me.png" alt="Portrait of Nainaiu Rakhaine">
+      <div>
+        <h1>Nainaiu Rakhaine</h1>
+        <p class="tag">Embedded System Developer • Electronics Engineer • PCB Designer</p>
+        <div class="cta">
+          <a class="btn primary" href="assets/assets/cv.pdf" target="_blank" rel="noopener">View CV</a>
+          <a class="btn ghost" href="mailto:nainaiu.rakhaine@gmail.com">Contact</a>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <h2>About</h2>
+      <p style="margin:0; line-height:1.7; color:var(--muted)">Embedded engineer focused on IoT, robotics and autonomous systems. Experience across STM32/ESP32, PCB design, low‑level firmware and integrating ML on edge devices. Passionate about building reliable, real‑world systems.</p>
+    </section>
+
+    <section>
+      <h2>Highlights</h2>
+      <ul class="clean">
+        <li>Winner – JRC Board Hackathon (IoT in Industry), Team Lead (2023)</li>
+        <li>2nd Runner‑Up – Line Follower Robot Contest (2023)</li>
+        <li>International – Represented Bangladesh at Singapore AUV Challenge</li>
+        <li>Seed funding for AUV startup at University Innovation Hub</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Training & Certificates</h2>
+      <ul class="clean">
+        <li>TICI – 21‑day training in Electrical Equipment, Power Systems, PLC (Grade A+)</li>
+        <li>Ulkasemi – 7‑day training on Analog Design & IC Mask Layout</li>
+        <li>Udemy – Machine Learning: data analysis, visualization, ML algorithms</li>
+        <li>Coursera – Embedded ML with Edge Impulse & neural networks</li>
+      </ul>
+    </section>
+
+    <footer>
+      © <span id="y"></span> Nainaiu Rakhaine · Dhaka, Bangladesh
+    </footer>
+  </div>
+
+  <script>
+    // Ensure any previously installed Flutter service worker is unregistered to avoid stale caches
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs){ regs.forEach(function(r){ r.unregister(); }); });
+    }
+    // Set year
+    try { document.getElementById('y').textContent = new Date().getFullYear(); } catch(e){}
+  </script>
+  <style>@keyframes flt-spin{to{transform:rotate(360deg)}}</style>
+  <!-- pdf.js is lazy-loaded by CVViewerPage when needed to avoid blocking initial load. -->
+  <!-- Removed legacy Flutter boot and error overlay scripts to keep the page lean and static. -->
+</body>
+</html>
