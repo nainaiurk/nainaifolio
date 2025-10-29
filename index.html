@@ -23,6 +23,14 @@
   <!-- Force HTTPS -->
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   
+  <!-- DNS Prefetch & Preconnect for faster external resource loading -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="dns-prefetch" href="https://accounts.google.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
   <!-- Primary Meta Tags for SEO -->
   <meta name="title" content="Nainaiu Rakhaine - Embedded System Developer, Electronics Engineer & PCB Designer">
   <meta name="description" content="Nainaiu Rakhaine - Embedded System Developer and Electronics Engineer specializing in PCB design, IoT solutions, robotics, and autonomous vehicles. Expert in STM32, ESP32, ROS, machine learning, embedded software, and hardware development. Winner of multiple hackathons and robotics competitions.">
@@ -78,22 +86,26 @@
   <title>Nainaiu Rakhaine | Embedded System Developer, Electronics Engineer & PCB Designer</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Preconnect & preload Google Fonts to reduce FOIT/FOUT while fonts are fetched -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Optimized font loading with font-display swap -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Montserrat:wght@400;600;700&family=Merriweather:wght@400;700&display=swap" as="style">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Montserrat:wght@400;600;700&family=Merriweather:wght@400;700&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Montserrat:wght@400;600;700&family=Merriweather:wght@400;700&display=swap">
+  </noscript>
   
   <!-- Preload main Dart bundle to reduce time-to-first-frame -->
   <link rel="preload" href="main.dart.js" as="script">
-  <!-- Combined Google Fonts stylesheet for families used in the app -->
-  <!-- Preload the stylesheet and apply it onload to avoid render-blocking while ensuring it gets applied quickly -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" onload="this.rel='stylesheet'">
-  <noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-  </noscript>
+  
+  <!-- Inline critical CSS for instant first paint -->
+  <style>
+    body{margin:0;padding:0;overflow-x:hidden;font-family:system-ui,-apple-system,sans-serif}
+    #flt-loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:9999}
+    @keyframes flt-spin{to{transform:rotate(360deg)}}
+  </style>
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "3922961836";
+    const serviceWorkerVersion = "19109235";
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
@@ -166,18 +178,30 @@
       <div style="font-size:14px;">Loading…</div>
     </div>
   </div>
-  <style>@keyframes flt-spin{to{transform:rotate(360deg)}}</style>
-  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.worker.min.js";
-    pdfRenderOptions = {
-      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/cmaps/',
-      cMapPacked: true,
-    }
-  </script>
-  <!-- pdf.js removed from eager load. It will be lazy-loaded when the CV viewer opens. -->
-  <!-- The CV viewer will inject pdf.js and the worker at runtime to avoid blocking the initial page load. -->
+  
+  <!-- Defer PDF.js loading until needed -->
   <script>
+    // PDF.js will be loaded on-demand when CV viewer opens
+    window.loadPdfJs = function() {
+      if (window.pdfjsLib) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.min.js';
+        script.onload = () => {
+          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.worker.min.js';
+          window.pdfRenderOptions = {
+            cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/cmaps/',
+            cMapPacked: true,
+          };
+          resolve();
+        };
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    };
+  </script>
+  
+  <!-- Google Identity Services loaded async -->
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
