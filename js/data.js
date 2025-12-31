@@ -56,7 +56,7 @@ const portfolioData = {
       period: "Sep 2025 - Present",
       location: "Remote",
       highlights: [
-        "Author detailed design guides spanning advanced PCB layout, embedded firmware, and TinyML workflows.",
+        "Author detailed design guides spanning advanced PCB layout, PCBA, and SMT workflows.",
         "Collaborate with engineer teams to validate reference designs prior to publication for engineering audiences."
       ]
     },
