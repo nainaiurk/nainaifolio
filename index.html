@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- SEO Meta Tags -->
+  <meta name="title" content="Nainaiu Rakhaine - Embedded System Developer, Electronics Engineer & PCB Designer">
+  <meta name="description" content="Nainaiu Rakhaine - Embedded System Developer and Electronics Engineer specializing in PCB design, IoT solutions, robotics, and autonomous vehicles. Expert in STM32, ESP32, ROS, machine learning, embedded software, and hardware development.">
+  <meta name="keywords" content="Nainaiu Rakhaine, Embedded System Developer, Electronics Engineer, PCB Design, IoT Developer, STM32, ESP32, ROS, Autonomous Vehicles, Machine Learning, Embedded Software">
+  <meta name="author" content="Nainaiu Rakhaine">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.nainaiurk.me/">
+  <meta property="og:title" content="Nainaiu Rakhaine - Embedded System Developer & Electronics Engineer">
+  <meta property="og:description" content="Embedded System Developer and Electronics Engineer specializing in PCB design, IoT solutions, robotics, and autonomous vehicles.">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nainaiu Rakhaine - Embedded System Developer">
+  <meta name="twitter:description" content="Embedded System Developer and Electronics Engineer specializing in PCB design, IoT solutions, robotics, and autonomous vehicles.">
+  
+  <title>Nainaiu Rakhaine | Embedded System Developer, Electronics Engineer & PCB Designer</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/dancingscript/v29/If2cXTr6YS-zF4S-kcSWSVi_sxjsohD9F50Ruu7B1i03Sup8.woff2">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-brand">(Nai)^2U_Rk</div>
+    <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open menu">
+      <span class="menu-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect y="6" width="28" height="2.8" rx="1.4" fill="white"/>
+          <rect y="13" width="28" height="2.8" rx="1.4" fill="white"/>
+          <rect y="20" width="28" height="2.8" rx="1.4" fill="white"/>
+        </svg>
+      </span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#hero">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#leadership">Leadership</a></li>
+      <li><a href="#awards">Awards</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero & About Section Combined -->
+  <section id="hero" class="hero-about-combined">
+    <div class="hero-content">
+      <div class="hero-image-container">
+        <img id="heroImage" src="" alt="Nainaiu Rakhaine" class="hero-image">
+      </div>
+      <div class="hero-text">
+        <h1 id="heroName"></h1>
+        <h2 id="heroTitle"></h2>
+        <p id="heroTagline"></p>
+        <div class="hero-socials" id="heroSocials"></div>
+        <a href="#" id="heroCvLink" target="_blank" class="cta-btn">Download CV</a>
+      </div>
+    </div>
+    
+    <!-- Introduction merged in hero -->
+    <div class="intro-content-merged">
+      <h2 class="intro-title" id="introTitle"></h2>
+      <div id="introContent" class="intro-paragraphs"></div>
+      <button id="introToggle" class="intro-toggle-btn" type="button" aria-expanded="true"></button>
+    </div>
+  </section>
+
+  <!-- Expertise Areas Section -->
+  <section id="expertise">
+    <h2 class="section-title"><i class="fas fa-lightbulb section-icon"></i>What I Can Offer</h2>
+    <div id="expertiseList"></div>
+  </section>
+
+  <!-- Education Section -->
+  <section id="education">
+    <h2 class="section-title"><span class="section-icon"><i class="fas fa-graduation-cap"></i></span> Education</h2>
+    <div id="educationList"></div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience">
+    <h2 class="section-title"><span class="section-icon"><i class="fas fa-briefcase"></i></span> Professional Experience</h2>
+    <div id="experienceList"></div>
+  </section>
+
+  <!-- Publications Section -->
+  <section id="publications">
+    <h2 class="section-title"><i class="fas fa-book-open section-icon"></i>Publications</h2>
+    <p class="publication-stats">(7 Conference, 1 Journal, 2 Accepted)</p>
+    <div id="publicationsList"></div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2 class="section-title"><i class="fas fa-project-diagram section-icon"></i>Featured Projects</h2>
+    <div id="projectsList"></div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills">
+    <h2 class="section-title"><i class="fas fa-code section-icon"></i>Technical Skills</h2>
+    <div id="skillsList"></div>
+  </section>
+
+  <!-- Leadership Section -->
+  <section id="leadership">
+    <h2 class="section-title"><span class="section-icon"><i class="fas fa-hands-helping"></i></span> Leadership & Volunteering</h2>
+    <div id="leadershipList"></div>
+  </section>
+
+  <!-- Awards Section -->
+  <section id="awards">
+    <h2 class="section-title"><i class="fas fa-trophy section-icon"></i>Awards & Certifications</h2>
+    <div id="awardsList"></div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2 class="section-title"><i class="fas fa-envelope section-icon"></i>Contact Me</h2>
+    <div class="contact-grid">
+      <a class="contact-btn" href="" id="contactEmail">
+        <div class="contact-btn-icon"><i class="fas fa-envelope"></i></div>
+        <div class="contact-btn-content">
+          <span class="contact-btn-label">Email</span>
+          <span class="contact-btn-value"></span>
+        </div>
+      </a>
+      <a class="contact-btn" href="" id="contactPhone">
+        <div class="contact-btn-icon"><i class="fas fa-phone"></i></div>
+        <div class="contact-btn-content">
+          <span class="contact-btn-label">Phone</span>
+          <span class="contact-btn-value"></span>
+        </div>
+      </a>
+      <a class="contact-btn" href="" id="contactWhatsapp" target="_blank" rel="noopener">
+        <div class="contact-btn-icon"><i class="fab fa-whatsapp"></i></div>
+        <div class="contact-btn-content">
+          <span class="contact-btn-label">WhatsApp</span>
+          <span class="contact-btn-value"></span>
+        </div>
+      </a>
+      <div class="contact-btn" id="contactWechat" role="text">
+        <div class="contact-btn-icon"><i class="fab fa-weixin"></i></div>
+        <div class="contact-btn-content">
+          <span class="contact-btn-label">WeChat</span>
+          <span class="contact-btn-value"></span>
+        </div>
+      </div>
+      <a class="contact-btn" href="" id="contactLinkedin" target="_blank" rel="noopener">
+        <div class="contact-btn-icon"><i class="fab fa-linkedin"></i></div>
+        <div class="contact-btn-content">
+          <span class="contact-btn-label">LinkedIn</span>
+          <span class="contact-btn-value"></span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Project Modal -->
+  <div id="projectModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('projectModal')">&times;</button>
+      <h2 id="modalTitle"></h2>
+      <p id="modalSubtitle" class="text-secondary mb-2"></p>
+      <div id="modalImageContainer"></div>
+      <p id="modalDescription" class="mb-2"></p>
+      <div id="modalAchievements"></div>
+      <div id="modalLinks" class="modal-links"></div>
+    </div>
+  </div>
+
+  <!-- Award Modal -->
+  <div id="awardModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('awardModal')">&times;</button>
+      <img id="awardModalImage" src="" alt="Certificate">
+      <h2 id="awardModalTitle"></h2>
+      <p><strong>Issuer:</strong> <span id="awardModalIssuer"></span></p>
+      <p><strong>Date:</strong> <span id="awardModalDate"></span></p>
+      <p id="awardModalHighlights" class="mb-2"></p>
+      <div id="awardModalTags"></div>
+    </div>
+  </div>
+
+  <!-- Image Lightbox -->
+  <div id="imageLightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightboxImage" class="lightbox-content" src="" alt="">
+  </div>
+
+  <!-- Expertise Modal -->
+  <div id="expertiseModal" class="modal">
+    <div class="modal-content expertise-modal-content">
+      <button class="modal-close" onclick="closeModal('expertiseModal')">&times;</button>
+      <div id="expertiseModalIcon" class="expertise-modal-icon"></div>
+      <h2 id="expertiseModalTitle"></h2>
+      <p id="expertiseModalDescription" class="expertise-modal-description"></p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/sections/hero.js"></script>
+  <script src="js/sections/introduction.js"></script>
+  <script src="js/sections/expertise.js"></script>
+  <script src="js/sections/education.js"></script>
+  <script src="js/sections/experience.js"></script>
+  <script src="js/sections/publications.js"></script>
+  <script src="js/sections/projects.js"></script>
+  <script src="js/sections/skills.js"></script>
+  <script src="js/sections/leadership.js"></script>
+  <script src="js/sections/awards.js"></script>
+  <script src="js/sections/contact.js"></script>
+  <script src="js/scroll-animations.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Nainaiu Rakhaine. All rights reserved.</p>
+    <p class="footer-tagline">Built with passion for embedded systems and innovation</p>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollToTop" class="scroll-top-btn" aria-label="Scroll to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+</body>
+</html>
