@@ -1,9 +1,37 @@
+// Typewriter effect for tagline
+function typeWriter(element, text, speed = 100, callback) {
+  let i = 0;
+  element.textContent = '';
+  element.style.position = 'relative';
+  
+  function type() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    } else if (callback) {
+      callback();
+    }
+  }
+  type();
+}
+
 // Hero Section Renderer
 function renderHero() {
   const hero = portfolioData.hero;
   document.getElementById('heroName').textContent = hero.name;
   document.getElementById('heroTitle').textContent = hero.title;
-  document.getElementById('heroTagline').textContent = hero.tagline;
+  
+  // Apply typewriter effect to tagline
+  const taglineElement = document.getElementById('heroTagline');
+  typeWriter(taglineElement, hero.tagline, 80, () => {
+    // Add wave icon after typing completes
+    const waveSpan = document.createElement('span');
+    waveSpan.className = 'wave';
+    waveSpan.textContent = ' 👋';
+    taglineElement.appendChild(waveSpan);
+  });
+  
   document.getElementById('heroImage').src = hero.image;
   document.getElementById('heroCvLink').href = hero.cvUrl;
 

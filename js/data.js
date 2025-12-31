@@ -462,7 +462,7 @@ const portfolioData = {
     {
       title: "Line Follower Robot Contest",
       issuer: "National Robotics Competition",
-      date: "2023",
+      date: "2022",
       highlights: "2nd Runner-Up (Team Lead), advanced line following with maze navigation.",
       tags: ["Robotics", "Competition"],
       credentialUrl: "https://drive.google.com/file/d/1BaESfaLckYSf56R7Tm9bQM6ds1uCZ-cl/view?usp=sharing",
@@ -512,7 +512,7 @@ const portfolioData = {
     {
       title: "Embedded Machine Learning",
       issuer: "Coursera",
-      date: "2024",
+      date: "2023",
       highlights: "Coursera Certification - built embedded ML workflows with Edge Impulse and neural networks for microcontrollers.",
       tags: ["Machine Learning", "TinyML"],
       credentialUrl: "https://drive.google.com/file/d/1FlPI5nLz1TGsV6VDjtCB_-xHmlOVqa3b/view?usp=sharing",
@@ -532,7 +532,7 @@ const portfolioData = {
     {
       title: "Mobile App Development(Cross Platform)",
       issuer: "ICT Division, Ministry of Post, Bangladesh",
-      date: "2024",
+      date: "2022",
       highlights: "Certified Mobile App Developer - developed cross-platform mobile applications using Flutter framework and managed database using Firebase.",
       tags: ["Flutter", "Cross Platform App", "Android, Web App", "Chat App Project"],
       credentialUrl: "https://drive.google.com/file/d/19FfH9TEQDirdk7zxo9-PeDSwjGMOpKS8/view?usp=sharing",
