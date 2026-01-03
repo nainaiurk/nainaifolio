@@ -175,6 +175,7 @@ const portfolioData = {
         "https://lh3.googleusercontent.com/d/1bzUBspAH-_S2GLodF9FIhI4RoBsC2YrY",
         "https://lh3.googleusercontent.com/d/1wMk0Z6ZLRNjG0cAGuRqb5J7_azQEGr1J"
       ],
+      documentationUrl: "https://github.com/nainaiurk/Edge-AI-enabled-Induction-Motor-Fault-Detection-and-Prediction",
       videoUrl: "https://youtu.be/EIakxc4opfQ"
     },
     {
