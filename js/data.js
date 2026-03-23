@@ -6,7 +6,8 @@ const portfolioData = {
     tagline: "Welcome to Nainai's Portfolio",
     greeting: "Hello:)",
     image: "assets/images/me.png",
-    cvUrl: "https://drive.google.com/file/d/1ikAex_odO75MeP2dYGRD7N0IP76JqhAZ/view",
+    academicCvUrl: "https://drive.google.com/file/d/1ikAex_odO75MeP2dYGRD7N0IP76JqhAZ/view",
+    tabularCvUrl: "https://drive.google.com/file/d/1SkMiEn_hiyiDJmSUfWdsd_bt1iRRneUO/view",
     socials: [
       { platform: "Google Scholar", icon: "fa-graduation-cap", url: "https://scholar.google.com/citations?user=U_HtJbQAAAAJ&hl=en" },
       { platform: "LinkedIn", icon: "fa-linkedin", url: "https://www.linkedin.com/in/nainaiu-rakhaine" },

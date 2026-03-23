@@ -33,7 +33,21 @@ function renderHero() {
   });
   
   document.getElementById('heroImage').src = hero.image;
-  document.getElementById('heroCvLink').href = hero.cvUrl;
+  document.getElementById('academicCvLink').href = hero.academicCvUrl;
+  document.getElementById('tabularCvLink').href = hero.tabularCvUrl;
+
+  // CV Dropdown toggle
+  const cvDropdown = document.getElementById('cvDropdown');
+  const cvToggle = document.getElementById('cvDropdownToggle');
+  cvToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    cvDropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!cvDropdown.contains(e.target)) {
+      cvDropdown.classList.remove('open');
+    }
+  });
 
   const socialsHTML = hero.socials.map(social => {
     // Use 'fas' for graduation-cap, 'fab' for brand icons (linkedin, github)

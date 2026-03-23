@@ -31,7 +31,21 @@ class Portfolio {
     document.getElementById('heroTitle').textContent = hero.title;
     document.getElementById('heroTagline').textContent = hero.tagline;
     document.getElementById('heroImage').src = hero.image;
-    document.getElementById('heroCvLink').href = hero.cvUrl;
+    document.getElementById('academicCvLink').href = hero.academicCvUrl;
+    document.getElementById('tabularCvLink').href = hero.tabularCvUrl;
+
+    // CV Dropdown toggle
+    const cvDropdown = document.getElementById('cvDropdown');
+    const cvToggle = document.getElementById('cvDropdownToggle');
+    cvToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cvDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!cvDropdown.contains(e.target)) {
+        cvDropdown.classList.remove('open');
+      }
+    });
 
     const socialsHTML = hero.socials.map(social => `
       <a href="${social.url}" target="_blank" rel="noopener" class="social-link" title="${social.platform}">

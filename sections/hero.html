@@ -8,7 +8,19 @@
       <h2 id="heroTitle"></h2>
       <p id="heroTagline"></p>
       <div class="hero-socials" id="heroSocials"></div>
-      <a href="#" id="heroCvLink" target="_blank" class="cta-btn">Download CV</a>
+      <div class="cv-dropdown" id="cvDropdown">
+        <button class="cta-btn cv-dropdown-toggle" id="cvDropdownToggle">
+          <i class="fas fa-file-download"></i> Download CV <i class="fas fa-chevron-down cv-arrow"></i>
+        </button>
+        <div class="cv-dropdown-menu" id="cvDropdownMenu">
+          <a href="#" id="academicCvLink" target="_blank" class="cv-dropdown-item">
+            <i class="fas fa-university"></i> Academic CV
+          </a>
+          <a href="#" id="tabularCvLink" target="_blank" class="cv-dropdown-item">
+            <i class="fas fa-table"></i> Tabular CV
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
