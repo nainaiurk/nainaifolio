@@ -25,8 +25,59 @@ class PortfolioApp {
     this.setupSmoothScroll();
     this.setupNavigation();
     this.setupScrollToTop();
+
+    // Handle URL hash deep-linking after content is rendered
+    this.handleInitialHash();
+    // Update URL hash as user scrolls
+    this.setupHashTracking();
     
     console.log('Portfolio initialized successfully!');
+  }
+
+  handleInitialHash() {
+    const hash = window.location.hash;
+    if (hash) {
+      // Small delay to let the DOM settle after rendering
+      setTimeout(() => {
+        const target = document.querySelector(hash);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+    // Also listen for hash changes (e.g., user edits URL or shares link)
+    window.addEventListener('hashchange', () => {
+      const newHash = window.location.hash;
+      if (newHash) {
+        const target = document.querySelector(newHash);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  }
+
+  setupHashTracking() {
+    const sections = document.querySelectorAll('section[id]');
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          let current = '';
+          sections.forEach(section => {
+            const top = section.offsetTop - 100;
+            if (window.pageYOffset >= top) {
+              current = section.getAttribute('id');
+            }
+          });
+          if (current && window.location.hash !== '#' + current) {
+            history.replaceState(null, null, '#' + current);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
   }
 
   setupSmoothScroll() {
