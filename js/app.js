@@ -30,11 +30,53 @@ class PortfolioApp {
     this.handleInitialHash();
     // Update URL hash as user scrolls
     this.setupHashTracking();
+    // Dark/Light mode
+    this.setupThemeToggle();
+    // Reading progress bar
+    this.setupProgressBar();
     
     // Reveal page (FOUC prevention)
     document.body.classList.add('loaded');
     
     console.log('Portfolio initialized successfully!');
+  }
+
+  setupThemeToggle() {
+    const toggle = document.getElementById('themeToggle');
+    const icon = toggle.querySelector('i');
+    
+    // Load saved preference or respect system preference
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initial = saved || (prefersDark ? 'dark' : 'light');
+    
+    if (initial === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      icon.classList.replace('fa-moon', 'fa-sun');
+    }
+    
+    toggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        icon.classList.replace('fa-sun', 'fa-moon');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        icon.classList.replace('fa-moon', 'fa-sun');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  }
+
+  setupProgressBar() {
+    const progressBar = document.getElementById('progressBar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      progressBar.style.width = progress + '%';
+    });
   }
 
   handleInitialHash() {
