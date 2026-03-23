@@ -59,6 +59,12 @@ body {
   font-size: 1.05rem;
   max-width: 1920px;
   margin: 0 auto;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+body.loaded {
+  opacity: 1;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -123,6 +129,23 @@ a:hover {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: rgba(255, 255, 255, 0.92);
+}
+
+.nav-links a.active {
+  color: var(--secondary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Accessible Focus Styles */
+a:focus-visible,
+button:focus-visible,
+.project-card:focus-visible,
+.award-card:focus-visible,
+.expertise-card:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Hero & About Combined Section */

@@ -4,7 +4,6 @@ const portfolioData = {
     name: "NAINAIU RAKHAINE",
     title: "B.Sc. in Electrical and Electronic Engineering",
     tagline: "Welcome to Nainai's Portfolio",
-    greeting: "Hello:)",
     image: "assets/images/me.png",
     academicCvUrl: "https://drive.google.com/file/d/1ikAex_odO75MeP2dYGRD7N0IP76JqhAZ/view",
     tabularCvUrl: "https://drive.google.com/file/d/1SkMiEn_hiyiDJmSUfWdsd_bt1iRRneUO/view",
@@ -47,7 +46,6 @@ const portfolioData = {
       color: "#51658C"
     }
   ],
-  about: "Specialized expertise in embedded systems development, IoT solutions, and hardware-software integration",
   experience: [
     {
       role: "Electronics Engineer",

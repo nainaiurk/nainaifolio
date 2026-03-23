@@ -31,6 +31,9 @@ class PortfolioApp {
     // Update URL hash as user scrolls
     this.setupHashTracking();
     
+    // Reveal page (FOUC prevention)
+    document.body.classList.add('loaded');
+    
     console.log('Portfolio initialized successfully!');
   }
 
@@ -59,20 +62,36 @@ class PortfolioApp {
 
   setupHashTracking() {
     const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
     let ticking = false;
     window.addEventListener('scroll', () => {
       if (!ticking) {
         requestAnimationFrame(() => {
           let current = '';
-          sections.forEach(section => {
-            const top = section.offsetTop - 100;
-            if (window.pageYOffset >= top) {
-              current = section.getAttribute('id');
-            }
-          });
+          const viewportPoint = window.pageYOffset + window.innerHeight * 0.35;
+          const atBottom = (window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 50;
+          if (atBottom) {
+            // At page bottom — always highlight the last section
+            current = sections[sections.length - 1].getAttribute('id');
+          } else {
+            sections.forEach(section => {
+              const top = section.offsetTop;
+              const bottom = top + section.offsetHeight;
+              if (viewportPoint >= top && viewportPoint < bottom) {
+                current = section.getAttribute('id');
+              }
+            });
+          }
           if (current && window.location.hash !== '#' + current) {
             history.replaceState(null, null, '#' + current);
           }
+          // Highlight active nav link
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+              link.classList.add('active');
+            }
+          });
           ticking = false;
         });
         ticking = true;
