@@ -6,7 +6,7 @@ const portfolioData = {
     tagline: "Welcome to Nainai's Portfolio",
     greeting: "Hello:)",
     image: "assets/images/me.png",
-    cvUrl: "https://drive.google.com/file/d/1ikAex_odO75MeP2dYGRD7N0IP76JqhAZ/view?usp=sharing",
+    cvUrl: "https://drive.google.com/file/d/1ikAex_odO75MeP2dYGRD7N0IP76JqhAZ/view",
     socials: [
       { platform: "Google Scholar", icon: "fa-graduation-cap", url: "https://scholar.google.com/citations?user=U_HtJbQAAAAJ&hl=en" },
       { platform: "LinkedIn", icon: "fa-linkedin", url: "https://www.linkedin.com/in/nainaiu-rakhaine" },
@@ -155,6 +155,28 @@ const portfolioData = {
     ]
   },
   projects: [
+    {
+      title: "ESP32 Multi-WiFi Provision Library",
+      subtitle: "Open Source Arduino/PlatformIO Library",
+      remark: "Published",
+      imageUrl: "https://raw.githubusercontent.com/nainaiurk/ESP32MultiWiFiProvision/main/docs/strongest.gif",
+      images: [
+        "https://raw.githubusercontent.com/nainaiurk/ESP32MultiWiFiProvision/main/docs/add_new_wifi.gif",
+        "https://raw.githubusercontent.com/nainaiurk/ESP32MultiWiFiProvision/main/docs/specific_wifi_connect.gif",
+        "https://raw.githubusercontent.com/nainaiurk/ESP32MultiWiFiProvision/main/docs/strongest.gif",
+        "https://raw.githubusercontent.com/nainaiurk/ESP32MultiWiFiProvision/main/docs/last_connected.gif"
+      ],
+      description: "Developed and published an Arduino/PlatformIO library enabling multi-network Wi-Fi provisioning with a captive portal and connection priority logic.",
+      achievements: [
+        "Enables multi-network Wi-Fi provisioning via a robust captive portal",
+        "Integrates advanced connection priority logic (strongest signal, last connected)",
+        "Published and available directly on the PlatformIO registry"
+      ],
+      documentationUrl: "https://github.com/nainaiurk/ESP32MultiWiFiProvision",
+      otherLinks: [
+        "https://registry.platformio.org/libraries/nainaiurk/ESP32MultiWiFiProvision"
+      ]
+    },
     {
       title: "TinyML Motor Fault Detection",
       subtitle: "Undergraduate Thesis (TinyML on MCU)",
@@ -335,6 +357,24 @@ const portfolioData = {
   publications: {
     peerReviewed: [
       {
+        title: "A Scalable Modular Architecture for Multimodal Control of an Electric Vehicle Platform",
+        authors: "N. Rakhaine, A. D. Mahbub, M. N. Baig, and M. S. Rahman",
+        year: 2026,
+        venue: "IEEE ICECTE 2026",
+        link: "https://ieeexplore.ieee.org/document/11429293",
+        type: "Conference",
+        summary: "Presented a modular control architecture enabling multimodal vehicle operation with flexible sensor integration and real-time actuation."
+      },
+      {
+        title: "Scalable Low Latency Cascaded EKF-based ROV Platform for Underwater Surveillance",
+        authors: "A. D. Mahbub, N. Rakhaine, M. N. Baig, and M. S. Rahman",
+        year: 2026,
+        venue: "IEEE ICECTE 2026",
+        link: "https://ieeexplore.ieee.org/document/11429321",
+        type: "Conference",
+        summary: "Designed a remotely operated underwater vehicle platform with distributed thruster control and real-time telemetry for marine surveillance applications."
+      },
+      {
         title: "A Comparative Analysis of Power Consumption and Security Features in LoRa and LoRaWAN Messaging Devices",
         authors: "N. Rakhaine, I. Ahmed, and T. Islam",
         year: 2024,
@@ -353,15 +393,6 @@ const portfolioData = {
         summary: "Implemented fingerprint and facial biometric fusion on an embedded edge device to deliver reliable, privacy-aware attendance tracking."
       },
       {
-        title: "A Comprehensive Android App-Based Solution for Automated Attendance and Management in Institutions Using IoT and TinyML",
-        authors: "A. Paul, N. Rakhaine, N. J. Ohee, and A. Ahammad",
-        year: 2023,
-        venue: "2023 International Conference on ICT for Sustainable Development (ICICT4SD)",
-        link: "https://ieeexplore.ieee.org/document/10303506",
-        type: "Conference",
-        summary: "Delivered an end-to-end ESP32-CAM and TinyML attendance pipeline with Flutter-based management tooling for secure, low-cost academic deployments."
-      },
-      {
         title: "IoT-Driven Smart Workplace Ecosystem with RFID Security and Environmental Monitoring",
         authors: "I. Ahmed, N. Rakhaine, A.-D. Mahbub, B. Halder, M. R. Islam, and S. Mulk",
         year: 2024,
@@ -371,6 +402,15 @@ const portfolioData = {
         summary: "Architected a secure workplace IoT layer combining RFID access, environmental telemetry, and real-time analytics for industrial-grade monitoring."
       },
       {
+        title: "A Comprehensive Android App-Based Solution for Automated Attendance and Management in Institutions Using IoT and TinyML",
+        authors: "A. Paul, N. Rakhaine, N. J. Ohee, and A. Ahammad",
+        year: 2023,
+        venue: "2023 International Conference on ICT for Sustainable Development (ICICT4SD)",
+        link: "https://ieeexplore.ieee.org/document/10303506",
+        type: "Conference",
+        summary: "Delivered an end-to-end ESP32-CAM and TinyML attendance pipeline with Flutter-based management tooling for secure, low-cost academic deployments."
+      },
+      {
         title: "Revolution in Campus Transportation: The Autonomous Electric Vehicle With Smart Features",
         authors: "A. Paul, N. Rakhaine, and A. Ahammad",
         year: 2023,
@@ -378,26 +418,6 @@ const portfolioData = {
         link: "https://ieeexplore.ieee.org/document/10429029",
         type: "Conference",
         summary: "Engineered embedded control and perception subsystems for Bangladesh's first Level 2 autonomous campus vehicle, advancing smart mobility research."
-      },
-      {
-        title: "A Scalable Modular Architecture for Multimodal Control of an Electric Vehicle Platform",
-        authors: "N. Rakhaine",
-        year: 2026,
-        venue: "ICECTE 2026 IEEE Conference",
-        link: "https://icecte.ruet.ac.bd/",
-        type: "Conference",
-        summary: "Presented a modular control architecture enabling multimodal vehicle operation with flexible sensor integration and real-time actuation.",
-        status: "Accepted, Not Published Yet"
-      },
-      {
-        title: "A Scalable Multi-Thruster ROV Platform With Modular Sensing and Low-Latency Control for Underwater Surveillance",
-        authors: "N. Rakhaine",
-        year: 2026,
-        venue: "ICECTE 2026 IEEE Conference",
-        link: "https://icecte.ruet.ac.bd/",
-        type: "Conference",
-        summary: "Designed a remotely operated underwater vehicle platform with distributed thruster control and real-time telemetry for marine surveillance applications.",
-        status: "Accepted, Not Published Yet"
       }
     ],
     additional: [
