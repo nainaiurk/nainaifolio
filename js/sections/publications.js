@@ -13,7 +13,8 @@ function renderPublications() {
   // Update publication stats
   const statsElement = document.querySelector('.publication-stats');
   if (statsElement) {
-    statsElement.textContent = `(${conferenceCount} Conference, ${journalCount} Journal, ${acceptedCount} Accepted)`;
+    const accepted = acceptedCount > 0 ? `, ${acceptedCount} Accepted` : '';
+    statsElement.textContent = `(${conferenceCount} Conference, ${journalCount} Journal${accepted})`;
   }
 
   function apa(pub) {
@@ -27,7 +28,7 @@ function renderPublications() {
   }
 
   const peerReviewedHTML = portfolioData.publications.peerReviewed.map(apa).join('');
-  const additionalHTML = portfolioData.publications.additional.length > 0 
+  const additionalHTML = portfolioData.publications.additional.length > 0
     ? `<h4 class="pub-subsection-title">Additional Publications</h4>${portfolioData.publications.additional.map(apa).join('')}`
     : '';
 
